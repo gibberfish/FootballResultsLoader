@@ -11,8 +11,64 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
+
+	<dependency>
+	<groupId>org.mockito</groupId>
+	<artifactId>mockito-all</artifactId>
+	<version>1.8.4</version>
+	<scope>test</scope>
+    </dependency>
+
+	<dependency>
+	<groupId>log4j</groupId>
+	<artifactId>log4j</artifactId>
+	<version>1.2.17</version>
+	</dependency>
+
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aop</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+    <dependency>
+      <groupId>uk.co.mindbadger.football-results-dao</groupId>
+      <artifactId>football-results-dao</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>uk.co.mindbadger.football-results-hibernate-dao</groupId>
+      <artifactId>football-results-hibernate-dao</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
   </dependencies>
+  
+  
+  
+	<properties>
+		<log4j.version>1.2.16</log4j.version>
+		<spring.version>3.1.2.RELEASE</spring.version>
+	</properties> 
+
+  <build>
+    <finalName>football-results-xml</finalName>
+	<plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
