@@ -10,15 +10,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 	private String dialect;
 	private DomainObjectFactory domainObjectFactory;
 	private FootballResultsAnalyserDAO dao;
-
-	@Override
-	public String getDialect() {
-		return dialect;
-	}
-	
-	public void setDialect(String dialect) {
-		this.dialect = dialect;
-	}
+	private XMLFileReader xmlFileReader;
 
 	@Override
 	public List<Fixture> readFixturesForSeason(int season) {
@@ -26,6 +18,15 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 		System.out.println("HELLO!");
 		
 		return null;
+	}
+	
+	@Override
+	public String getDialect() {
+		return dialect;
+	}
+	
+	public void setDialect(String dialect) {
+		this.dialect = dialect;
 	}
 	
 	@Override
@@ -46,6 +47,14 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 	@Override
 	public void setDAO(FootballResultsAnalyserDAO dao) {
 		this.dao = dao;
+	}
+
+	public XMLFileReader getXmlFileReader() {
+		return xmlFileReader;
+	}
+
+	public void setXmlFileReader(XMLFileReader xmlFileReader) {
+		this.xmlFileReader = xmlFileReader;
 	}
 }
 

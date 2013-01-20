@@ -7,7 +7,13 @@
 
     <import resource="spring-common.xml"/>
     
-   <bean id="reader" class="uk.co.mindbadger.footballresults.reader.SoccerbaseXMLReader">
+    <bean id="xmlFileReader" class="uk.co.mindbadger.footballresults.reader.XMLFileReader">
+    </bean>
+        
+    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.SoccerbaseXMLReader">
        <property name="dialect" value="soccerbase"/>
-   </bean>
+       <property name="dao" ref="dao"/>
+       <property name="domainObjectFactory" ref="domainObjectFactory"/>
+       <property name="xmlFileReader" ref="xmlFileReader"/>
+    </bean>
 </beans>
