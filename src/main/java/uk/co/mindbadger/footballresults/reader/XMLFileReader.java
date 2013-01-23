@@ -49,14 +49,14 @@ public class XMLFileReader {
 	
 	public static void main(String[] args) throws Exception {
 		XMLFileReader reader = new XMLFileReader ();
-		reader.setRootDirectory("C:/dev/FootballResults");
+		reader.setRootDirectory("C:/checkout/FootballResultsLoader/testdata/");
 		
 		List<String> files = reader.getFilesForSeason(2000);
 		
 		System.out.println("Files: " + files.size());
 		System.out.println("First: " + files.get(0));
 		
-		Document doc = reader.readXMLFile("C:\\dev\\FootballResults\\2000\\soccerbase_2000-08-19.xml");
+		Document doc = reader.readXMLFile("C:/checkout/FootballResultsLoader/testdata/2000/soccerbase_2000-11-18.xml");
 		
 		Element rootElement = doc.getDocumentElement();
 		String fixtureDate = rootElement.getAttribute("date");
