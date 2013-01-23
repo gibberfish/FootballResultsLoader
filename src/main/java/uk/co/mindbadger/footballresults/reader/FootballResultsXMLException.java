@@ -6,4 +6,8 @@ public class FootballResultsXMLException extends RuntimeException {
     public FootballResultsXMLException(Exception e) {
 	super (e);
     }
+
+    public FootballResultsXMLException(String string) {
+	super (string);
+    }
 }

@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -20,8 +22,15 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
+import uk.co.mindbadger.footballresultsanalyser.domain.Division;
+import uk.co.mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 import uk.co.mindbadger.footballresultsanalyser.domain.Fixture;
+import uk.co.mindbadger.footballresultsanalyser.domain.FixtureImpl;
+import uk.co.mindbadger.footballresultsanalyser.domain.Season;
+import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
+import uk.co.mindbadger.footballresultsanalyser.domain.Team;
+import uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl;
 
 public class SoccerbaseXMLReaderTest {
     private static final int SEASON = 2000;
@@ -48,7 +57,7 @@ public class SoccerbaseXMLReaderTest {
     private static final String TEAM_7_NAME = "Middlesbrough";
     private static final String TEAM_8_ID = "1007";
     private static final String TEAM_8_NAME = "Cardiff";
-    
+
     private static final String FIXTURE_1_ID = "9990";
     private static final String FIXTURE_DATE_1 = "2000-11-18";
     private static final String FIXTURE_1_HOME_GOALS = "0";
@@ -74,7 +83,7 @@ public class SoccerbaseXMLReaderTest {
     private static final String FIXTURE_7_HOME_GOALS = "12";
     private static final String FIXTURE_7_AWAY_GOALS = "13";
     private static final String FIXTURE_8_ID = "9997";
-    
+
     private static final String DIALECT = "soccerbase";
     private static final String FILE3 = "/location/FILE3.xml";
     private static final String FILE2 = "/location/FILE2.xml";
@@ -88,6 +97,15 @@ public class SoccerbaseXMLReaderTest {
     private FootballResultsAnalyserDAO mockDao;
     @Mock
     private XMLFileReader mockXmlFileReader;
+
+    // @Mock private Fixture mockFixture1;
+    // @Mock private Fixture mockFixture2;
+    // @Mock private Fixture mockFixture3;
+    // @Mock private Fixture mockFixture4;
+    // @Mock private Fixture mockFixture5;
+    // @Mock private Fixture mockFixture6;
+    // @Mock private Fixture mockFixture7;
+    // @Mock private Fixture mockFixture8;
 
     @Before
     public void setup() {
@@ -109,6 +127,55 @@ public class SoccerbaseXMLReaderTest {
 	when(mockXmlFileReader.readXMLFile(FILE2)).thenReturn(getDocument2());
 	when(mockXmlFileReader.readXMLFile(FILE3)).thenReturn(getDocument3());
 
+	Season season = new SeasonImpl();
+	when(mockDomainObjectFactory.createSeason(Integer.parseInt(SEASON_ID))).thenReturn(season);
+
+	Division division1 = new DivisionImpl();
+	Division division2 = new DivisionImpl();
+	when(mockDomainObjectFactory.createDivision(Integer.parseInt(COMPETITION_1_ID), COMPETITION_1_NAME)).thenReturn(division1).thenReturn(division2);
+
+	Team team1 = new TeamImpl();
+	Team team2 = new TeamImpl();
+	Team team3 = new TeamImpl();
+	Team team4 = new TeamImpl();
+	Team team5 = new TeamImpl();
+	Team team6 = new TeamImpl();
+	Team team7 = new TeamImpl();
+	Team team8 = new TeamImpl();
+	when(mockDomainObjectFactory.createTeam(Integer.parseInt(TEAM_1_ID), TEAM_1_NAME))
+		.thenReturn(team1)
+		.thenReturn(team2)
+		.thenReturn(team3)
+		.thenReturn(team4)
+		.thenReturn(team5)
+		.thenReturn(team6)
+		.thenReturn(team7)
+		.thenReturn(team8);
+
+	Fixture fixture1 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_1_ID), season, team1, team2)).thenReturn(fixture1);
+
+	Fixture fixture2 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_2_ID), season, team3, team4)).thenReturn(fixture2);
+
+	Fixture fixture3 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_3_ID), season, team5, team6)).thenReturn(fixture3);
+
+	Fixture fixture4 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_4_ID), season, team7, team8)).thenReturn(fixture4);
+
+	Fixture fixture5 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_5_ID), season, team2, team1)).thenReturn(fixture5);
+
+	Fixture fixture6 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_6_ID), season, team4, team3)).thenReturn(fixture6);
+
+	Fixture fixture7 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_7_ID), season, team6, team5)).thenReturn(fixture7);
+
+	Fixture fixture8 = new FixtureImpl ();
+	when(mockDomainObjectFactory.createFixture(Integer.parseInt(FIXTURE_8_ID), season, team8, team7)).thenReturn(fixture8);
+
 	// When
 	List<Fixture> fixtures = objectUnderTest.readFixturesForSeason(SEASON);
 
@@ -117,8 +184,88 @@ public class SoccerbaseXMLReaderTest {
 	verify(mockXmlFileReader).readXMLFile(FILE1);
 	verify(mockXmlFileReader).readXMLFile(FILE2);
 	verify(mockXmlFileReader).readXMLFile(FILE3);
-	
+
 	assertEquals(8, fixtures.size());
+
+	assertEquals (fixture1, fixtures.get(0));
+	assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture1.getFixtureDate()));
+	assertEquals(FIXTURE_1_ID, fixture1.getFixtureId());
+	assertEquals(season, fixture1.getSeason());
+	assertEquals(division1, fixture1.getDivision());
+	assertEquals(team1, fixture1.getHomeTeam());
+	assertEquals(team2, fixture1.getAwayTeam());
+	assertEquals(FIXTURE_1_HOME_GOALS, fixture1.getHomeGoals());
+	assertEquals(FIXTURE_1_AWAY_GOALS, fixture1.getAwayGoals());
+	
+	assertEquals (fixture2, fixtures.get(1));
+	assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture2.getFixtureDate()));
+	assertEquals(FIXTURE_2_ID, fixture2.getFixtureId());
+	assertEquals(season, fixture2.getSeason());
+	assertEquals(division1, fixture2.getDivision());
+	assertEquals(team3, fixture2.getHomeTeam());
+	assertEquals(team4, fixture2.getAwayTeam());
+	assertEquals(FIXTURE_2_HOME_GOALS, fixture2.getHomeGoals());
+	assertEquals(FIXTURE_2_AWAY_GOALS, fixture2.getAwayGoals());
+	
+	assertEquals (fixture3, fixtures.get(2));
+	assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture3.getFixtureDate()));
+	assertEquals(FIXTURE_3_ID, fixture3.getFixtureId());
+	assertEquals(season, fixture3.getSeason());
+	assertEquals(division2, fixture3.getDivision());
+	assertEquals(team5, fixture3.getHomeTeam());
+	assertEquals(team6, fixture3.getAwayTeam());
+	assertEquals(FIXTURE_3_HOME_GOALS, fixture3.getHomeGoals());
+	assertEquals(FIXTURE_3_AWAY_GOALS, fixture3.getAwayGoals());
+	
+	assertEquals (fixture4, fixtures.get(3));
+	assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture4.getFixtureDate()));
+	assertEquals(FIXTURE_4_ID, fixture4.getFixtureId());
+	assertEquals(season, fixture4.getSeason());
+	assertEquals(division2, fixture4.getDivision());
+	assertEquals(team7, fixture4.getHomeTeam());
+	assertEquals(team8, fixture4.getAwayTeam());
+	assertEquals(FIXTURE_4_HOME_GOALS, fixture4.getHomeGoals());
+	assertEquals(FIXTURE_4_AWAY_GOALS, fixture4.getAwayGoals());
+
+	assertEquals (fixture5, fixtures.get(4));
+	assertEquals(FIXTURE_DATE_2, convertCalendarToString(fixture5.getFixtureDate()));
+	assertEquals(FIXTURE_5_ID, fixture5.getFixtureId());
+	assertEquals(season, fixture5.getSeason());
+	assertEquals(division1, fixture5.getDivision());
+	assertEquals(team2, fixture5.getHomeTeam());
+	assertEquals(team1, fixture5.getAwayTeam());
+	assertEquals(FIXTURE_5_HOME_GOALS, fixture5.getHomeGoals());
+	assertEquals(FIXTURE_5_AWAY_GOALS, fixture5.getAwayGoals());
+
+	assertEquals (fixture6, fixtures.get(5));
+	assertEquals(FIXTURE_DATE_3, convertCalendarToString(fixture6.getFixtureDate()));
+	assertEquals(FIXTURE_6_ID, fixture6.getFixtureId());
+	assertEquals(season, fixture6.getSeason());
+	assertEquals(division1, fixture6.getDivision());
+	assertEquals(team4, fixture6.getHomeTeam());
+	assertEquals(team3, fixture6.getAwayTeam());
+	assertEquals(FIXTURE_6_HOME_GOALS, fixture6.getHomeGoals());
+	assertEquals(FIXTURE_6_AWAY_GOALS, fixture6.getAwayGoals());
+
+	assertEquals (fixture7, fixtures.get(6));
+	assertEquals(FIXTURE_DATE_3, convertCalendarToString(fixture7.getFixtureDate()));
+	assertEquals(FIXTURE_7_ID, fixture7.getFixtureId());
+	assertEquals(season, fixture7.getSeason());
+	assertEquals(division2, fixture7.getDivision());
+	assertEquals(team6, fixture7.getHomeTeam());
+	assertEquals(team5, fixture7.getAwayTeam());
+	assertEquals(FIXTURE_7_HOME_GOALS, fixture7.getHomeGoals());
+	assertEquals(FIXTURE_7_AWAY_GOALS, fixture7.getAwayGoals());
+	
+	assertEquals (fixture8, fixtures.get(7));
+	assertEquals(FIXTURE_DATE_3, convertCalendarToString(fixture8.getFixtureDate()));
+	assertEquals(FIXTURE_8_ID, fixture8.getFixtureId());
+	assertEquals(season, fixture8.getSeason());
+	assertEquals(division2, fixture8.getDivision());
+	assertEquals(team8, fixture8.getHomeTeam());
+	assertEquals(team7, fixture8.getAwayTeam());
+	assertNull(fixture8.getHomeGoals());
+	assertNull(fixture8.getAwayGoals());
     }
 
     private void weHaveThreeFilesInOurDirectory() {
@@ -131,7 +278,7 @@ public class SoccerbaseXMLReaderTest {
 
     private Document getDocument1() throws ParserConfigurationException {
 	Document doc = createNewDocument();
-	Element root = createFixtureDateElement (doc, FIXTURE_DATE_1);
+	Element root = createFixtureDateElement(doc, FIXTURE_DATE_1);
 
 	Element div1 = createCompetitionElement(doc, root, COMPETITION_1_ID, COMPETITION_1_NAME, SEASON_ID);
 	Element game1 = createGameElement(doc, div1, FIXTURE_1_ID, TEAM_1_ID, TEAM_1_NAME, TEAM_2_ID, TEAM_2_NAME);
@@ -147,10 +294,10 @@ public class SoccerbaseXMLReaderTest {
 
 	return doc;
     }
-    
+
     private Document getDocument2() throws ParserConfigurationException {
 	Document doc = createNewDocument();
-	Element root = createFixtureDateElement (doc, FIXTURE_DATE_2);
+	Element root = createFixtureDateElement(doc, FIXTURE_DATE_2);
 
 	Element div1 = createCompetitionElement(doc, root, COMPETITION_1_ID, COMPETITION_1_NAME, SEASON_ID);
 	Element game1 = createGameElement(doc, div1, FIXTURE_5_ID, TEAM_2_ID, TEAM_2_NAME, TEAM_1_ID, TEAM_1_NAME);
@@ -161,7 +308,7 @@ public class SoccerbaseXMLReaderTest {
 
     private Document getDocument3() throws ParserConfigurationException {
 	Document doc = createNewDocument();
-	Element root = createFixtureDateElement (doc, FIXTURE_DATE_3);
+	Element root = createFixtureDateElement(doc, FIXTURE_DATE_3);
 
 	Element div1 = createCompetitionElement(doc, root, COMPETITION_1_ID, COMPETITION_1_NAME, SEASON_ID);
 	Element game2 = createGameElement(doc, div1, FIXTURE_6_ID, TEAM_4_ID, TEAM_4_NAME, TEAM_3_ID, TEAM_3_NAME);
@@ -174,21 +321,21 @@ public class SoccerbaseXMLReaderTest {
 
 	return doc;
     }
-    
+
     private Document createNewDocument() throws ParserConfigurationException {
 	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	DocumentBuilder builder = factory.newDocumentBuilder();
 	Document doc = builder.newDocument();
 	return doc;
     }
-    
-    private Element createFixtureDateElement (Document doc, String date) {
+
+    private Element createFixtureDateElement(Document doc, String date) {
 	Element element = doc.createElement("FixtureDate");
 	element.setAttribute("date", date);
 	doc.appendChild(element);
 	return element;
     }
-    
+
     private Element createCompetitionElement(Document doc, Element rootElement, String competitionId, String competitionName, String seasonId) {
 	Element div = doc.createElement("Competition");
 	rootElement.appendChild(div);
@@ -197,7 +344,7 @@ public class SoccerbaseXMLReaderTest {
 	div.setAttribute("seasonId", seasonId);
 	return div;
     }
-    
+
     private Element createGameElement(Document doc, Element competitionElement, String gameId, String homeTeamId, String homeTeamName, String awayTeamId, String awayTeamName) {
 	Element game = doc.createElement("Game");
 	competitionElement.appendChild(game);
@@ -208,11 +355,16 @@ public class SoccerbaseXMLReaderTest {
 	game.setAttribute("homeTeamName", homeTeamName);
 	return game;
     }
-    
+
     private void createScoreElement(Document doc, Element game1, String homeGoals, String awayGoals) {
 	Element score1 = doc.createElement("Score");
 	game1.appendChild(score1);
 	score1.setAttribute("awayGoals", awayGoals);
 	score1.setAttribute("homeGoals", homeGoals);
+    }
+
+    private String convertCalendarToString(Calendar calendar) {
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	return sdf.format(calendar.getTime());
     }
 }
