@@ -9,11 +9,16 @@
     
     <bean id="xmlFileReader" class="uk.co.mindbadger.footballresults.reader.XMLFileReader">
     </bean>
-        
-    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.SoccerbaseXMLReader">
+
+    <bean id="footballXmlReader" class="uk.co.mindbadger.footballresults.reader.SoccerbaseXMLReader">
+        <property name="xmlFileReader" ref="xmlFileReader"/>
+        <property name="rootDirectory" value="C:\\checkouts\\FootballResultsLoader\\testdata"/>
+    </bean>
+    
+    <bean id="reader" class="uk.co.mindbadger.footballresults.laoder.FootballResultsLoader">
        <property name="dialect" value="soccerbase"/>
        <property name="dao" ref="dao"/>
        <property name="domainObjectFactory" ref="domainObjectFactory"/>
-       <property name="xmlFileReader" ref="xmlFileReader"/>
+       <property name="reader" ref="footballXmlReader"/>
     </bean>
 </beans>

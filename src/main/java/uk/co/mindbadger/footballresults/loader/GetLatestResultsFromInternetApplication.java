@@ -1,7 +1,9 @@
-package uk.co.mindbadger.footballresults.reader;
+package uk.co.mindbadger.footballresults.loader;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 
 public class GetLatestResultsFromInternetApplication {
 
