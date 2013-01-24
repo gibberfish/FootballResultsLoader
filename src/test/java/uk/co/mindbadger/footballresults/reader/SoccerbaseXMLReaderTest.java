@@ -1,9 +1,11 @@
 package uk.co.mindbadger.footballresults.reader;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,22 +21,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
-import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
-import uk.co.mindbadger.footballresultsanalyser.domain.Division;
-import uk.co.mindbadger.footballresultsanalyser.domain.DivisionImpl;
-import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
-import uk.co.mindbadger.footballresultsanalyser.domain.Fixture;
-import uk.co.mindbadger.footballresultsanalyser.domain.FixtureImpl;
-import uk.co.mindbadger.footballresultsanalyser.domain.Season;
-import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
-import uk.co.mindbadger.footballresultsanalyser.domain.Team;
-import uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl;
 
 public class SoccerbaseXMLReaderTest {
 	private static final Integer SEASON = 2000;
 	private static final String SEASON_ID = "130";
+	private static final String NOT_MATCHING_SEASON_ID = "131";
 
 	private static final String COMPETITION_1_ID = "100";
 	private static final String COMPETITION_1_NAME = "English Premier";
@@ -85,7 +76,6 @@ public class SoccerbaseXMLReaderTest {
 	private static final String FIXTURE_8_ID = "9997";
 
 	private static final String ROOT_DIRECTORY = "C:\\results";
-	private static final String DIALECT = "soccerbase";
 	private static final String FILE3 = "C:\\results\\2000\\FILE3.xml";
 	private static final String FILE2 = "C:\\results\\2000\\FILE2.xml";
 	private static final String FILE1 = "C:\\results\\2000\\FILE1.xml";
@@ -113,9 +103,9 @@ public class SoccerbaseXMLReaderTest {
 		listOfFiles.add(FILE3);
 		when(mockXmlFileReader.getFilesInDirectory(ROOT_DIRECTORY + "\\" + SEASON)).thenReturn(listOfFiles);
 
-		when(mockXmlFileReader.readXMLFile(FILE1)).thenReturn(getDocument1());
-		when(mockXmlFileReader.readXMLFile(FILE2)).thenReturn(getDocument2());
-		when(mockXmlFileReader.readXMLFile(FILE3)).thenReturn(getDocument3());
+		when(mockXmlFileReader.readXMLFile(FILE1)).thenReturn(getDocumentForDate1());
+		when(mockXmlFileReader.readXMLFile(FILE2)).thenReturn(getDocumentForDate2());
+		when(mockXmlFileReader.readXMLFile(FILE3)).thenReturn(getDocumentForDate3());
 
 		// When
 		List<ParsedFixture> fixtures = objectUnderTest.readFixturesForSeason(SEASON);
@@ -231,10 +221,27 @@ public class SoccerbaseXMLReaderTest {
 		assertEquals (TEAM_7_NAME, fixture8.getAwayTeamName());
 		assertNull (fixture8.getHomeGoals());
 		assertNull (fixture8.getAwayGoals());
-
 	}
 
-	private Document getDocument1() throws ParserConfigurationException {
+	@Test
+	public void shouldThrowExceptionIfTheSeasonDoesntMatchTheFolder () throws Exception {
+		// Given
+		List<String> listOfFiles = new ArrayList<String>();
+		listOfFiles.add(FILE1);
+		when(mockXmlFileReader.getFilesInDirectory(ROOT_DIRECTORY + "\\" + SEASON)).thenReturn(listOfFiles);
+		when(mockXmlFileReader.readXMLFile(FILE1)).thenReturn(getDocumentForWithNotMatchingFixtureDate());
+		
+		// When
+		try {
+			objectUnderTest.readFixturesForSeason(SEASON);
+			fail("Should thrown an exception when the seasons don't match");
+		} catch (FootballResultsXMLException e) {
+			assertEquals ("uk.co.mindbadger.footballresults.reader.FootballResultsXMLException: Your xml file contains a season that is not in the correct folder", e.getMessage());
+		}
+	}
+
+
+	private Document getDocumentForDate1() throws ParserConfigurationException {
 		Document doc = createNewDocument();
 		Element root = createFixtureDateElement(doc, FIXTURE_DATE_1);
 
@@ -253,7 +260,7 @@ public class SoccerbaseXMLReaderTest {
 		return doc;
 	}
 
-	private Document getDocument2() throws ParserConfigurationException {
+	private Document getDocumentForDate2() throws ParserConfigurationException {
 		Document doc = createNewDocument();
 		Element root = createFixtureDateElement(doc, FIXTURE_DATE_2);
 
@@ -264,7 +271,7 @@ public class SoccerbaseXMLReaderTest {
 		return doc;
 	}
 
-	private Document getDocument3() throws ParserConfigurationException {
+	private Document getDocumentForDate3() throws ParserConfigurationException {
 		Document doc = createNewDocument();
 		Element root = createFixtureDateElement(doc, FIXTURE_DATE_3);
 
@@ -275,7 +282,15 @@ public class SoccerbaseXMLReaderTest {
 		Element div2 = createCompetitionElement(doc, root, COMPETITION_2_ID, COMPETITION_2_NAME, SEASON_ID);
 		Element game3 = createGameElement(doc, div2, FIXTURE_7_ID, TEAM_6_ID, TEAM_6_NAME, TEAM_5_ID, TEAM_5_NAME);
 		createScoreElement(doc, game3, FIXTURE_7_HOME_GOALS, FIXTURE_7_AWAY_GOALS);
-		Element game4 = createGameElement(doc, div2, FIXTURE_8_ID, TEAM_8_ID, TEAM_8_NAME, TEAM_7_ID, TEAM_7_NAME);
+		createGameElement(doc, div2, FIXTURE_8_ID, TEAM_8_ID, TEAM_8_NAME, TEAM_7_ID, TEAM_7_NAME);
+
+		return doc;
+	}
+
+	private Document getDocumentForWithNotMatchingFixtureDate() throws ParserConfigurationException {
+		Document doc = createNewDocument();
+		Element root = createFixtureDateElement(doc, FIXTURE_DATE_1);
+		createCompetitionElement(doc, root, COMPETITION_1_ID, COMPETITION_1_NAME, NOT_MATCHING_SEASON_ID);
 
 		return doc;
 	}
