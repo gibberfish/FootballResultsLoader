@@ -35,7 +35,6 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 
 					Integer seasonId = Integer.parseInt(competition.getAttribute("seasonId")) + 1870;
 					if (seasonId != seasonNumber) {
-						// TODO need a test for this scenario
 						throw new FootballResultsXMLException("Your xml file contains a season that is not in the correct folder");
 					}
 

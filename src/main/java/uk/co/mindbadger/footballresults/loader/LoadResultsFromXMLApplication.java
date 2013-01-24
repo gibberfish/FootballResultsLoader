@@ -7,10 +7,10 @@ import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 
 public class LoadResultsFromXMLApplication {
 
-    public static void main(String[] args) {
-	ApplicationContext context = new ClassPathXmlApplicationContext("spring-xml-reader.xml");
+	public static void main(String[] args) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-xml-reader.xml");
 
-	FootballResultsReader reader = (FootballResultsReader) context.getBean("reader");
-	reader.readFixturesForSeason(2000);
-    }
+		FootballResultsReader reader = (FootballResultsReader) context.getBean("reader");
+		reader.readFixturesForSeason(2000);
+	}
 }
