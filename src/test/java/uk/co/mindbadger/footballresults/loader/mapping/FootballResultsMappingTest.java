@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -152,6 +153,22 @@ public class FootballResultsMappingTest{
 			// Then
 			assertEquals ("There are no DivisionMappings in your mapping file for dialect " + DIALECT, e.getMessage());
 		}
+	}
+
+	@Test
+	public void shouldReadDivisionMappingsFromAValidMappingFile () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+
+		// When
+		Map<Integer,Integer> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
+		
+		// Then
+		assertEquals (2, divisionMappings.size());
+		
+		assertEquals (new Integer(FRA_DIV_ID_1), divisionMappings.get(new Integer (SOURCE_DIV_ID_1)));
+		assertEquals (new Integer(FRA_DIV_ID_2), divisionMappings.get(new Integer (SOURCE_DIV_ID_2)));
 	}
 
 	

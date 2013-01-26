@@ -57,6 +57,18 @@ public class FootballResultsMapping {
 					throw new FootballResultsLoaderException("There are no DivisionMappings in your mapping file for dialect " + dialectName);
 				}
 
+				Element divisionMappingsContainerElement = (Element) divisionMappingsContainer.item(0);
+				NodeList divisionMappings = divisionMappingsContainerElement.getElementsByTagName("Div");
+
+				for (int k = 0; k < divisionMappings.getLength(); k++) {
+					Element divisionMapping = (Element) divisionMappings.item(k);
+					Integer sourceDivisionId = Integer.parseInt(divisionMapping.getAttribute("sourceId"));
+					Integer fraDivisionId = Integer.parseInt(divisionMapping.getAttribute("fraId"));
+					
+					dialect.getDivisionMappings().put(sourceDivisionId, fraDivisionId);
+					System.out.println("Div mapping: " + sourceDivisionId + ", " + fraDivisionId + ": " + dialect.getDivisionMappings().get(sourceDivisionId));
+				}
+
 			}
 
 		} catch (ParserConfigurationException e) {
@@ -77,6 +89,10 @@ public class FootballResultsMapping {
 		return dialects.get(dialectName).getIncludedDivisions();
 	}
 
+	public Map<Integer, Integer> getDivisionMappings(String dialectName) {
+		return dialects.get(dialectName).getDivisionMappings();
+	}
+	
 	private class Dialect {
 		private String name;
 		private List<Integer> includedDivisions = new ArrayList<Integer>();
