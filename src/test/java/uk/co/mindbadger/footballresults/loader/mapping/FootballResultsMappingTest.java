@@ -25,27 +25,16 @@ import uk.co.mindbadger.xml.XMLFileReader;
 
 public class FootballResultsMappingTest{
 	private static final String NON_EXISTANT_DIALECT = "Non Existant Dialect";
-
 	private static final String FRA_TEAM_ID_2 = "4";
-
 	private static final String FRA_TEAM_ID_1 = "3";
-
 	private static final String FRA_DIV_ID_2 = "2";
-
 	private static final String FRA_DIV_ID_1 = "1";
-
 	private static final String SOURCE_TEAM_ID_2 = "501";
-
 	private static final String SOURCE_TEAM_ID_1 = "500";
-
 	private static final String SOURCE_DIV_ID_3 = "1025";
-
 	private static final String SOURCE_DIV_ID_2 = "1024";
-
 	private static final String SOURCE_DIV_ID_1 = "1023";
-
 	private static final String MAPPING_FILE = "C:\\mapping\\mapping.xml";
-
 	private static final String DIALECT = "soccerbase";
 
 	private FootballResultsMapping objectUnderTest;
@@ -150,7 +139,36 @@ public class FootballResultsMappingTest{
 		assertEquals (new Integer(SOURCE_DIV_ID_3), includedDivisions.get(2));
 	}
 
+	@Test
+	public void shouldThrowExceptionWhenNoDivisionMappingsExistsInXML () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getDocumentWithNoDivisionMappingsXML());
+			
+		// When
+		try {
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+			fail("Should thrown a FootballResultsLoaderException here");
+		} catch (FootballResultsLoaderException e) {
+			// Then
+			assertEquals ("There are no DivisionMappings in your mapping file for dialect " + DIALECT, e.getMessage());
+		}
+	}
+
 	
+	// ---------------------------------------------------------------------------------------------------------------
+	
+	private Document getDocumentWithNoDivisionMappingsXML() throws ParserConfigurationException {
+		Document doc = createNewDocument();
+		Element root = createRootElement(doc);
+
+		Element source = createSourceElement(doc, root, "soccerbase");
+		Element includedDivisions = createIncludedDivisionsElement(doc, source);
+		Element teamMapping = createTeamMappingsElement(doc, source);
+		
+		return doc;
+	}
+
+
 	private Document getValidDocument() throws ParserConfigurationException {
 		Document doc = createNewDocument();
 		Element root = createRootElement(doc);

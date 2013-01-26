@@ -51,6 +51,12 @@ public class FootballResultsMapping {
 					Integer includedDivisionId = Integer.parseInt(includedDivision.getAttribute("sourceId"));
 					dialect.getIncludedDivisions().add(includedDivisionId);
 				}
+				
+				NodeList divisionMappingsContainer = source.getElementsByTagName("DivisionMappings");
+				if (divisionMappingsContainer.getLength() != 1) {
+					throw new FootballResultsLoaderException("There are no DivisionMappings in your mapping file for dialect " + dialectName);
+				}
+
 			}
 
 		} catch (ParserConfigurationException e) {
