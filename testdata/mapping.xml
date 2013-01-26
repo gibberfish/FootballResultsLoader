@@ -1,0 +1,17 @@
+<Mapping>
+	<Source dialect="soccerbase">
+		<IncludedDivisions>
+			<Div sourceId="1023"/>
+			<Div sourceId="1024"/>
+			<Div sourceId="1025"/>
+		</IncludedDivisions>
+		<DivisionMappings>
+			<Div sourceId="1023" fraId="1"/>
+			<Div sourceId="1024" fraId="2"/>
+		</DivisionMappings>
+		<TeamMappings>
+			<Team sourceId="592" fraId="1"/>
+			<Team sourceId="213" fraId="2"/>
+		</TeamMappings>
+	</Source>
+</Mapping>

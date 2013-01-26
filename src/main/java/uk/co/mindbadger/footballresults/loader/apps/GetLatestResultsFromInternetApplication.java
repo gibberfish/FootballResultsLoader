@@ -1,4 +1,4 @@
-package uk.co.mindbadger.footballresults.loader;
+package uk.co.mindbadger.footballresults.loader.apps;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
