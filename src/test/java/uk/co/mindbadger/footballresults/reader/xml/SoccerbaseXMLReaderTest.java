@@ -1,4 +1,4 @@
-package uk.co.mindbadger.footballresults.reader;
+package uk.co.mindbadger.footballresults.reader.xml;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -22,6 +22,8 @@ import org.mockito.MockitoAnnotations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
+import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresults.reader.xml.SoccerbaseXMLReader;
 import uk.co.mindbadger.xml.XMLFileReader;
 
