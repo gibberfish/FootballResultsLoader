@@ -1,13 +1,17 @@
 package uk.co.mindbadger.footballresults.loader.mapping;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import uk.co.mindbadger.footballresults.loader.FootballResultsLoaderException;
 import uk.co.mindbadger.xml.XMLFileReader;
@@ -17,8 +21,6 @@ public class FootballResultsMapping {
 	private XMLFileReader xmlFileReader;
 
 	private Map<String, Dialect> dialects = new HashMap<String, Dialect>();
-
-	private List<Integer> includedDivisions = new ArrayList<Integer>();
 
 	public FootballResultsMapping(String mappingFile, XMLFileReader xmlFileReader) throws FootballResultsLoaderException {
 		this.mappingFile = mappingFile;
@@ -35,9 +37,27 @@ public class FootballResultsMapping {
 				String dialectName = source.getAttribute("dialect");
 				Dialect dialect = new Dialect(dialectName);
 				dialects.put(dialectName, dialect);
+				
+				NodeList includedDivisionsContainer = source.getElementsByTagName("IncludedDivisions");
+				if (includedDivisionsContainer.getLength() != 1) {
+					throw new FootballResultsLoaderException("There are no IncludedDivisions in your mapping file for dialect " + dialectName);
+				}
+				
+				Element includedDivisionsContainerElement = (Element) includedDivisionsContainer.item(0);
+				NodeList includedDivisions = includedDivisionsContainerElement.getElementsByTagName("Div");
+				
+				for (int j = 0; j < includedDivisions.getLength(); j++) {
+					Element includedDivision = (Element) includedDivisions.item(j);
+					Integer includedDivisionId = Integer.parseInt(includedDivision.getAttribute("sourceId"));
+					dialect.getIncludedDivisions().add(includedDivisionId);
+				}
 			}
 
-		} catch (Exception e) {
+		} catch (ParserConfigurationException e) {
+			throw new FootballResultsLoaderException(e);
+		} catch (SAXException e) {
+			throw new FootballResultsLoaderException(e);
+		} catch (IOException e) {
 			throw new FootballResultsLoaderException(e);
 		}
 	}
@@ -48,7 +68,7 @@ public class FootballResultsMapping {
 			throw new FootballResultsLoaderException("There is no configuration for " + dialectName + " in your mapping file");
 		}
 		
-		return includedDivisions;
+		return dialects.get(dialectName).getIncludedDivisions();
 	}
 
 	private class Dialect {

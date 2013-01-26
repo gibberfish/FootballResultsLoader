@@ -105,7 +105,7 @@ public class FootballResultsMappingTest{
 	@Test
 	public void shouldThrowExceptionWhenNoSpecifiedSourceExistsInXML () throws Exception {
 		// Given
-		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getDocumentWithNoIncludedDivisionsXML());
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
 		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
 			
 		// When
@@ -118,16 +118,14 @@ public class FootballResultsMappingTest{
 		}
 	}
 	
-	@Ignore
 	@Test
 	public void shouldThrowExceptionWhenNoIncludedDivisionsExistsInXML () throws Exception {
 		// Given
 		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getDocumentWithNoIncludedDivisionsXML());
-		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
 			
 		// When
 		try {
-			objectUnderTest.getIncludedDivisions(DIALECT);
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
 			fail("Should thrown a FootballResultsLoaderException here");
 		} catch (FootballResultsLoaderException e) {
 			// Then
@@ -136,7 +134,6 @@ public class FootballResultsMappingTest{
 	}
 
 
-	@Ignore
 	@Test
 	public void shouldReadIncludedDivisionsFromAValidMappingFile () throws Exception {
 		// Given
