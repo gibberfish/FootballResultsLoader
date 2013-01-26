@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
@@ -17,6 +18,7 @@ public class FootballResultsLoader {
 	private DomainObjectFactory domainObjectFactory;
 	private FootballResultsAnalyserDAO dao;
 	private FootballResultsReader reader;
+	private FootballResultsMapping mapping;
 
 	private Map<Integer, Division> divisions = new HashMap<Integer, Division>();
 	private Map<Integer, Team> teams = new HashMap<Integer, Team>();
@@ -53,5 +55,11 @@ public class FootballResultsLoader {
 	}
 	public void setReader(FootballResultsReader reader) {
 		this.reader = reader;
+	}
+	public FootballResultsMapping getMapping() {
+		return mapping;
+	}
+	public void setMapping(FootballResultsMapping mapping) {
+		this.mapping = mapping;
 	}
 }
