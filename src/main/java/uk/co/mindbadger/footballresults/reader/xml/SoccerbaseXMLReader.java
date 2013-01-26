@@ -1,4 +1,4 @@
-package uk.co.mindbadger.footballresults.reader;
+package uk.co.mindbadger.footballresults.reader.xml;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,11 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
+import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
+import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.xml.XMLFileReader;
 
 public class SoccerbaseXMLReader implements FootballResultsReader {
 	private XMLFileReader xmlFileReader;
@@ -35,7 +40,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 
 					Integer seasonId = Integer.parseInt(competition.getAttribute("seasonId")) + 1870;
 					if (seasonId != seasonNumber) {
-						throw new FootballResultsXMLException("Your xml file contains a season that is not in the correct folder");
+						throw new FootballResultsReaderException("Your xml file contains a season that is not in the correct folder");
 					}
 
 					Integer competitionId = Integer.parseInt(competition.getAttribute("competitionId"));
@@ -73,7 +78,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 					}
 				}
 			} catch (Exception e) {
-				throw new FootballResultsXMLException(e);
+				throw new FootballResultsReaderException(e);
 			}
 		}
 
@@ -88,7 +93,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 			return cal;
 		} catch (ParseException e) {
 			// TODO Need to add a test to deal with being unable to parse the date
-			throw new FootballResultsXMLException(e);
+			throw new FootballResultsReaderException(e);
 		}
 	}
 

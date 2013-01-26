@@ -7,7 +7,7 @@
 
 	<import resource="spring-common.xml"/>
 	
-   <bean id="reader" class="uk.co.mindbadger.footballresults.reader.SoccerbasePageReader">
+   <bean id="reader" class="uk.co.mindbadger.footballresults.reader.web.SoccerbasePageReader">
        <property name="dialect" value="soccerbase"/>
    </bean>
 </beans>

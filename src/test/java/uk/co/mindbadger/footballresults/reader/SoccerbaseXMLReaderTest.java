@@ -22,6 +22,9 @@ import org.mockito.MockitoAnnotations;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import uk.co.mindbadger.footballresults.reader.xml.SoccerbaseXMLReader;
+import uk.co.mindbadger.xml.XMLFileReader;
+
 public class SoccerbaseXMLReaderTest {
 	private static final Integer SEASON = 2000;
 	private static final String SEASON_ID = "130";
@@ -235,7 +238,7 @@ public class SoccerbaseXMLReaderTest {
 		try {
 			objectUnderTest.readFixturesForSeason(SEASON);
 			fail("Should thrown an exception when the seasons don't match");
-		} catch (FootballResultsXMLException e) {
+		} catch (FootballResultsReaderException e) {
 			assertEquals ("uk.co.mindbadger.footballresults.reader.FootballResultsXMLException: Your xml file contains a season that is not in the correct folder", e.getMessage());
 		}
 	}

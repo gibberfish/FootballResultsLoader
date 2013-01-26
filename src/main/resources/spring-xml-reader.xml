@@ -7,10 +7,10 @@
 
     <import resource="spring-common.xml"/>
     
-    <bean id="xmlFileReader" class="uk.co.mindbadger.footballresults.reader.XMLFileReader">
+    <bean id="xmlFileReader" class="uk.co.mindbadger.xml.XMLFileReader">
     </bean>
 
-    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.SoccerbaseXMLReader">
+    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.xml.SoccerbaseXMLReader">
         <property name="xmlFileReader" ref="xmlFileReader"/>
         <property name="rootDirectory" value="C:\\checkouts\\FootballResultsLoader\\testdata"/>
     </bean>

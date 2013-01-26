@@ -1,4 +1,4 @@
-package uk.co.mindbadger.footballresults.reader;
+package uk.co.mindbadger.xml;
 
 import java.io.File;
 import java.io.IOException;
