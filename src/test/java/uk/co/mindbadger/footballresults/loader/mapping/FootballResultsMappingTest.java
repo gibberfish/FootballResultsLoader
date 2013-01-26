@@ -171,6 +171,21 @@ public class FootballResultsMappingTest{
 		assertEquals (new Integer(FRA_DIV_ID_2), divisionMappings.get(new Integer (SOURCE_DIV_ID_2)));
 	}
 
+	@Test
+	public void shouldReadTeamMappingsFromAValidMappingFile () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+
+		// When
+		Map<Integer,Integer> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
+		
+		// Then
+		assertEquals (2, teamMappings.size());
+		
+		assertEquals (new Integer(FRA_TEAM_ID_1), teamMappings.get(new Integer (SOURCE_TEAM_ID_1)));
+		assertEquals (new Integer(FRA_TEAM_ID_2), teamMappings.get(new Integer (SOURCE_TEAM_ID_2)));
+	}
 	
 	// ---------------------------------------------------------------------------------------------------------------
 	

@@ -66,9 +66,19 @@ public class FootballResultsMapping {
 					Integer fraDivisionId = Integer.parseInt(divisionMapping.getAttribute("fraId"));
 					
 					dialect.getDivisionMappings().put(sourceDivisionId, fraDivisionId);
-					System.out.println("Div mapping: " + sourceDivisionId + ", " + fraDivisionId + ": " + dialect.getDivisionMappings().get(sourceDivisionId));
 				}
 
+				NodeList teamMappingsContainer = source.getElementsByTagName("TeamMappings");
+				Element teamMappingsContainerElement = (Element) teamMappingsContainer.item(0);
+				NodeList teamMappings = teamMappingsContainerElement.getElementsByTagName("Team");
+
+				for (int l = 0; l < teamMappings.getLength(); l++) {
+					Element teamMapping = (Element) teamMappings.item(l);
+					Integer sourceTeamId = Integer.parseInt(teamMapping.getAttribute("sourceId"));
+					Integer fraTeamId = Integer.parseInt(teamMapping.getAttribute("fraId"));
+					
+					dialect.getTeamMappings().put(sourceTeamId, fraTeamId);
+				}
 			}
 
 		} catch (ParserConfigurationException e) {
@@ -91,6 +101,10 @@ public class FootballResultsMapping {
 
 	public Map<Integer, Integer> getDivisionMappings(String dialectName) {
 		return dialects.get(dialectName).getDivisionMappings();
+	}
+	
+	public Map<Integer, Integer> getTeamMappings(String dialectName) {
+		return dialects.get(dialectName).getTeamMappings();
 	}
 	
 	private class Dialect {
