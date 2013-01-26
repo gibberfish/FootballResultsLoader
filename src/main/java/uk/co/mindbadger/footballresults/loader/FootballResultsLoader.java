@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
+import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
@@ -24,6 +25,8 @@ public class FootballResultsLoader {
 	public void loadResultsForSeason(int season) {
 		List<Division> divisionsInDatabase = dao.getAllDivisions();
 		List<Team> teamsInDatabase = dao.getAllTeams();
+		
+		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(season);
 	}
 	
 	

@@ -10,6 +10,7 @@ import org.junit.*;
 import org.mockito.*;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
+import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
@@ -51,5 +52,25 @@ public class FootballResultsLoaderTest {
 		// Then
 		verify(mockDao).getAllDivisions();
 		verify(mockDao).getAllTeams();
+	}
+	
+	@Test
+	public void shouldReadFixturesForSeason () {
+		// Given
+		List<Division> divisionsFromDatabase = new ArrayList<Division> ();
+		List<Team> teamsFromDatabase = new ArrayList<Team> ();
+		
+		when (mockDao.getAllDivisions()).thenReturn(divisionsFromDatabase);
+		when (mockDao.getAllTeams()).thenReturn(teamsFromDatabase);
+		
+		List<ParsedFixture> fixturesReadFromReader = new ArrayList<ParsedFixture> ();
+		
+		when (mockReader.readFixturesForSeason(SEASON)).thenReturn(fixturesReadFromReader);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify (mockReader).readFixturesForSeason(SEASON);
 	}
 }
