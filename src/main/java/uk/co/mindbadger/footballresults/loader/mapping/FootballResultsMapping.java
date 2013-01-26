@@ -17,15 +17,9 @@ import uk.co.mindbadger.footballresults.loader.FootballResultsLoaderException;
 import uk.co.mindbadger.xml.XMLFileReader;
 
 public class FootballResultsMapping {
-	private String mappingFile;
-	private XMLFileReader xmlFileReader;
-
 	private Map<String, Dialect> dialects = new HashMap<String, Dialect>();
 
 	public FootballResultsMapping(String mappingFile, XMLFileReader xmlFileReader) throws FootballResultsLoaderException {
-		this.mappingFile = mappingFile;
-		this.xmlFileReader = xmlFileReader;
-
 		try {
 			Document doc = xmlFileReader.readXMLFile(mappingFile);
 			Element rootElement = doc.getDocumentElement();
@@ -80,7 +74,6 @@ public class FootballResultsMapping {
 					dialect.getTeamMappings().put(sourceTeamId, fraTeamId);
 				}
 			}
-
 		} catch (ParserConfigurationException e) {
 			throw new FootballResultsLoaderException(e);
 		} catch (SAXException e) {
@@ -125,24 +118,12 @@ public class FootballResultsMapping {
 			return includedDivisions;
 		}
 
-		public void setIncludedDivisions(List<Integer> includedDivisions) {
-			this.includedDivisions = includedDivisions;
-		}
-
 		public Map<Integer, Integer> getDivisionMappings() {
 			return divisionMappings;
 		}
 
-		public void setDivisionMappings(Map<Integer, Integer> divisionMappings) {
-			this.divisionMappings = divisionMappings;
-		}
-
 		public Map<Integer, Integer> getTeamMappings() {
 			return teamMappings;
-		}
-
-		public void setTeamMappings(Map<Integer, Integer> teamMappings) {
-			this.teamMappings = teamMappings;
 		}
 	}
 }

@@ -5,10 +5,25 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean id="xmlFileReader" class="uk.co.mindbadger.xml.XMLFileReader">
+  </bean>
+
+  <bean id="mapping" class="uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping">
+      <constructor-arg value="C:\\Mark\\appConfig\\fra_mapping.xml"/>
+      <constructor-arg ref="xmlFileReader"/>
+  </bean>
+  
   <bean id="domainObjectFactory" class="uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl">
   </bean>
 
   <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserHibernateDAO">
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
+  </bean>
+  
+  <bean id="loader" class="uk.co.mindbadger.footballresults.loader.FootballResultsLoader">
+  	<property name="dialect" value="soccerbase"/>
+  	<property name="domainObjectFactory" ref="domainObjectFactory"/>
+  	<property name="dao" ref="dao"/>
+  	<property name="reader" ref="reader"/>
   </bean>
 </beans>
