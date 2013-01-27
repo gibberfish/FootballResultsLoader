@@ -222,7 +222,7 @@ public class FootballResultsLoaderTest {
 		objectUnderTest.loadResultsForSeason(SEASON);
 		
 		// Then
-		verify(mockDao, never()).addTeam((String)any());
+		verify(mockDao, never()).addTeam(READ_TEAM_NAME_1);
 	}
 	
 	@Test
@@ -246,6 +246,59 @@ public class FootballResultsLoaderTest {
 		verify(mockDao).addTeam(READ_TEAM_NAME_1);
 	}
 	
+	@Test
+	public void shouldNotCreateNewAwayTeamIfExistsInListReadFromDatabase () {
+		// Given
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		Division division1 = new DivisionImpl();
+		division1.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+		
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao, never()).addTeam((String)any());
+	}
+	
+	@Test
+	public void shouldCreateNewAwayTeamIfNotExistsInListReadFromDatabase () {
+		// Given
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		Division division1 = new DivisionImpl();
+		division1.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao).addTeam(READ_TEAM_NAME_2);
+	}
 	
 	
 	

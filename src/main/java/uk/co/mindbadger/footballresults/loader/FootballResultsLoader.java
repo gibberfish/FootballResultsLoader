@@ -34,9 +34,11 @@ public class FootballResultsLoader {
 			for (ParsedFixture parsedFixture : fixturesRead) {
 				Division division = null;
 				Team homeTeam = null;
+				Team awayTeam = null;
 
 				Integer readDivisionId = parsedFixture.getDivisionId();
 				Integer readHomeTeamId = parsedFixture.getHomeTeamId();
+				Integer readAwayTeamId = parsedFixture.getAwayTeamId();
 				
 				if (mapping.getIncludedDivisions(dialect).contains(readDivisionId)) {
 					
@@ -51,11 +53,13 @@ public class FootballResultsLoader {
 					if (homeTeam == null) {
 						homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
 					}
+
+					Integer fraAwayTeamId = mapping.getTeamMappings(dialect).get(readAwayTeamId);
+					awayTeam = teamsInDatabase.get(fraAwayTeamId);
+					if (awayTeam == null) {
+						awayTeam = dao.addTeam(parsedFixture.getAwayTeamName());
+					}
 				}
-				
-				
-				
-				
 			}
 		}
 	}
