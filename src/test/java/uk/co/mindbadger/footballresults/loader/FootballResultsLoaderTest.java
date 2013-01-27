@@ -22,6 +22,7 @@ import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
+import uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl;
 
 public class FootballResultsLoaderTest {
 	private static final int SEASON = 2000;
@@ -39,8 +40,10 @@ public class FootballResultsLoaderTest {
 
 	private static final Integer READ_TEAM_ID_1 = 500;
 	private static final String READ_TEAM_NAME_1 = "Portsmouth";
+	private static final Integer MAPPED_TEAM_ID_1 = 600;
 	private static final Integer READ_TEAM_ID_2 = 501;
 	private static final String READ_TEAM_NAME_2 = "Hull";
+	private static final Integer MAPPED_TEAM_ID_2 = 601;
 
 	private FootballResultsLoader objectUnderTest;
 	
@@ -197,6 +200,64 @@ public class FootballResultsLoaderTest {
 		verify(mockDao).addDivision(READ_DIV_NAME_1);
 	}
 
+	@Test
+	public void shouldNotCreateNewHomeTeamIfExistsInListReadFromDatabase () {
+		// Given
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		Division division1 = new DivisionImpl();
+		division1.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+		
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao, never()).addTeam((String)any());
+	}
+	
+	@Test
+	public void shouldCreateNewHomeTeamIfNotExistsInListReadFromDatabase () {
+		// Given
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		Division division1 = new DivisionImpl();
+		division1.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+				
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao).addTeam(READ_TEAM_NAME_1);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@Ignore
 	@Test

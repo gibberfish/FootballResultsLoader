@@ -33,15 +33,29 @@ public class FootballResultsLoader {
 			
 			for (ParsedFixture parsedFixture : fixturesRead) {
 				Division division = null;
+				Team homeTeam = null;
+
 				Integer readDivisionId = parsedFixture.getDivisionId();
+				Integer readHomeTeamId = parsedFixture.getHomeTeamId();
 				
 				if (mapping.getIncludedDivisions(dialect).contains(readDivisionId)) {
+					
 					Integer fraDivisionId = mapping.getDivisionMappings(dialect).get(readDivisionId);
 					division = divisionsInDatabase.get(fraDivisionId);
 					if (division == null) {
 						division = dao.addDivision(parsedFixture.getDivisionName());
 					}
+
+					Integer fraHomeTeamId = mapping.getTeamMappings(dialect).get(readHomeTeamId);
+					homeTeam = teamsInDatabase.get(fraHomeTeamId);
+					if (homeTeam == null) {
+						homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
+					}
 				}
+				
+				
+				
+				
 			}
 		}
 	}
