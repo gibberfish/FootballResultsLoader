@@ -69,6 +69,8 @@ public class FootballResultsLoader {
 						teamsInDatabase.put(awayTeam.getTeamId(), awayTeam);
 						teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
 					}
+					
+					dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
 				}
 			}
 		}
