@@ -189,6 +189,10 @@ public class FootballResultsLoaderTest {
 		// Given
 		Season season = new SeasonImpl();
 		when (mockDao.getSeason(SEASON)).thenReturn(season);
+		Division division = new DivisionImpl ();
+		division.setDivisionId(MAPPED_DIV_ID_1);
+		when (mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division );
+		
 		fixturesReadFromReader.add(createParsedFixture1());
 		
 		includedDivisions.add(READ_DIV_ID_1);
@@ -300,7 +304,27 @@ public class FootballResultsLoaderTest {
 		verify(mockDao).addTeam(READ_TEAM_NAME_2);
 	}
 	
-	
+	@Test
+	public void shouldReuseAPreviouslyAddedDivision () {
+		// Given
+		Season season = new SeasonImpl();
+		when (mockDao.getSeason(SEASON)).thenReturn(season);
+
+		Division division = new DivisionImpl ();
+		division.setDivisionId(MAPPED_DIV_ID_1);
+		when (mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division );
+
+		fixturesReadFromReader.add(createParsedFixture1());
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+
+		// Then
+		verify(mockDao,times(1)).addDivision(READ_DIV_NAME_1);
+	}
 	
 	
 	

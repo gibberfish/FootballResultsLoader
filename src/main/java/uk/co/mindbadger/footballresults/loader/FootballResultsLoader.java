@@ -30,6 +30,10 @@ public class FootballResultsLoader {
 			if (season == null) {
 				season = dao.addSeason(seasonNum);
 			}
+
+			List<Integer> includedDivisions = mapping.getIncludedDivisions(dialect);
+			Map<Integer, Integer> divisionMappings = mapping.getDivisionMappings(dialect);
+			Map<Integer, Integer> teamMappings = mapping.getTeamMappings(dialect);
 			
 			for (ParsedFixture parsedFixture : fixturesRead) {
 				Division division = null;
@@ -40,21 +44,23 @@ public class FootballResultsLoader {
 				Integer readHomeTeamId = parsedFixture.getHomeTeamId();
 				Integer readAwayTeamId = parsedFixture.getAwayTeamId();
 				
-				if (mapping.getIncludedDivisions(dialect).contains(readDivisionId)) {
+				if (includedDivisions.contains(readDivisionId)) {
 					
-					Integer fraDivisionId = mapping.getDivisionMappings(dialect).get(readDivisionId);
+					Integer fraDivisionId = divisionMappings.get(readDivisionId);
 					division = divisionsInDatabase.get(fraDivisionId);
 					if (division == null) {
 						division = dao.addDivision(parsedFixture.getDivisionName());
+						divisionsInDatabase.put(division.getDivisionId(), division);
+						divisionMappings.put(readDivisionId, division.getDivisionId());
 					}
 
-					Integer fraHomeTeamId = mapping.getTeamMappings(dialect).get(readHomeTeamId);
+					Integer fraHomeTeamId = teamMappings.get(readHomeTeamId);
 					homeTeam = teamsInDatabase.get(fraHomeTeamId);
 					if (homeTeam == null) {
 						homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
 					}
 
-					Integer fraAwayTeamId = mapping.getTeamMappings(dialect).get(readAwayTeamId);
+					Integer fraAwayTeamId = teamMappings.get(readAwayTeamId);
 					awayTeam = teamsInDatabase.get(fraAwayTeamId);
 					if (awayTeam == null) {
 						awayTeam = dao.addTeam(parsedFixture.getAwayTeamName());
