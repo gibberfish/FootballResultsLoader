@@ -16,6 +16,8 @@ import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
+import uk.co.mindbadger.footballresultsanalyser.domain.Season;
+import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
 public class FootballResultsLoaderTest {
@@ -79,18 +81,37 @@ public class FootballResultsLoaderTest {
 	public void shouldReadFixturesForSeason () {
 		// Given
 		
-		
 		// When
 		objectUnderTest.loadResultsForSeason(SEASON);
 		
 		// Then
 		verify (mockReader).readFixturesForSeason(SEASON);
 	}
-	
-	@Ignore
+
+	@Test
+	public void shouldTakeNoFurtherActionIfNoResultsLoaded () {
+		// Given
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao, never()).getSeason(SEASON);
+		verify(mockDao, never()).addSeason (SEASON);
+	}
+
 	@Test
 	public void shouldCreateNewSeasonIfNotExistsInDatabase () {
-		fail ("Need to implement this test");
+		// Given
+		when (mockDao.getSeason(SEASON)).thenReturn(null);
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao).getSeason(SEASON);
+		verify(mockDao).addSeason (SEASON);
 	}
 	
 	@Ignore

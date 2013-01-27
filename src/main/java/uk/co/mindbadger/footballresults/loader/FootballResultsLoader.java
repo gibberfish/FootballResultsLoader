@@ -11,6 +11,7 @@ import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
+import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
 public class FootballResultsLoader {
@@ -24,13 +25,19 @@ public class FootballResultsLoader {
 	private Map<Integer, Team> teams = new HashMap<Integer, Team>();
 
 	
-	public void loadResultsForSeason(int season) {
+	public void loadResultsForSeason(int seasonNum) {
 		List<Division> divisionsInDatabase = dao.getAllDivisions();
 		List<Team> teamsInDatabase = dao.getAllTeams();
 		
-		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(season);
+		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
+		
+		if (fixturesRead.size() > 0) {
+			Season season = dao.getSeason(seasonNum);
+			if (season == null) {
+				season = dao.addSeason(seasonNum);
+			}
+		}
 	}
-	
 	
 	public DomainObjectFactory getDomainObjectFactory() {
 		return domainObjectFactory;
