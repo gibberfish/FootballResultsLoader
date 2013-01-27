@@ -174,8 +174,17 @@ public class FootballResultsLoaderTest {
 		Division division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
-		
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
 		
 		// When
 		objectUnderTest.loadResultsForSeason(SEASON);
@@ -189,9 +198,20 @@ public class FootballResultsLoaderTest {
 		// Given
 		Season season = new SeasonImpl();
 		when (mockDao.getSeason(SEASON)).thenReturn(season);
+		
 		Division division = new DivisionImpl ();
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		when (mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division );
+		
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
 		
 		fixturesReadFromReader.add(createParsedFixture1());
 		
@@ -214,13 +234,17 @@ public class FootballResultsLoaderTest {
 		Division division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 		
 		Team team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
-		
-		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+		
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
 		
 		// When
 		objectUnderTest.loadResultsForSeason(SEASON);
@@ -239,9 +263,16 @@ public class FootballResultsLoaderTest {
 		Division division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
-				
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
-		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+				
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
+
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		when (mockDao.addTeam(READ_TEAM_NAME_1)).thenReturn(team1);
 		
 		// When
 		objectUnderTest.loadResultsForSeason(SEASON);
@@ -289,13 +320,16 @@ public class FootballResultsLoaderTest {
 		Division division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
 		Team team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
-
-		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		when (mockDao.addTeam(READ_TEAM_NAME_2)).thenReturn(team2);
 		
 		// When
 		objectUnderTest.loadResultsForSeason(SEASON);
@@ -314,6 +348,16 @@ public class FootballResultsLoaderTest {
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		when (mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division );
 
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
+
 		fixturesReadFromReader.add(createParsedFixture1());
 		fixturesReadFromReader.add(createParsedFixture1());
 		
@@ -326,7 +370,71 @@ public class FootballResultsLoaderTest {
 		verify(mockDao,times(1)).addDivision(READ_DIV_NAME_1);
 	}
 	
+	@Test
+	public void shouldReuseAPreviouslyAddedHomeTeam () {
+		// Given
+		Season season = new SeasonImpl();
+		when (mockDao.getSeason(SEASON)).thenReturn(season);
+
+		Division division = new DivisionImpl ();
+		division.setDivisionId(MAPPED_DIV_ID_1);
+		when (mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division );
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		when (mockDao.addTeam(READ_TEAM_NAME_1)).thenReturn(team1);
+
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
+
+		fixturesReadFromReader.add(createParsedFixture1());
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+
+		// Then
+		verify(mockDao,times(1)).addTeam(READ_TEAM_NAME_1);
+	}
 	
+	@Test
+	public void shouldReuseAPreviouslyAddedAwayTeam () {
+		// Given
+		Season season = new SeasonImpl();
+		when (mockDao.getSeason(SEASON)).thenReturn(season);
+
+		Division division = new DivisionImpl ();
+		division.setDivisionId(MAPPED_DIV_ID_1);
+		when (mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division );
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+
+		Team team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		when (mockDao.addTeam(READ_TEAM_NAME_2)).thenReturn(team2);
+
+		Team team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		fixturesReadFromReader.add(createParsedFixture1());
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+
+		// Then
+		verify(mockDao,times(1)).addTeam(READ_TEAM_NAME_2);
+	}
 	
 	
 	

@@ -58,12 +58,16 @@ public class FootballResultsLoader {
 					homeTeam = teamsInDatabase.get(fraHomeTeamId);
 					if (homeTeam == null) {
 						homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
+						teamsInDatabase.put(homeTeam.getTeamId(), homeTeam);
+						teamMappings.put(readHomeTeamId, homeTeam.getTeamId());
 					}
 
 					Integer fraAwayTeamId = teamMappings.get(readAwayTeamId);
 					awayTeam = teamsInDatabase.get(fraAwayTeamId);
 					if (awayTeam == null) {
 						awayTeam = dao.addTeam(parsedFixture.getAwayTeamName());
+						teamsInDatabase.put(awayTeam.getTeamId(), awayTeam);
+						teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
 					}
 				}
 			}
