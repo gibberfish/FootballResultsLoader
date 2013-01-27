@@ -24,5 +24,6 @@
   	<property name="dialect" value="soccerbase"/>
   	<property name="dao" ref="dao"/>
   	<property name="reader" ref="reader"/>
+  	<property name="mapping" ref="mapping"/>
   </bean>
 </beans>

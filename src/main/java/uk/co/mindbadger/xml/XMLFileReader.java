@@ -25,6 +25,7 @@ public class XMLFileReader {
 	}
 
 	public List<String> getFilesInDirectory(String directory) {
+		System.out.println("getFilesInDirectory: " + directory);
 		File root = new File (directory);
 		File[] list = root.listFiles();
 
