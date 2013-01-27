@@ -1,7 +1,5 @@
 package uk.co.mindbadger.footballresults.loader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,13 +19,9 @@ public class FootballResultsLoader {
 	private FootballResultsReader reader;
 	private FootballResultsMapping mapping;
 
-	private Map<Integer, Division> divisions = new HashMap<Integer, Division>();
-	private Map<Integer, Team> teams = new HashMap<Integer, Team>();
-
-	
 	public void loadResultsForSeason(int seasonNum) {
-		List<Division> divisionsInDatabase = dao.getAllDivisions();
-		List<Team> teamsInDatabase = dao.getAllTeams();
+		Map<Integer, Division> divisionsInDatabase = dao.getAllDivisions();
+		Map<Integer, Team> teamsInDatabase = dao.getAllTeams();
 		
 		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
 		
@@ -35,6 +29,19 @@ public class FootballResultsLoader {
 			Season season = dao.getSeason(seasonNum);
 			if (season == null) {
 				season = dao.addSeason(seasonNum);
+			}
+			
+			for (ParsedFixture parsedFixture : fixturesRead) {
+				Division division = null;
+				Integer readDivisionId = parsedFixture.getDivisionId();
+				
+				if (mapping.getIncludedDivisions(dialect).contains(readDivisionId)) {
+					Integer fraDivisionId = mapping.getDivisionMappings(dialect).get(readDivisionId);
+					division = divisionsInDatabase.get(fraDivisionId);
+					if (division == null) {
+						division = dao.addDivision(parsedFixture.getDivisionName());
+					}
+				}
 			}
 		}
 	}

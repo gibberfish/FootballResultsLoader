@@ -5,7 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.*;
 import org.mockito.*;
@@ -15,6 +17,7 @@ import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
+import uk.co.mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
@@ -25,8 +28,15 @@ public class FootballResultsLoaderTest {
 	private static final String DIALECT = "soccerbase";
 	private static final Integer DIVISION_NOT_INCLUDED_IN_MAPPING = 5;
 	private static final Integer READ_FIX_ID_1 = 100;
+
 	private static final Integer READ_DIV_ID_1 = 1;
 	private static final String READ_DIV_NAME_1 = "Premier";
+	private static final Integer MAPPED_DIV_ID_1 = 10;
+
+	private static final Integer READ_DIV_ID_2 = 2;
+	private static final String READ_DIV_NAME_2 = "Championship";
+	private static final Integer MAPPED_DIV_ID_2 = 11;
+
 	private static final Integer READ_TEAM_ID_1 = 500;
 	private static final String READ_TEAM_NAME_1 = "Portsmouth";
 	private static final Integer READ_TEAM_ID_2 = 501;
@@ -42,10 +52,12 @@ public class FootballResultsLoaderTest {
 	private Calendar date1;
 	private Calendar date2;
 	
-	private List<Division> divisionsFromDatabase;
-	private List<Team> teamsFromDatabase;
+	private Map<Integer, Division> divisionsFromDatabase;
+	private Map<Integer, Team> teamsFromDatabase;
 	private List<Integer> includedDivisions;
 	private List<ParsedFixture> fixturesReadFromReader;
+	private Map<Integer,Integer> mappedDivisions;
+	private Map<Integer,Integer> mappedTeams;
 	
 	@Before
 	public void setup() {
@@ -61,6 +73,8 @@ public class FootballResultsLoaderTest {
 		when (mockDao.getAllTeams()).thenReturn(teamsFromDatabase);
 		when (mockReader.readFixturesForSeason(SEASON)).thenReturn(fixturesReadFromReader);
 		when (mockMapping.getIncludedDivisions(DIALECT)).thenReturn(includedDivisions);
+		when (mockMapping.getDivisionMappings(DIALECT)).thenReturn(mappedDivisions);
+		when (mockMapping.getTeamMappings(DIALECT)).thenReturn(mappedTeams);
 	}
 	
 	// ----------------------------------------------------------------------------------------------
@@ -98,6 +112,24 @@ public class FootballResultsLoaderTest {
 		// Then
 		verify(mockDao, never()).getSeason(SEASON);
 		verify(mockDao, never()).addSeason (SEASON);
+		verify(mockDao, never()).addDivision((String)any());
+		verify(mockDao, never()).addTeam((String)any());
+		verify(mockDao, never()).addFixture((Integer)any(), (Season)any(), (Calendar)any(), (Division)any(), (Team)any(), (Team)any(), (Integer)any(), (Integer)any());
+	}
+
+	@Test
+	public void shouldNotCreateNewSeasonIfExistsInDatabase () {
+		// Given
+		Season season = new SeasonImpl();
+		when (mockDao.getSeason(SEASON)).thenReturn(season);
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao).getSeason(SEASON);
+		verify(mockDao, never()).addSeason (SEASON);
 	}
 
 	@Test
@@ -113,19 +145,68 @@ public class FootballResultsLoaderTest {
 		verify(mockDao).getSeason(SEASON);
 		verify(mockDao).addSeason (SEASON);
 	}
-	
-	@Ignore
+
 	@Test
-	public void shouldNotCreateNewSeasonIfExistsInDatabase () {
-		fail ("Need to implement this test");
+	public void shouldTakeNoActionForFixtureWhosDivisionIsNotInTheIncludedList () {
+		// Given
+		includedDivisions.add(READ_DIV_ID_2);
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao, never()).addDivision((String)any());
+		verify(mockDao, never()).addTeam((String)any());
+		verify(mockDao, never()).addFixture((Integer)any(), (Season)any(), (Calendar)any(), (Division)any(), (Team)any(), (Team)any(), (Integer)any(), (Integer)any());
 	}
 	
+	@Test
+	public void shouldNotCreateNewDivisionIfExistsInListReadFromDatabase () {
+		// Given
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+		
+		Division division1 = new DivisionImpl();
+		division1.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
+		
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao, never()).addDivision((String)any());
+	}
+
+	@Test
+	public void shouldCreateNewDivisionIfNotExistsInListReadFromDatabase () {
+		// Given
+		Season season = new SeasonImpl();
+		when (mockDao.getSeason(SEASON)).thenReturn(season);
+		fixturesReadFromReader.add(createParsedFixture1());
+		
+		includedDivisions.add(READ_DIV_ID_1);
+				
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao).addDivision(READ_DIV_NAME_1);
+	}
+
+	
+	@Ignore
 	@Test
 	public void shouldNotCreateFixtureIfDivisionForFixtureReadIsNotInMappingList () {
 		// Given
 		ParsedFixture parsedFixture1 = createParsedFixture1();
 		parsedFixture1.setDivisionId(DIVISION_NOT_INCLUDED_IN_MAPPING);
 		fixturesReadFromReader.add(parsedFixture1);
+		
+		includedDivisions.add(READ_DIV_ID_1);
 		
 		// When
 		objectUnderTest.loadResultsForSeason(SEASON);
@@ -140,10 +221,12 @@ public class FootballResultsLoaderTest {
 	// ----------------------------------------------------------------------------------------------------------
 	
 	private void initialiseAllListsAsEmpty() {
-		divisionsFromDatabase = new ArrayList<Division> ();
-		teamsFromDatabase = new ArrayList<Team> ();
+		divisionsFromDatabase = new HashMap<Integer, Division> ();
+		teamsFromDatabase = new HashMap<Integer, Team> ();
 		fixturesReadFromReader = new ArrayList<ParsedFixture> ();
 		includedDivisions = new ArrayList<Integer> ();
+		mappedDivisions = new HashMap<Integer, Integer> ();
+		mappedTeams = new HashMap<Integer, Integer> ();
 	}
 	
 	private void createObjectToTestAndInjectDependencies() {
