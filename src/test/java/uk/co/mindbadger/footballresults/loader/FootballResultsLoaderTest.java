@@ -48,7 +48,6 @@ public class FootballResultsLoaderTest {
 	private FootballResultsLoader objectUnderTest;
 	
 	@Mock private FootballResultsAnalyserDAO mockDao;
-	@Mock private DomainObjectFactory mockDomainObjectFactory;
 	@Mock private FootballResultsReader mockReader;
 	@Mock private FootballResultsMapping mockMapping;
 
@@ -81,7 +80,19 @@ public class FootballResultsLoaderTest {
 	}
 	
 	// ----------------------------------------------------------------------------------------------
-	
+
+	@Test
+	public void shouldOpenAndCloseASession () {
+		// Given
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockDao).startSession();
+		verify(mockDao).closeSession();
+	}
+
 	@Test
 	public void shouldReadAllDivisionsAndSeasonsDuringLoadResults () {
 		// Given
@@ -482,7 +493,6 @@ public class FootballResultsLoaderTest {
 	private void createObjectToTestAndInjectDependencies() {
 		objectUnderTest = new FootballResultsLoader();
 		objectUnderTest.setDao(mockDao);
-		objectUnderTest.setDomainObjectFactory(mockDomainObjectFactory);
 		objectUnderTest.setReader(mockReader);
 		objectUnderTest.setMapping(mockMapping);
 		objectUnderTest.setDialect(DIALECT);

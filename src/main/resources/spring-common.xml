@@ -22,7 +22,6 @@
   
   <bean id="loader" class="uk.co.mindbadger.footballresults.loader.FootballResultsLoader">
   	<property name="dialect" value="soccerbase"/>
-  	<property name="domainObjectFactory" ref="domainObjectFactory"/>
   	<property name="dao" ref="dao"/>
   	<property name="reader" ref="reader"/>
   </bean>
