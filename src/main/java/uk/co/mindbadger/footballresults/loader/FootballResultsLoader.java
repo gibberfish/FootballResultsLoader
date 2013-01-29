@@ -1,5 +1,6 @@
 package uk.co.mindbadger.footballresults.loader;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,6 @@ import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
-import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
@@ -72,10 +72,13 @@ public class FootballResultsLoader {
 							teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
 						}
 						
+						String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());
+						System.out.println("Adding fixture: ssn:" + season + ",dt:"+dateString+",div:"+division.getDivisionName()+",hm:"+homeTeam.getTeamName()+",aw:"+awayTeam.getTeamName());
 						dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
 					}
 				}
 			}
+			mapping.saveMappings();
 		} finally {
 			dao.closeSession();
 		}

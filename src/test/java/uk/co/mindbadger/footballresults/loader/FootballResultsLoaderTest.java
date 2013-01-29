@@ -1,7 +1,10 @@
 package uk.co.mindbadger.footballresults.loader;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,8 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
@@ -18,7 +23,6 @@ import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.DivisionImpl;
-import uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
@@ -103,6 +107,17 @@ public class FootballResultsLoaderTest {
 		// Then
 		verify(mockDao).getAllDivisions();
 		verify(mockDao).getAllTeams();
+	}
+	
+	@Test
+	public void shouldWriteTheMappingFileDuringLoadResults () {
+		// Given
+		
+		// When
+		objectUnderTest.loadResultsForSeason(SEASON);
+		
+		// Then
+		verify(mockMapping).saveMappings();
 	}
 	
 	@Test

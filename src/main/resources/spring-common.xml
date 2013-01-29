@@ -8,9 +8,13 @@
   <bean id="xmlFileReader" class="uk.co.mindbadger.xml.XMLFileReader">
   </bean>
 
+  <bean id="xmlFileWriter" class="uk.co.mindbadger.xml.XMLFileWriter">
+  </bean>
+  
   <bean id="mapping" class="uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping">
       <constructor-arg value="C:\\Mark\\appConfig\\fra_mapping.xml"/>
       <constructor-arg ref="xmlFileReader"/>
+      <constructor-arg ref="xmlFileWriter"/>
   </bean>
   
   <bean id="domainObjectFactory" class="uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl">

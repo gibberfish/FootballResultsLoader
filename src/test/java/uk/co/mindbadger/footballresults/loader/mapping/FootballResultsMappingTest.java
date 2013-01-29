@@ -23,13 +23,17 @@ import org.xml.sax.SAXException;
 
 import uk.co.mindbadger.footballresults.loader.FootballResultsLoaderException;
 import uk.co.mindbadger.xml.XMLFileReader;
+import uk.co.mindbadger.xml.XMLFileWriter;
 
 public class FootballResultsMappingTest{
 	private static final String NON_EXISTANT_DIALECT = "Non Existant Dialect";
+	private static final String FRA_TEAM_ID_3 = "5";
 	private static final String FRA_TEAM_ID_2 = "4";
 	private static final String FRA_TEAM_ID_1 = "3";
 	private static final String FRA_DIV_ID_2 = "2";
 	private static final String FRA_DIV_ID_1 = "1";
+	private static final String FRA_DIV_ID_3 = "3";
+	private static final String SOURCE_TEAM_ID_3 = "502";
 	private static final String SOURCE_TEAM_ID_2 = "501";
 	private static final String SOURCE_TEAM_ID_1 = "500";
 	private static final String SOURCE_DIV_ID_3 = "1025";
@@ -41,6 +45,7 @@ public class FootballResultsMappingTest{
 	private FootballResultsMapping objectUnderTest;
 	
 	@Mock private XMLFileReader mockXmlFileReader;
+	@Mock private XMLFileWriter mockXmlFileWriter;
 	
 	@Before
 	public void setup() {
@@ -54,7 +59,7 @@ public class FootballResultsMappingTest{
 			
 		// When
 		try {
-			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 			fail("Should thrown a FootballResultsLoaderException here");
 		} catch (FootballResultsLoaderException e) {
 			// Then
@@ -69,7 +74,7 @@ public class FootballResultsMappingTest{
 			
 		// When
 		try {
-			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 			fail("Should thrown a FootballResultsLoaderException here");
 		} catch (FootballResultsLoaderException e) {
 			// Then
@@ -84,7 +89,7 @@ public class FootballResultsMappingTest{
 			
 		// When
 		try {
-			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 			fail("Should thrown a FootballResultsLoaderException here");
 		} catch (FootballResultsLoaderException e) {
 			// Then
@@ -96,7 +101,7 @@ public class FootballResultsMappingTest{
 	public void shouldThrowExceptionWhenNoSpecifiedSourceExistsInXML () throws Exception {
 		// Given
 		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
-		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 			
 		// When
 		try {
@@ -115,7 +120,7 @@ public class FootballResultsMappingTest{
 			
 		// When
 		try {
-			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 			fail("Should thrown a FootballResultsLoaderException here");
 		} catch (FootballResultsLoaderException e) {
 			// Then
@@ -128,7 +133,7 @@ public class FootballResultsMappingTest{
 	public void shouldReadIncludedDivisionsFromAValidMappingFile () throws Exception {
 		// Given
 		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
-		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 
 		// When
 		List<Integer> includedDivisions = objectUnderTest.getIncludedDivisions (DIALECT);
@@ -147,7 +152,7 @@ public class FootballResultsMappingTest{
 			
 		// When
 		try {
-			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+			objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 			fail("Should thrown a FootballResultsLoaderException here");
 		} catch (FootballResultsLoaderException e) {
 			// Then
@@ -159,7 +164,7 @@ public class FootballResultsMappingTest{
 	public void shouldReadDivisionMappingsFromAValidMappingFile () throws Exception {
 		// Given
 		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
-		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 
 		// When
 		Map<Integer,Integer> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
@@ -175,7 +180,7 @@ public class FootballResultsMappingTest{
 	public void shouldReadTeamMappingsFromAValidMappingFile () throws Exception {
 		// Given
 		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
-		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader);
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 
 		// When
 		Map<Integer,Integer> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
@@ -187,6 +192,55 @@ public class FootballResultsMappingTest{
 		assertEquals (new Integer(FRA_TEAM_ID_2), teamMappings.get(new Integer (SOURCE_TEAM_ID_2)));
 	}
 	
+	@Test
+	public void shouldAddDivisionMapping () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
+		
+		// When
+		objectUnderTest.addDivisionMapping (DIALECT, new Integer(SOURCE_DIV_ID_3), new Integer (FRA_DIV_ID_3));
+		
+		// Then
+		Map<Integer,Integer> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
+
+		assertEquals (3, divisionMappings.size());
+		assertEquals (new Integer(FRA_DIV_ID_1), divisionMappings.get(new Integer (SOURCE_DIV_ID_1)));
+		assertEquals (new Integer(FRA_DIV_ID_2), divisionMappings.get(new Integer (SOURCE_DIV_ID_2)));
+		assertEquals (new Integer(FRA_DIV_ID_3), divisionMappings.get(new Integer (SOURCE_DIV_ID_3)));
+	}
+
+	@Test
+	public void shouldAddTeamMapping () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
+		
+		// When
+		objectUnderTest.addTeamMapping (DIALECT, new Integer(SOURCE_TEAM_ID_3), new Integer (FRA_TEAM_ID_3));
+		
+		// Then
+		Map<Integer,Integer> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
+
+		assertEquals (3, teamMappings.size());
+		assertEquals (new Integer(FRA_TEAM_ID_1), teamMappings.get(new Integer (SOURCE_TEAM_ID_1)));
+		assertEquals (new Integer(FRA_TEAM_ID_2), teamMappings.get(new Integer (SOURCE_TEAM_ID_2)));
+		assertEquals (new Integer(FRA_TEAM_ID_3), teamMappings.get(new Integer (SOURCE_TEAM_ID_3)));
+	}
+	
+	@Test
+	public void shouldSaveMappingFile () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
+		
+		// When
+		objectUnderTest.saveMappings ();
+		
+		// Then
+		verify (mockXmlFileWriter).writeXMLFile(eq(MAPPING_FILE), (Document)any());
+	}
+
 	// ---------------------------------------------------------------------------------------------------------------
 	
 	private Document getDocumentWithNoDivisionMappingsXML() throws ParserConfigurationException {
