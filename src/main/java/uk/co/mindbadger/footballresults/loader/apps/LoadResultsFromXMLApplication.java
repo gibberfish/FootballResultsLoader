@@ -12,6 +12,6 @@ public class LoadResultsFromXMLApplication {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-xml-reader.xml");
 
 		FootballResultsLoader loader = (FootballResultsLoader) context.getBean("loader");
-		loader.loadResultsForSeason(2001);
+		loader.loadResultsForSeason(2003);
 	}
 }
