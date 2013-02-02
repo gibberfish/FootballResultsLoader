@@ -97,7 +97,7 @@ public class SoccerbaseXMLReaderTest {
 	}
 
 	@Test
-	public void testReadFixturesForSeason() throws Exception {
+	public void shouldReadFixturesForSeason() throws Exception {
 		// Given
 		List<String> listOfFiles = new ArrayList<String>();
 		listOfFiles.add(FILE1);
@@ -243,7 +243,7 @@ public class SoccerbaseXMLReaderTest {
 	}
 
 	@Test
-	public void testReadFixturesWithNoDateInFile() throws Exception {
+	public void shouldReadFixturesWithNoDateInFile() throws Exception {
 		// Given
 		List<String> listOfFiles = new ArrayList<String>();
 		listOfFiles.add(FILE1);

@@ -3,14 +3,18 @@ package uk.co.mindbadger.footballresults.reader.web;
 import uk.co.mindbadger.web.WebPageReader;
 
 public class SoccerbaseDatePageParser {
-
-	public void setWebPageReader(WebPageReader mockWebPageReader) {
-		// TODO Auto-generated method stub
-		
+	private WebPageReader webPageReader;
+	private String url;
+	
+	public void setWebPageReader(WebPageReader webPageReader) {
+		this.webPageReader = webPageReader;
 	}
 
 	public void setUrl(String url) {
-		// TODO Auto-generated method stub
+		this.url = url;
+	}
+
+	public void parseFixturesForDate(String dateString) {
 		
 	}
 

@@ -22,5 +22,7 @@
    	
    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseWebPageReader">
       <property name="dialect" value="soccerbase"/>
+      <property name="teamPageParser" ref="teamPageParser"/>
+      <property name="datePageParser" ref="datePageParser"/>
    </bean>
 </beans>
