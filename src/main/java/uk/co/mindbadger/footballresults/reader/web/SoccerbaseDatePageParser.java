@@ -1,5 +1,8 @@
 package uk.co.mindbadger.footballresults.reader.web;
 
+import java.util.List;
+
+import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.web.WebPageReader;
 
 public class SoccerbaseDatePageParser {
@@ -14,8 +17,8 @@ public class SoccerbaseDatePageParser {
 		this.url = url;
 	}
 
-	public void parseFixturesForDate(String dateString) {
-		
+	public List<ParsedFixture> parseFixturesForDate(String dateString) {
+		return null;
 	}
 
 }

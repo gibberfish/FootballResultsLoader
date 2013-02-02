@@ -13,7 +13,12 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 	@Override
 	public List<ParsedFixture> readFixturesForSeason(int season) {
 		String boxingDay = season + "-12-26";
-		datePageParser.parseFixturesForDate(boxingDay);
+		List<ParsedFixture> boxingDayFixtures = datePageParser.parseFixturesForDate(boxingDay);
+		
+		for (ParsedFixture fixture : boxingDayFixtures) {
+			teamPageParser.parseFixturesForTeam(season, fixture.getHomeTeamId());
+			teamPageParser.parseFixturesForTeam(season, fixture.getAwayTeamId());
+		}
 		
 		return null;
 	}
