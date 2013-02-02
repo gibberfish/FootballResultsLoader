@@ -4,7 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import uk.co.mindbadger.footballresults.loader.FootballResultsLoader;
-import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 
 public class LoadResultsFromXMLApplication {
 
@@ -12,6 +11,6 @@ public class LoadResultsFromXMLApplication {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-xml-reader.xml");
 
 		FootballResultsLoader loader = (FootballResultsLoader) context.getBean("loader");
-		loader.loadResultsForSeason(2003);
+		loader.loadResultsForSeason(2004);
 	}
 }
