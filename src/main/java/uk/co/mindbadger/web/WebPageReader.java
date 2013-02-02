@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WebPageReader {
-	public ArrayList<String> readWebPage(String pURL) throws FileNotFoundException, IOException {
+	public List<String> readWebPage(String pURL) throws FileNotFoundException, IOException {
 		ArrayList<String> results = new ArrayList <String>();
 		BufferedReader in = null;
 		InputStreamReader webReader = null;
@@ -37,7 +38,7 @@ public class WebPageReader {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		WebPageReader reader = new WebPageReader();
-		ArrayList<String> output = reader.readWebPage("http://www.soccerbase.com/matches/results.sd?date=2012-12-26");
+		List<String> output = reader.readWebPage("http://www.soccerbase.com/matches/results.sd?date=2012-12-26");
 		for (String line : output) {
 			System.out.println(line);
 		}
