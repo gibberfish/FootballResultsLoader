@@ -14,7 +14,6 @@ import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 
 public class SoccerbaseWebPageReaderTest {
 	private static final String BOXING_DAY_2000 = "2000-12-26";
-	private static final String DIALECT = "soccerbase";
 	private static final int SEASON_NUMBER = 2000;
 	
 	private SoccerbaseWebPageReader objectUnderTest;
@@ -27,7 +26,6 @@ public class SoccerbaseWebPageReaderTest {
 		MockitoAnnotations.initMocks(this);
 
 		objectUnderTest = new SoccerbaseWebPageReader();
-		objectUnderTest.setDialect(DIALECT);
 		objectUnderTest.setTeamPageParser(mockTeamPageParser);
 		objectUnderTest.setDatePageParser(mockDatePageParser);
 	}
@@ -103,11 +101,56 @@ public class SoccerbaseWebPageReaderTest {
 		assertTrue (parsedFixtures.contains(fixture6));
 	}
 
-	
-	
-	
-	
-	
+	@Test
+	public void shouldAlsoReadTheTeamPagesForEachTeamNotPlayingOnBoxingDay () {
+		// Given
+		Calendar fixtureDate = Calendar.getInstance();
+
+		ParsedFixture fixture1 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 101, "Leeds", fixtureDate , 3, 0);
+		ParsedFixture fixture2 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 104, "Liverpool", fixtureDate , 1, 1);
+		ParsedFixture fixture3 = createParsedFixture(1000, 2000, 1, "Premier", 101, "Leeds", 104, "Liverpool", fixtureDate , 1, 4);
+		ParsedFixture fixture4 = createParsedFixture(1000, 2000, 1, "Premier", 104, "Liverpool", 101, "Leeds", fixtureDate , 2, 1);
+		
+
+		List<ParsedFixture> fixturesOnBoxingDay = new ArrayList<ParsedFixture> ();
+		fixturesOnBoxingDay.add(fixture1);
+		when(mockDatePageParser.parseFixturesForDate(BOXING_DAY_2000)).thenReturn(fixturesOnBoxingDay);
+		
+		List<ParsedFixture> fixturesForPortsmouth = new ArrayList<ParsedFixture> ();
+		fixturesForPortsmouth.add(fixture1);
+		fixturesForPortsmouth.add(fixture2);
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 100)).thenReturn(fixturesForPortsmouth);
+		
+		List<ParsedFixture> fixturesForLeeds = new ArrayList<ParsedFixture> ();
+		fixturesForLeeds.add(fixture1);
+		fixturesForLeeds.add(fixture3);
+		fixturesForLeeds.add(fixture4);
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 101)).thenReturn(fixturesForLeeds);
+		
+		List<ParsedFixture> fixturesForLiverpool = new ArrayList<ParsedFixture> ();
+		fixturesForLiverpool.add(fixture2);
+		fixturesForLiverpool.add(fixture3);
+		fixturesForLiverpool.add(fixture4);
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 103)).thenReturn(fixturesForLiverpool);
+
+		List<ParsedFixture> fixturesForManU = new ArrayList<ParsedFixture> ();
+		fixturesForManU.add(fixture4);
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 103)).thenReturn(fixturesForManU);
+
+		// When
+		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
+		
+		// Then
+		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 100);
+		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 101);
+		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 104);
+		
+		assertEquals (4, parsedFixtures.size());
+		assertTrue (parsedFixtures.contains(fixture1));
+		assertTrue (parsedFixtures.contains(fixture2));
+		assertTrue (parsedFixtures.contains(fixture3));
+		assertTrue (parsedFixtures.contains(fixture4));
+	}
 	
 	private ParsedFixture createParsedFixture (Integer fixtureId, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, Calendar fixtureDate, Integer homeGoals, Integer awayGoals) {
 		ParsedFixture parsedFixture = new ParsedFixture ();
