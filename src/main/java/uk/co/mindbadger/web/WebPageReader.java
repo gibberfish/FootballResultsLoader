@@ -37,7 +37,7 @@ public class WebPageReader {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		WebPageReader reader = new WebPageReader();
-		ArrayList<String> output = reader.readWebPage("http://www.soccerbase.com/matches/results.sd?date=2012-11-28");
+		ArrayList<String> output = reader.readWebPage("http://www.soccerbase.com/matches/results.sd?date=2012-12-26");
 		for (String line : output) {
 			System.out.println(line);
 		}
