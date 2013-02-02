@@ -46,12 +46,44 @@ public class SoccerbaseWebPageReaderTest {
 	@Test
 	public void shouldReadTheTeamPagesForEachTeamPlayingOnBoxingDay () {
 		// Given
-		List<ParsedFixture> fixturesOnBoxingDay = new ArrayList<ParsedFixture> ();
 		Calendar fixtureDate = Calendar.getInstance();
-		fixturesOnBoxingDay.add(createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 101, "Leeds", fixtureDate , 3, 0));
-		fixturesOnBoxingDay.add(createParsedFixture(1001, 2000, 2, "Championship", 102, "Southampton", 103, "Grimsby", fixtureDate , 0, 7));
-		
+
+		ParsedFixture fixture1 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 101, "Leeds", fixtureDate , 3, 0);
+		ParsedFixture fixture2 = createParsedFixture(1001, 2000, 2, "Championship", 102, "Southampton", 103, "Grimsby", fixtureDate , 0, 7);
+		ParsedFixture fixture3 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 104, "Liverpool", fixtureDate , 1, 1);
+		ParsedFixture fixture4 = createParsedFixture(1000, 2000, 1, "Premier", 105, "Everton", 100, "Portsmouth", fixtureDate , 1, 4);
+		ParsedFixture fixture5 = createParsedFixture(1001, 2000, 2, "Championship", 102, "Southampton", 103, "Charlton", fixtureDate , 1, 2);
+		ParsedFixture fixture6 = createParsedFixture(1001, 2000, 2, "Championship", 102, "Southampton", 103, "QPR", fixtureDate , 0, 5);
+
+		List<ParsedFixture> fixturesOnBoxingDay = new ArrayList<ParsedFixture> ();
+		fixturesOnBoxingDay.add(fixture1);
+		fixturesOnBoxingDay.add(fixture2);
+
 		when(mockDatePageParser.parseFixturesForDate(BOXING_DAY_2000)).thenReturn(fixturesOnBoxingDay);
+		
+		List<ParsedFixture> fixturesForPortsmouth = new ArrayList<ParsedFixture> ();
+		fixturesForPortsmouth.add(fixture1);
+		fixturesForPortsmouth.add(fixture3);
+		fixturesForPortsmouth.add(fixture4);
+		
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 100)).thenReturn(fixturesForPortsmouth);
+		
+		List<ParsedFixture> fixturesForLeeds = new ArrayList<ParsedFixture> ();
+		fixturesForLeeds.add(fixture1);
+		
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 101)).thenReturn(fixturesForLeeds);
+		
+		List<ParsedFixture> fixturesForSouthampton = new ArrayList<ParsedFixture> ();
+		fixturesForSouthampton.add(fixture2);
+		fixturesForSouthampton.add(fixture5);
+		fixturesForSouthampton.add(fixture6);
+		
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 102)).thenReturn(fixturesForSouthampton);
+		
+		List<ParsedFixture> fixturesForGrimsby = new ArrayList<ParsedFixture> ();
+		fixturesForGrimsby.add(fixture2);
+		
+		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 103)).thenReturn(fixturesForGrimsby);
 		
 		// When
 		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
@@ -61,6 +93,14 @@ public class SoccerbaseWebPageReaderTest {
 		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 101);
 		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 102);
 		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 103);
+		
+		assertEquals (6, parsedFixtures.size());
+		assertTrue (parsedFixtures.contains(fixture1));
+		assertTrue (parsedFixtures.contains(fixture2));
+		assertTrue (parsedFixtures.contains(fixture3));
+		assertTrue (parsedFixtures.contains(fixture4));
+		assertTrue (parsedFixtures.contains(fixture5));
+		assertTrue (parsedFixtures.contains(fixture6));
 	}
 
 	

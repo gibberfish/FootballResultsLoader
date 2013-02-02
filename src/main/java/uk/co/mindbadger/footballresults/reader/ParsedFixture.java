@@ -80,5 +80,25 @@ public class ParsedFixture {
 	public void setAwayGoals(Integer awayGoals) {
 		this.awayGoals = awayGoals;
 	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ParsedFixture) {
+			ParsedFixture parsedFixture = (ParsedFixture) obj;
+			
+			boolean equals = parsedFixture.getSeasonId().equals(this.seasonId);
+			equals = equals && ((parsedFixture.getFixtureDate() == null && this.fixtureDate == null) || (parsedFixture.getFixtureDate().equals(this.fixtureDate)));
+			equals = equals && parsedFixture.getHomeTeamId().equals(this.homeTeamId);
+			equals = equals && parsedFixture.getAwayTeamId().equals(this.awayTeamId);
+			equals = equals && parsedFixture.getDivisionId().equals(this.divisionId);
+			
+			return equals;
+		} else {
+			return false;
+		}
+	}
 
+	
+	
 }

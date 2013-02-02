@@ -1,5 +1,6 @@
 package uk.co.mindbadger.footballresults.reader.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
@@ -12,15 +13,21 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 	
 	@Override
 	public List<ParsedFixture> readFixturesForSeason(int season) {
+		
+		List<ParsedFixture> fixturesForSeason = new ArrayList<ParsedFixture> ();
+		
 		String boxingDay = season + "-12-26";
 		List<ParsedFixture> boxingDayFixtures = datePageParser.parseFixturesForDate(boxingDay);
 		
 		for (ParsedFixture fixture : boxingDayFixtures) {
-			teamPageParser.parseFixturesForTeam(season, fixture.getHomeTeamId());
-			teamPageParser.parseFixturesForTeam(season, fixture.getAwayTeamId());
+			List<ParsedFixture> homeTeamFixtures = teamPageParser.parseFixturesForTeam(season, fixture.getHomeTeamId());
+			List<ParsedFixture> awayTeamFixtures = teamPageParser.parseFixturesForTeam(season, fixture.getAwayTeamId());
+			
+			fixturesForSeason.addAll(homeTeamFixtures);
+			fixturesForSeason.addAll(awayTeamFixtures);
 		}
 		
-		return null;
+		return fixturesForSeason;
 	}
 
 	public void setDialect(String dialect) {
