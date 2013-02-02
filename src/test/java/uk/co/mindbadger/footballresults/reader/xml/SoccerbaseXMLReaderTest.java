@@ -75,6 +75,8 @@ public class SoccerbaseXMLReaderTest {
 	private static final String FIXTURE_7_AWAY_GOALS = "13";
 	private static final String FIXTURE_8_ID = "9997";
 
+	private static final String NO_FIXTURE_DATE = "";
+	
 	private static final String ROOT_DIRECTORY = "C:\\results";
 	private static final String FILE3 = "C:\\results\\2000\\FILE3.xml";
 	private static final String FILE2 = "C:\\results\\2000\\FILE2.xml";
@@ -240,6 +242,38 @@ public class SoccerbaseXMLReaderTest {
 		}
 	}
 
+	@Test
+	public void testReadFixturesWithNoDateInFile() throws Exception {
+		// Given
+		List<String> listOfFiles = new ArrayList<String>();
+		listOfFiles.add(FILE1);
+		when(mockXmlFileReader.getFilesInDirectory(ROOT_DIRECTORY + "\\" + SEASON)).thenReturn(listOfFiles);
+
+		when(mockXmlFileReader.readXMLFile(FILE1)).thenReturn(getDocumentWithNoFixtureDate());
+
+		// When
+		List<ParsedFixture> fixtures = objectUnderTest.readFixturesForSeason(SEASON);
+
+		// Then
+		verify(mockXmlFileReader).getFilesInDirectory(ROOT_DIRECTORY + "\\" + SEASON);
+		verify(mockXmlFileReader).readXMLFile(FILE1);
+
+		assertEquals(1, fixtures.size());
+
+		ParsedFixture fixture1 = fixtures.get(0);
+		assertEquals(new Integer(FIXTURE_5_ID), fixture1.getFixtureId());
+		assertEquals(SEASON, fixture1.getSeasonId());
+		assertEquals(new Integer(COMPETITION_1_ID), fixture1.getDivisionId());
+		assertEquals(COMPETITION_1_NAME, fixture1.getDivisionName());
+		assertNull(fixture1.getFixtureDate());
+		assertEquals(new Integer(TEAM_2_ID), fixture1.getHomeTeamId());
+		assertEquals(TEAM_2_NAME, fixture1.getHomeTeamName());
+		assertEquals(new Integer(TEAM_1_ID), fixture1.getAwayTeamId());
+		assertEquals(TEAM_1_NAME, fixture1.getAwayTeamName());
+		assertEquals(new Integer(FIXTURE_5_HOME_GOALS), fixture1.getHomeGoals());
+		assertEquals(new Integer(FIXTURE_5_AWAY_GOALS), fixture1.getAwayGoals());
+	}
+
 	private Document getDocumentForDate1() throws ParserConfigurationException {
 		Document doc = createNewDocument();
 		Element root = createFixtureDateElement(doc, FIXTURE_DATE_1);
@@ -290,6 +324,17 @@ public class SoccerbaseXMLReaderTest {
 		Document doc = createNewDocument();
 		Element root = createFixtureDateElement(doc, FIXTURE_DATE_1);
 		createCompetitionElement(doc, root, COMPETITION_1_ID, COMPETITION_1_NAME, NOT_MATCHING_SEASON_ID);
+
+		return doc;
+	}
+
+	private Document getDocumentWithNoFixtureDate() throws ParserConfigurationException {
+		Document doc = createNewDocument();
+		Element root = createFixtureDateElement(doc, NO_FIXTURE_DATE);
+
+		Element div1 = createCompetitionElement(doc, root, COMPETITION_1_ID, COMPETITION_1_NAME, SEASON_ID);
+		Element game1 = createGameElement(doc, div1, FIXTURE_5_ID, TEAM_2_ID, TEAM_2_NAME, TEAM_1_ID, TEAM_1_NAME);
+		createScoreElement(doc, game1, FIXTURE_5_HOME_GOALS, FIXTURE_5_AWAY_GOALS);
 
 		return doc;
 	}

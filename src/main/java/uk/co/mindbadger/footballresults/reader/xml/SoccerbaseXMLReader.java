@@ -97,6 +97,11 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 	}
 
 	private Calendar convertDateStringToCalendar(String dateString) {
+		
+		if (dateString == null || "".equals(dateString)) {
+			return null;
+		}
+		
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
