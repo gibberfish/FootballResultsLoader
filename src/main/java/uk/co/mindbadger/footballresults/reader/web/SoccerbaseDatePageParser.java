@@ -39,22 +39,18 @@ public class SoccerbaseDatePageParser {
 	}
 
 	public List<ParsedFixture> parseFixturesForDate(String dateString) {
-		List<ParsedFixture> parsedFixtures;
-		
 		String url = this.url.replace("{fixtureDate}", dateString);
 		
 		try {
 			System.out.println(url);
 			List<String> page = webPageReader.readWebPage(url);
 			
-			parsedFixtures = parsePage(page);
+			return parsePage(page);
 		} catch (FileNotFoundException e) {
 			throw new FootballResultsReaderException("No page found for " + dateString);
 		} catch (IOException e) {
 			throw new FootballResultsReaderException("Cannot load page for " + dateString);
 		}
-		
-		return parsedFixtures;
 	}
 
 	protected List<ParsedFixture> parsePage(List<String> page) {
@@ -75,26 +71,6 @@ public class SoccerbaseDatePageParser {
 		Integer season = null;
 		
 		for (String line : page) {
-			/*
-			 * TO FIND THE START OF A DIVISION SECTION:
-			 * <a href="/tournaments/tournament.sd?comp_id=1" title="Go to English Premier competition page">English Premier</a> </h2>
-			 * 
-			 * TO FIND THE DATE
-			 * <a href="/matches/results.sd?date=2012-12-26" title="We 26Dec 2012">We 26Dec 2012</a>
-			 * 
-			 * FIXTURES
-			 * <td class="team homeTeam">
-				 <a href="/teams/team.sd?team_id=942" title="Go to Everton team page">Everton</a> </td>
-				 <td class="score">
-				 <a href="#" class="vs" title="View Match info"><em>2</em>&nbsp;-&nbsp;<em>1</em></a> </td>
-				 <td class="team awayTeam">
-				 <a href="/teams/team.sd?team_id=2783" title="Go to Wigan team page">Wigan</a> </td>
-				 
-				 
-				Assume that if the fixture is between July and Dec, then the year in the date is the season
-				Assume that if the fixture is between Jan and Jun, then the year in the date-1 is the season 
-			 */
-			
 			if (line.startsWith(START_OF_DIVISION_ID_LOCATION)) {
 				int divisionIdStartPos = line.indexOf(START_OF_DIVISION_ID_LOCATION) + START_OF_DIVISION_ID_LOCATION.length();
 				int divisionIdEndPos = line.indexOf(END_OF_DIVISION_ID_LOCATION,divisionIdStartPos);
@@ -144,8 +120,7 @@ public class SoccerbaseDatePageParser {
 					awayTeamName = line.substring(teamNameStartPos, teamNameEndPos);
 					System.out.println("awayTeamName: " + awayTeamName);
 					
-					addFixture(parsedFixtures, divisionId, divisionName, homeTeamId, awayTeamId, homeTeamName, awayTeamName, homeGoals, awayGoals, fixtureDate, season);
-					
+					parsedFixtures.add(createFixture(divisionId, divisionName, homeTeamId, awayTeamId, homeTeamName, awayTeamName, homeGoals, awayGoals, fixtureDate, season));
 				} else {
 					homeTeamName = line.substring(teamNameStartPos, teamNameEndPos);
 					System.out.println("homeTeamName: " + homeTeamName);
@@ -173,7 +148,7 @@ public class SoccerbaseDatePageParser {
 		return parsedFixtures;
 	}
 
-	private void addFixture(List<ParsedFixture> parsedFixtures, Integer divisionId, String divisionName, Integer homeTeamId, Integer awayTeamId, String homeTeamName, String awayTeamName, Integer homeGoals, Integer awayGoals, Calendar fixtureDate,
+	private ParsedFixture createFixture(Integer divisionId, String divisionName, Integer homeTeamId, Integer awayTeamId, String homeTeamName, String awayTeamName, Integer homeGoals, Integer awayGoals, Calendar fixtureDate,
 			Integer season) {
 		ParsedFixture parsedFixture = new ParsedFixture();
 		parsedFixture.setSeasonId(season);
@@ -187,7 +162,7 @@ public class SoccerbaseDatePageParser {
 		parsedFixture.setHomeGoals(homeGoals);
 		parsedFixture.setAwayGoals(awayGoals);
 		
-		parsedFixtures.add(parsedFixture);
+		return parsedFixture;
 	}
 
 	
@@ -198,29 +173,4 @@ public class SoccerbaseDatePageParser {
 			return fixtureDate.get(Calendar.YEAR);
 		}
 	}
-
-//	public static void main(String[] args) {
-//		SoccerbaseDatePageParser parser = new SoccerbaseDatePageParser();
-//		
-//		List<String> page = new ArrayList<String> ();
-//		page.add("<a href=\"/tournaments/tournament.sd?comp_id=1\" title=\"Go to English Premier competition page\">English Premier</a>");
-//		page.add("<a href=\"/matches/results.sd?date=2012-12-26\" title=\"We 26Dec 2012\">We 26Dec 2012</a>");
-//		page.add("<td class=\"team homeTeam\">");
-//		page.add("<a href=\"/teams/team.sd?team_id=942\" title=\"Go to Everton team page\">Everton</a> </td>");
-//		page.add(START_OF_SCORE_SECTION);
-//		page.add("<a href=\"#\" class=\"vs\" title=\"View Match info\"><em>2</em>&nbsp;-&nbsp;<em>1</em></a> </td>");
-//		page.add("<td class=\"team awayTeam\">");
-//		page.add("<a href=\"/teams/team.sd?team_id=2783\" title=\"Go to Wigan team page\">Wigan</a> </td>");
-//		
-//		page.add("<a href=\"/matches/results.sd?date=2013-03-09\" title=\"Sa 09Mar 2013\">Sa 09Mar 2013</a> </span>");
-//		page.add("<td class=\"team homeTeam\">");
-//		page.add("<a href=\"/teams/team.sd?team_id=2802\" title=\"Go to West Ham team page\">West Ham</a> </td>");
-//		page.add("<td class=\"score\">");
-//		page.add("<span class=\"vs\">v</span>");
-//		page.add("<td class=\"team awayTeam\">");
-//		page.add("<a href=\"/teams/team.sd?team_id=1724\" title=\"Go to Man Utd team page\">Man Utd</a> </td>");
-//		
-//		
-//		parser.parsePage(page);
-//	}
 }
