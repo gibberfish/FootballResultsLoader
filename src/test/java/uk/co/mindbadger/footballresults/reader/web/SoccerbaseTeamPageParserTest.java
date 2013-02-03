@@ -173,10 +173,10 @@ public class SoccerbaseTeamPageParserTest {
 		page.add("");
 		page.add("");
 
-		addFixtureWithScore(page, SEASON, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_2_ID, TEAM_2_NAME, FIXTURE_DATE_1, 5, 2);
-		addFixtureWithScore(page, SEASON, DIV_1_ID, DIV_1_NAME, TEAM_3_ID, TEAM_3_NAME, TEAM_1_ID, TEAM_1_NAME, FIXTURE_DATE_2, 3, 0);
-		addFixtureWithScore(page, SEASON, DIV_2_ID, DIV_2_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_4_ID, TEAM_4_NAME, FIXTURE_DATE_3, 1, 4);
-		addFixtureWithoutScore(page, SEASON, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_5_ID, TEAM_5_NAME, FIXTURE_DATE_4);
+		addFixtureWithScore(page, SOCCERBASE_SEASON_2012, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_2_ID, TEAM_2_NAME, FIXTURE_DATE_1, 5, 2);
+		addFixtureWithScore(page, SOCCERBASE_SEASON_2012, DIV_1_ID, DIV_1_NAME, TEAM_3_ID, TEAM_3_NAME, TEAM_1_ID, TEAM_1_NAME, FIXTURE_DATE_2, 3, 0);
+		addFixtureWithScore(page, SOCCERBASE_SEASON_2012, DIV_2_ID, DIV_2_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_4_ID, TEAM_4_NAME, FIXTURE_DATE_3, 1, 4);
+		addFixtureWithoutScore(page, SOCCERBASE_SEASON_2012, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_5_ID, TEAM_5_NAME, FIXTURE_DATE_4);
 		
 		page.add("</script>                ");
 		page.add("</body>");

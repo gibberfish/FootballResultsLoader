@@ -20,8 +20,8 @@ public class SoccerbaseDatePageParser {
 	private static final String START_OF_TEAM_NAME_LOCATION = "team page\">";
 	private static final String END_OF_TEAM_ID_LOCATION = "\" title=";
 	private static final String START_OF_TEAM_ID_LOCATION = "<a href=\"/teams/team.sd?team_id=";
-	private static final String START_OF_AWAY_TEAM_SECTION = "<td class=\"team awayTeam\">";
-	private static final String START_OF_HOME_TEAM_SECTION = "<td class=\"team homeTeam\">";
+	private static final String START_OF_AWAY_TEAM_SECTION = "<td class=\"team awayTeam";
+	private static final String START_OF_HOME_TEAM_SECTION = "<td class=\"team homeTeam";
 	private static final String END_OF_DATE_LOCATION = END_OF_TEAM_ID_LOCATION;
 	private static final String START_OF_DATE_LOCATION = "<a href=\"/matches/results.sd?date=";
 	private static final String START_OF_DIVISION_NAME_LOCATION = "page\">";
