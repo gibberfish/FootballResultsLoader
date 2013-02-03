@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.xml.XMLFileReader;
 
 public class SoccerbaseXMLReader implements FootballResultsReader {
@@ -32,7 +33,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 
 				Element rootElement = doc.getDocumentElement();
 
-				Calendar fixtureDate = convertDateStringToCalendar(rootElement.getAttribute("date"));
+				Calendar fixtureDate = StringToCalendarConverter.convertDateStringToCalendar(rootElement.getAttribute("date"));
 
 				NodeList competitions = rootElement.getElementsByTagName("Competition");
 
@@ -94,24 +95,6 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 		System.out.println("WE HAVE PARSED " + fixtures.size()  + " FIXTURES");
 		
 		return fixtures;
-	}
-
-	private Calendar convertDateStringToCalendar(String dateString) {
-		
-		if (dateString == null || "".equals(dateString)) {
-			return null;
-		}
-		
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			cal.setTime(sdf.parse(dateString));
-			return cal;
-		} catch (ParseException e) {
-			// TODO Need to add a test to deal with being unable to parse the
-			// date
-			throw new FootballResultsReaderException(e);
-		}
 	}
 
 	public XMLFileReader getXmlFileReader() {
