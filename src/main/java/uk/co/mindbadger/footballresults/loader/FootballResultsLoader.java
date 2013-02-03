@@ -26,7 +26,6 @@ public class FootballResultsLoader {
 			Map<Integer, Team> teamsInDatabase = dao.getAllTeams();
 			
 			List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
-			System.out.println("#### Fixtures read for season " + seasonNum + ": " + fixturesRead.size());
 			
 			if (fixturesRead.size() > 0) {
 				Season season = dao.getSeason(seasonNum);

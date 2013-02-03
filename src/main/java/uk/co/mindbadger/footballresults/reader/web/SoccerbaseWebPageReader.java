@@ -40,14 +40,16 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 			System.out.println("#### Parse fixture for team ID " + teamId);
 			List<ParsedFixture> fixtures = teamPageParser.parseFixturesForTeam(season, teamId);
 			for (ParsedFixture fixture : fixtures) {
-				fixturesForSeason.put(fixture, fixture);
-
-				if (!boxingDayTeams.contains(fixture.getHomeTeamId())) {
-					otherTeams.add(fixture.getHomeTeamId());
-				}
-				
-				if (!boxingDayTeams.contains(fixture.getAwayTeamId())) {
-					otherTeams.add(fixture.getAwayTeamId());
+				if (includedDivisions.contains(fixture.getDivisionId())) {
+					fixturesForSeason.put(fixture, fixture);
+	
+					if (!boxingDayTeams.contains(fixture.getHomeTeamId())) {
+						otherTeams.add(fixture.getHomeTeamId());
+					}
+					
+					if (!boxingDayTeams.contains(fixture.getAwayTeamId())) {
+						otherTeams.add(fixture.getAwayTeamId());
+					}
 				}
 			}
 		}

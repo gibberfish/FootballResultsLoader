@@ -45,7 +45,6 @@ public class SoccerbaseTeamPageParser {
 		url = url.replace("{teamId}", teamId.toString());
 		
 		try {
-			System.out.println(url);
 			List<String> page = webPageReader.readWebPage(url);
 			
 			pauser.pause ();
@@ -93,19 +92,16 @@ public class SoccerbaseTeamPageParser {
 				int divisionIdStartPos = line.indexOf(START_OF_DIVISION_LINE) + START_OF_DIVISION_LINE.length();
 				int divisionIdEndPos = line.indexOf(END_OF_DIVISION_ID,divisionIdStartPos);
 				divisionId = Integer.parseInt(line.substring(divisionIdStartPos, divisionIdEndPos));
-				System.out.println("...divisionIdString: " + divisionId);
 				
 				int divisionNameStartPos = line.indexOf(START_OF_DIVISION_NAME, divisionIdEndPos) + START_OF_DIVISION_NAME.length();
 				int divisionNameEndPos = line.indexOf(END_OF_DIVISION_NAME, divisionIdStartPos);
 				divisionName = line.substring(divisionNameStartPos, divisionNameEndPos);
-				System.out.println("divisionName: " + divisionName);
 			}
 			
 			if (line.startsWith(START_OF_FIXTURE_DATE)) {
 				int fixtureDateStartPos = line.indexOf(START_OF_FIXTURE_DATE) + START_OF_FIXTURE_DATE.length();
 				int fixtureDateEndPos = line.indexOf(END_OF_FIXTURE_DATE,fixtureDateStartPos);
 				String fixtureDateString = line.substring(fixtureDateStartPos, fixtureDateEndPos);
-				System.out.println("...fixtureDate: " + fixtureDateString);
 				
 				fixtureDate = StringToCalendarConverter.convertDateStringToCalendar(fixtureDateString);
 			}
@@ -123,27 +119,22 @@ public class SoccerbaseTeamPageParser {
 				int teamIdEndPos = line.indexOf(END_OF_TEAM_ID,teamIdStartPos);
 				if (lookingForAwayTeam) {
 					awayTeamId = Integer.parseInt(line.substring(teamIdStartPos, teamIdEndPos));
-					System.out.println("awayTeamId: " + awayTeamId);
 				} else {
 					homeTeamId = Integer.parseInt(line.substring(teamIdStartPos, teamIdEndPos));
-					System.out.println("homeTeamId: " + homeTeamId);
 				}
 				
 				int seasonStartPos = line.indexOf(END_OF_TEAM_ID, teamIdEndPos) + END_OF_TEAM_ID.length();
 				int seasonEndPos = line.indexOf("&amp;teamTabs=results\" title", seasonStartPos);
 				season = Integer.parseInt(line.substring(seasonStartPos, seasonEndPos)) + 1870;
-				System.out.println("... season: " + season);
 				
 				int teamNameStartPos = line.indexOf(START_OF_TEAM_NAME, seasonEndPos) + START_OF_TEAM_NAME.length();
 				int teamNameEndPos = line.indexOf(END_OF_TEAM_NAME, teamNameStartPos);
 				if (lookingForAwayTeam) {
 					awayTeamName = line.substring(teamNameStartPos, teamNameEndPos);
-					System.out.println("awayTeamName: " + awayTeamName);
 					
 					parsedFixtures.add(createFixture(divisionId, divisionName, homeTeamId, awayTeamId, homeTeamName, awayTeamName, homeGoals, awayGoals, fixtureDate, season));
 				} else {
 					homeTeamName = line.substring(teamNameStartPos, teamNameEndPos);
-					System.out.println("homeTeamName: " + homeTeamName);
 				}
 			}
 			
@@ -156,12 +147,10 @@ public class SoccerbaseTeamPageParser {
 				int homeGoalsStartPos = line.indexOf(START_OF_HOME_GOALS_LOCATION) + START_OF_HOME_GOALS_LOCATION.length();
 				int homeGoalsEndPos = line.indexOf(END_OF_HOME_GOALS_LOCATION,homeGoalsStartPos);
 				homeGoals = Integer.parseInt(line.substring(homeGoalsStartPos, homeGoalsEndPos));
-				System.out.println("homeGoals: " + homeGoals);
 				
 				int awayGoalsStartPos = homeGoalsEndPos + END_OF_HOME_GOALS_LOCATION.length();
 				int awayGoalsEndPos = line.indexOf(END_OF_AWAY_GOALS_LOCATION, awayGoalsStartPos);
 				awayGoals = Integer.parseInt(line.substring(awayGoalsStartPos, awayGoalsEndPos));
-				System.out.println("awayGoals: " + awayGoals);
 			}
 
 		}		
