@@ -105,11 +105,6 @@ public class SoccerbaseDatePageParserTest {
 	@Test
 	public void shouldParseADatePage() throws Exception {
 		// Given
-		Calendar fixtureDate = Calendar.getInstance();
-		fixtureDate.set(Calendar.YEAR, 2008);
-		fixtureDate.set(Calendar.MONTH, 12);
-		fixtureDate.set(Calendar.DAY_OF_MONTH, 26);
-
 		when(mockWebPageReader.readWebPage(URL_FOR_BOXING_DAY)).thenReturn(get2008BoxingDayPage());
 
 		// When
