@@ -15,19 +15,19 @@ import uk.co.mindbadger.web.WebPageReader;
 public class SoccerbaseDatePageParser {
 	private static final String END_OF_HOME_GOALS_LOCATION = "</em>&nbsp;-&nbsp;<em>";
 	private static final String END_OF_AWAY_GOALS_LOCATION = "</em></a>";
-	private static final String START_OF_HOME_GOALS_LOCATION = "<a href=\"#\" class=\"vs\" title=\"View Match info\"><em>";
-	private static final String START_OF_SCORE_SECTION = "<td class=\"score\">";
+	private static final String START_OF_HOME_GOALS_LOCATION = " <a href=\"#\" class=\"vs\" title=\"View Match info\"><em>";
+	private static final String START_OF_SCORE_SECTION = " <td class=\"score\">";
 	private static final String END_OF_TEAM_NAME_LOCATION = "</a>";
 	private static final String START_OF_TEAM_NAME_LOCATION = "team page\">";
 	private static final String END_OF_TEAM_ID_LOCATION = "\" title=";
-	private static final String START_OF_TEAM_ID_LOCATION = "<a href=\"/teams/team.sd?team_id=";
-	private static final String START_OF_AWAY_TEAM_SECTION = "<td class=\"team awayTeam";
-	private static final String START_OF_HOME_TEAM_SECTION = "<td class=\"team homeTeam";
+	private static final String START_OF_TEAM_ID_LOCATION = " <a href=\"/teams/team.sd?team_id=";
+	private static final String START_OF_AWAY_TEAM_SECTION = " <td class=\"team awayTeam";
+	private static final String START_OF_HOME_TEAM_SECTION = " <td class=\"team homeTeam";
 	private static final String END_OF_DATE_LOCATION = END_OF_TEAM_ID_LOCATION;
-	private static final String START_OF_DATE_LOCATION = "<a href=\"/matches/results.sd?date=";
+	private static final String START_OF_DATE_LOCATION = " <a href=\"/matches/results.sd?date=";
 	private static final String START_OF_DIVISION_NAME_LOCATION = "page\">";
 	private static final String END_OF_DIVISION_ID_LOCATION = "\" title";
-	private static final String START_OF_DIVISION_ID_LOCATION = "<a href=\"/tournaments/tournament.sd?comp_id=";
+	private static final String START_OF_DIVISION_ID_LOCATION = " <a href=\"/tournaments/tournament.sd?comp_id=";
 	private WebPageReader webPageReader;
 	private String url;
 	private Pauser pauser;
@@ -73,8 +73,11 @@ public class SoccerbaseDatePageParser {
 		Integer awayGoals = null;
 		Calendar fixtureDate = null;
 		Integer season = null;
+
 		
 		for (String line : page) {
+			System.out.println("Got a new competition row: " + line);
+
 			if (line.startsWith(START_OF_DIVISION_ID_LOCATION)) {
 				int divisionIdStartPos = line.indexOf(START_OF_DIVISION_ID_LOCATION) + START_OF_DIVISION_ID_LOCATION.length();
 				int divisionIdEndPos = line.indexOf(END_OF_DIVISION_ID_LOCATION,divisionIdStartPos);

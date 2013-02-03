@@ -210,26 +210,26 @@ public class SoccerbaseDatePageParserTest {
 	}
 
 	private void addFixtureHTMLWithScore(List<String> page, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, Integer homeGoals, Integer awayGoals) {
-		page.add("<a href=\"/matches/results.sd?date=" + BOXING_DAY_DATE_STRING + "\" title=\"We 26Dec 2008\">We 26Dec 2008</a>");
-		page.add("<td class=\"team homeTeam\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + homeTeamId + "\" title=\"Go to Everton team page\">" + homeTeamName + "</a> </td>");
-		page.add("<td class=\"score\">");
-		page.add("<a href=\"#\" class=\"vs\" title=\"View Match info\"><em>" + homeGoals + "</em>&nbsp;-&nbsp;<em>" + awayGoals + "</em></a> </td>");
-		page.add("<td class=\"team awayTeam\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + awayTeamId + "\" title=\"Go to Wigan team page\">" + awayTeamName + "</a> </td>");
+		page.add(" <a href=\"/matches/results.sd?date=" + BOXING_DAY_DATE_STRING + "\" title=\"We 26Dec 2008\">We 26Dec 2008</a>");
+		page.add(" <td class=\"team homeTeam\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + homeTeamId + "\" title=\"Go to Everton team page\">" + homeTeamName + "</a> </td>");
+		page.add(" <td class=\"score\">");
+		page.add(" <a href=\"#\" class=\"vs\" title=\"View Match info\"><em>" + homeGoals + "</em>&nbsp;-&nbsp;<em>" + awayGoals + "</em></a> </td>");
+		page.add(" <td class=\"team awayTeam\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + awayTeamId + "\" title=\"Go to Wigan team page\">" + awayTeamName + "</a> </td>");
 	}
 
 	private void addFixtureHTMLWithoutScore(List<String> page, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName) {
-		page.add("<a href=\"/matches/results.sd?date=" + BOXING_DAY_DATE_STRING + "\" title=\"We 26Dec 2008\">We 26Dec 2008</a>");
-		page.add("<td class=\"team homeTeam\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + homeTeamId + "\" title=\"Go to Everton team page\">" + homeTeamName + "</a> </td>");
-		page.add("<td class=\"score\">");
-		page.add("<span class=\"vs\">v</span>");
-		page.add("<td class=\"team awayTeam\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + awayTeamId + "\" title=\"Go to Wigan team page\">" + awayTeamName + "</a> </td>");
+		page.add(" <a href=\"/matches/results.sd?date=" + BOXING_DAY_DATE_STRING + "\" title=\"We 26Dec 2008\">We 26Dec 2008</a>");
+		page.add(" <td class=\"team homeTeam\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + homeTeamId + "\" title=\"Go to Everton team page\">" + homeTeamName + "</a> </td>");
+		page.add(" <td class=\"score\">");
+		page.add(" <span class=\"vs\">v</span>");
+		page.add(" <td class=\"team awayTeam\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + awayTeamId + "\" title=\"Go to Wigan team page\">" + awayTeamName + "</a> </td>");
 	}
 
 	private void addDivisionHTML(List<String> page, Integer divisionId, String divisionName) {
-		page.add("<a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to English Premier competition page\">" + divisionName + "</a>");
+		page.add(" <a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to English Premier competition page\">" + divisionName + "</a>");
 	}
 }

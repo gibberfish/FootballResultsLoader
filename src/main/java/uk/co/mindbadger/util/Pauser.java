@@ -20,6 +20,6 @@ public class Pauser {
 	}
 
 	public void pause () {
-		this.pause(10, 20);
+		this.pause(5, 15);
 	}
 }

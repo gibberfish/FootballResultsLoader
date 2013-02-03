@@ -18,20 +18,20 @@ public class SoccerbaseTeamPageParser {
 	private static final String END_OF_TEAM_NAME = "</a> <span";
 	private static final String START_OF_TEAM_NAME = " team page\">";
 	private static final String END_OF_TEAM_ID = "&amp;season_id=";
-	private static final String START_OF_TEAM_ID = "<a href=\"/teams/team.sd?team_id=";
+	private static final String START_OF_TEAM_ID = " <a href=\"/teams/team.sd?team_id=";
 	private static final String END_OF_FIXTURE_DATE = "\" title=\"";
-	private static final String START_OF_FIXTURE_DATE = "<a href=\"/matches/results.sd?date=";
+	private static final String START_OF_FIXTURE_DATE = " <a href=\"/matches/results.sd?date=";
 	private static final String END_OF_DIVISION_NAME = "</a> <span ";
 	private static final String START_OF_DIVISION_NAME = " competition page\">";
 	private static final String END_OF_DIVISION_ID = "\" title=\"Go to ";
-	private static final String START_OF_DIVISION_LINE = "<a href=\"/tournaments/tournament.sd?comp_id=";
-	private static final String START_OF_MATCH = "<tr class=\"match\"";
-	private static final String START_OF_HOME_TEAM_SECTION = "<td class=\"team homeTeam";
-	private static final String START_OF_AWAY_TEAM_SECTION = "<td class=\"team awayTeam";
-	private static final String START_OF_SCORE_SECTION = "<td class=\"score\">";
+	private static final String START_OF_DIVISION_LINE = " <a href=\"/tournaments/tournament.sd?comp_id=";
+	private static final String START_OF_MATCH = " <tr class=\"match\"";
+	private static final String START_OF_HOME_TEAM_SECTION = " <td class=\"team homeTeam";
+	private static final String START_OF_AWAY_TEAM_SECTION = " <td class=\"team awayTeam";
+	private static final String START_OF_SCORE_SECTION = " <td class=\"score\">";
 	private static final String END_OF_HOME_GOALS_LOCATION = "</em>&nbsp;-&nbsp;<em>";
 	private static final String END_OF_AWAY_GOALS_LOCATION = "</em></a>";
-	private static final String START_OF_HOME_GOALS_LOCATION = "<a href=\"#\" class=\"vs\" title=\"View Match info\"><em>";
+	private static final String START_OF_HOME_GOALS_LOCATION = " <a href=\"#\" class=\"vs\" title=\"View Match info\"><em>";
 
 
 	private String url;
@@ -64,7 +64,6 @@ public class SoccerbaseTeamPageParser {
 		
 		Integer divisionId = null;
 		String divisionName = null;
-		String dateString = null;
 		Integer homeTeamId = null;
 		Integer awayTeamId = null;
 		String homeTeamName = null;
@@ -80,7 +79,6 @@ public class SoccerbaseTeamPageParser {
 			if (line.startsWith(START_OF_MATCH)) {
 				divisionId = null;
 				divisionName = null;
-				dateString = null;
 				homeTeamId = null;
 				awayTeamId = null;
 				homeTeamName = null;

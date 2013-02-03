@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.util.Pauser;
@@ -14,9 +15,12 @@ import uk.co.mindbadger.util.Pauser;
 public class SoccerbaseWebPageReader implements FootballResultsReader {
 	private SoccerbaseTeamPageParser teamPageParser;
 	private SoccerbaseDatePageParser datePageParser;
+	private FootballResultsMapping mapping;
 	
 	@Override
 	public List<ParsedFixture> readFixturesForSeason(int season) {
+		
+		List<Integer> includedDivisions = mapping.getIncludedDivisions("soccerbase");
 		
 		Map <ParsedFixture, ParsedFixture> fixturesForSeason = new HashMap<ParsedFixture, ParsedFixture> ();
 		Set <Integer> boxingDayTeams = new HashSet <Integer> ();
@@ -26,11 +30,14 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 		List<ParsedFixture> boxingDayFixtures = datePageParser.parseFixturesForDate(boxingDay);
 		
 		for (ParsedFixture fixture : boxingDayFixtures) {
-			boxingDayTeams.add(fixture.getHomeTeamId());
-			boxingDayTeams.add(fixture.getAwayTeamId());
+			if (includedDivisions.contains(fixture.getDivisionId())) {
+				boxingDayTeams.add(fixture.getHomeTeamId());
+				boxingDayTeams.add(fixture.getAwayTeamId());
+			}
 		}
 		
 		for (Integer teamId : boxingDayTeams) {
+			System.out.println("#### Parse fixture for team ID " + teamId);
 			List<ParsedFixture> fixtures = teamPageParser.parseFixturesForTeam(season, teamId);
 			for (ParsedFixture fixture : fixtures) {
 				fixturesForSeason.put(fixture, fixture);
@@ -61,5 +68,9 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 
 	public void setDatePageParser(SoccerbaseDatePageParser datePageParser) {
 		this.datePageParser = datePageParser;
+	}
+
+	public void setMapping(FootballResultsMapping mapping) {
+		this.mapping = mapping;
 	}
 }

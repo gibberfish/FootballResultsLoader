@@ -11,6 +11,6 @@ public class GetLatestResultsFromInternetApplication {
       ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
 
       FootballResultsLoader loader = (FootballResultsLoader) context.getBean("loader");
-		loader.loadResultsForSeason(2004);
+		loader.loadResultsForSeason(2005);
 	}
 }

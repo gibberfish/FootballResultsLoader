@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.*;
 
+import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.util.Pauser;
 
@@ -21,6 +22,7 @@ public class SoccerbaseWebPageReaderTest {
 	
 	@Mock	private SoccerbaseTeamPageParser mockTeamPageParser;
 	@Mock private SoccerbaseDatePageParser mockDatePageParser;
+	@Mock private FootballResultsMapping mockFootballResultsMapping;
 	
 	@Before
 	public void setup() {
@@ -29,6 +31,7 @@ public class SoccerbaseWebPageReaderTest {
 		objectUnderTest = new SoccerbaseWebPageReader();
 		objectUnderTest.setTeamPageParser(mockTeamPageParser);
 		objectUnderTest.setDatePageParser(mockDatePageParser);
+		objectUnderTest.setMapping(mockFootballResultsMapping);
 	}
 	
 	@Test
@@ -40,6 +43,17 @@ public class SoccerbaseWebPageReaderTest {
 		
 		// Then
 		verify(mockDatePageParser).parseFixturesForDate(BOXING_DAY_2000);
+	}
+
+	@Test
+	public void shouldGetTheDivisionsToBeIncluded () {
+		// Given
+		
+		// When
+		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
+		
+		// Then
+		verify(mockFootballResultsMapping).getIncludedDivisions("soccerbase");
 	}
 	
 	@Test
@@ -53,10 +67,12 @@ public class SoccerbaseWebPageReaderTest {
 		ParsedFixture fixture4 = createParsedFixture(1000, 2000, 1, "Premier", 105, "Everton", 100, "Portsmouth", fixtureDate , 1, 4);
 		ParsedFixture fixture5 = createParsedFixture(1001, 2000, 2, "Championship", 102, "Southampton", 103, "Charlton", fixtureDate , 1, 2);
 		ParsedFixture fixture6 = createParsedFixture(1001, 2000, 2, "Championship", 102, "Southampton", 103, "QPR", fixtureDate , 0, 5);
+		ParsedFixture fixture7 = createParsedFixture(1002, 2000, 3, "Scottish", 200, "Dundee Utd", 201, "Hibbernian", fixtureDate , 1, 1);
 
 		List<ParsedFixture> fixturesOnBoxingDay = new ArrayList<ParsedFixture> ();
 		fixturesOnBoxingDay.add(fixture1);
 		fixturesOnBoxingDay.add(fixture2);
+		fixturesOnBoxingDay.add(fixture7);
 
 		when(mockDatePageParser.parseFixturesForDate(BOXING_DAY_2000)).thenReturn(fixturesOnBoxingDay);
 		
@@ -84,6 +100,11 @@ public class SoccerbaseWebPageReaderTest {
 		
 		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 103)).thenReturn(fixturesForGrimsby);
 		
+		List<Integer> includedDivisions = new ArrayList<Integer> ();
+		includedDivisions.add(1);
+		includedDivisions.add(2);
+		when (mockFootballResultsMapping.getIncludedDivisions("soccerbase")).thenReturn(includedDivisions);
+		
 		// When
 		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
 		
@@ -92,6 +113,8 @@ public class SoccerbaseWebPageReaderTest {
 		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 101);
 		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 102);
 		verify(mockTeamPageParser).parseFixturesForTeam(SEASON_NUMBER, 103);
+		verify(mockTeamPageParser, never()).parseFixturesForTeam(SEASON_NUMBER, 200);
+		verify(mockTeamPageParser, never()).parseFixturesForTeam(SEASON_NUMBER, 201);
 		
 		assertEquals (6, parsedFixtures.size());
 		assertTrue (parsedFixtures.contains(fixture1));
@@ -100,6 +123,8 @@ public class SoccerbaseWebPageReaderTest {
 		assertTrue (parsedFixtures.contains(fixture4));
 		assertTrue (parsedFixtures.contains(fixture5));
 		assertTrue (parsedFixtures.contains(fixture6));
+		
+		assertTrue (!parsedFixtures.contains(fixture7));
 	}
 
 	@Test
@@ -137,6 +162,11 @@ public class SoccerbaseWebPageReaderTest {
 		List<ParsedFixture> fixturesForManU = new ArrayList<ParsedFixture> ();
 		fixturesForManU.add(fixture4);
 		when(mockTeamPageParser.parseFixturesForTeam(SEASON_NUMBER, 103)).thenReturn(fixturesForManU);
+
+		List<Integer> includedDivisions = new ArrayList<Integer> ();
+		includedDivisions.add(1);
+		includedDivisions.add(2);
+		when (mockFootballResultsMapping.getIncludedDivisions("soccerbase")).thenReturn(includedDivisions);
 
 		// When
 		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);

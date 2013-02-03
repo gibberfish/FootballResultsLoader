@@ -188,30 +188,30 @@ public class SoccerbaseTeamPageParserTest {
 	}
 
 	private void addFixtureWithScore(List<String> page, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, String fixtureDate, int homeGoals, int awayGoals) {
-		page.add("<tr class=\"match\" id=\"tgc663960\">");
-		page.add("<a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to " + divisionName + " competition page\">" + divisionName + "</a> <span class=\"hide\">");
-		page.add("<a href=\"/matches/results.sd?date=" + fixtureDate + "\" title=\"Tu 28Aug 2012\">Tu 28Aug 2012</a>");
-		page.add("<td class=\"team homeTeam\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + homeTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + homeTeamName + " team page\">" + homeTeamName + "</a> <span class=\"hide\">");
-		page.add("<td class=\"score\">");
-		page.add("<a href=\"#\" class=\"vs\" title=\"View Match info\"><em>" + homeGoals + "</em>&nbsp;-&nbsp;<em>" + awayGoals + "</em></a> </td>");
-		page.add("<td class=\"team awayTeam inactive\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + awayTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + awayTeamName + " team page\">" + awayTeamName + "</a> <span class=\"hide\">");		page.add("");
-		page.add("</td>");
-		page.add("</tr>");
+		page.add(" <tr class=\"match\" id=\"tgc663960\">");
+		page.add(" <a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to " + divisionName + " competition page\">" + divisionName + "</a> <span class=\"hide\">");
+		page.add(" <a href=\"/matches/results.sd?date=" + fixtureDate + "\" title=\"Tu 28Aug 2012\">Tu 28Aug 2012</a>");
+		page.add(" <td class=\"team homeTeam\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + homeTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + homeTeamName + " team page\">" + homeTeamName + "</a> <span class=\"hide\">");
+		page.add(" <td class=\"score\">");
+		page.add(" <a href=\"#\" class=\"vs\" title=\"View Match info\"><em>" + homeGoals + "</em>&nbsp;-&nbsp;<em>" + awayGoals + "</em></a> </td>");
+		page.add(" <td class=\"team awayTeam inactive\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + awayTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + awayTeamName + " team page\">" + awayTeamName + "</a> <span class=\"hide\">");		page.add("");
+		page.add(" </td>");
+		page.add(" </tr>");
 	}
 
 	private void addFixtureWithoutScore(List<String> page, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, String fixtureDate) {
-		page.add("<tr class=\"match\" id=\"tgc663960\">");
-		page.add("<a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to " + divisionName + " competition page\">" + divisionName + "</a> <span class=\"hide\">");
-		page.add("<a href=\"/matches/results.sd?date=" + fixtureDate + "\" title=\"Tu 28Aug 2012\">Tu 28Aug 2012</a>");
-		page.add("<td class=\"team homeTeam\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + homeTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + homeTeamName + " team page\">" + homeTeamName + "</a> <span class=\"hide\">");
-		page.add("<td class=\"score\">");
-		page.add("<span class=\"vs\">v</span>");
-		page.add("<td class=\"team awayTeam inactive\">");
-		page.add("<a href=\"/teams/team.sd?team_id=" + awayTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + awayTeamName + " team page\">" + awayTeamName + "</a> <span class=\"hide\">");		page.add("");
-		page.add("</td>");
-		page.add("</tr>");
+		page.add(" <tr class=\"match\" id=\"tgc663960\">");
+		page.add(" <a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to " + divisionName + " competition page\">" + divisionName + "</a> <span class=\"hide\">");
+		page.add(" <a href=\"/matches/results.sd?date=" + fixtureDate + "\" title=\"Tu 28Aug 2012\">Tu 28Aug 2012</a>");
+		page.add(" <td class=\"team homeTeam\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + homeTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + homeTeamName + " team page\">" + homeTeamName + "</a> <span class=\"hide\">");
+		page.add(" <td class=\"score\">");
+		page.add(" <span class=\"vs\">v</span>");
+		page.add(" <td class=\"team awayTeam inactive\">");
+		page.add(" <a href=\"/teams/team.sd?team_id=" + awayTeamId + "&amp;season_id=" + season +"&amp;teamTabs=results\" title=\"Go to " + awayTeamName + " team page\">" + awayTeamName + "</a> <span class=\"hide\">");		page.add("");
+		page.add(" </td>");
+		page.add(" </tr>");
 	}
 }

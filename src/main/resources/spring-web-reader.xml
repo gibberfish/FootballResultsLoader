@@ -15,17 +15,19 @@
    
    <bean id="teamPageParser" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser">
        <property name="webPageReader" ref="webPageReader"/>
-       <property name="url" value="http://www.soccerbase.com/teams/results.sd?season_id=__seasonNum__&amp;team_id=__teamId__&amp;teamTabs=results"/>
+       <property name="url" value="http://www.soccerbase.com/teams/results.sd?season_id={seasonNum}&amp;team_id={teamId}&amp;teamTabs=results"/>
+       <property name="pauser" ref="pauser"/>
    </bean>
 
    <bean id="datePageParser" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseDatePageParser">
        <property name="webPageReader" ref="webPageReader"/>
-       <property name="url" value="http://www.soccerbase.com/matches/results.sd?date=__fixtureDate__"/>
+       <property name="url" value="http://www.soccerbase.com/matches/results.sd?date={fixtureDate}"/>
+       <property name="pauser" ref="pauser"/>
    </bean>
    	
    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseWebPageReader">
       <property name="teamPageParser" ref="teamPageParser"/>
       <property name="datePageParser" ref="datePageParser"/>
-      <property name="pauser" ref="pauser"/>
+      <property name="mapping" ref="mapping"/>
    </bean>
 </beans>
