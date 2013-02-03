@@ -9,6 +9,7 @@ import java.util.Set;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.Pauser;
 
 public class SoccerbaseWebPageReader implements FootballResultsReader {
 	private SoccerbaseTeamPageParser teamPageParser;

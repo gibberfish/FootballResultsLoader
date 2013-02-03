@@ -10,6 +10,7 @@ import org.mockito.internal.matchers.StartsWith;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.Pauser;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.web.WebPageReader;
 
@@ -35,6 +36,7 @@ public class SoccerbaseTeamPageParser {
 
 	private String url;
 	private WebPageReader webPageReader;
+	private Pauser pauser;
 	
 	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, Integer teamId) {
 		Integer soccerbaseSeasonNumber = seasonNumber - 1870;
@@ -45,6 +47,8 @@ public class SoccerbaseTeamPageParser {
 		try {
 			System.out.println(url);
 			List<String> page = webPageReader.readWebPage(url);
+			
+			pauser.pause ();
 			
 			return parsePage(page);
 		} catch (FileNotFoundException e) {
@@ -191,11 +195,8 @@ public class SoccerbaseTeamPageParser {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	public void setPauser(Pauser pauser) {
+		this.pauser = pauser;
+	}
 }

@@ -9,6 +9,9 @@
    
    <bean id="webPageReader" class="uk.co.mindbadger.web.WebPageReader">
    </bean>
+
+   <bean id="pauser" class="uk.co.mindbadger.util.Pauser">
+   </bean>
    
    <bean id="teamPageParser" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser">
        <property name="webPageReader" ref="webPageReader"/>
@@ -23,5 +26,6 @@
    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseWebPageReader">
       <property name="teamPageParser" ref="teamPageParser"/>
       <property name="datePageParser" ref="datePageParser"/>
+      <property name="pauser" ref="pauser"/>
    </bean>
 </beans>

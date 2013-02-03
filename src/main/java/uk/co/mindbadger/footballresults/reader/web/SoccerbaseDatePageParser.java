@@ -8,6 +8,7 @@ import java.util.List;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.Pauser;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.web.WebPageReader;
 
@@ -29,6 +30,7 @@ public class SoccerbaseDatePageParser {
 	private static final String START_OF_DIVISION_ID_LOCATION = "<a href=\"/tournaments/tournament.sd?comp_id=";
 	private WebPageReader webPageReader;
 	private String url;
+	private Pauser pauser;
 	
 	public void setWebPageReader(WebPageReader webPageReader) {
 		this.webPageReader = webPageReader;
@@ -44,6 +46,8 @@ public class SoccerbaseDatePageParser {
 		try {
 			System.out.println(url);
 			List<String> page = webPageReader.readWebPage(url);
+			
+			pauser.pause();
 			
 			return parsePage(page);
 		} catch (FileNotFoundException e) {
@@ -172,5 +176,9 @@ public class SoccerbaseDatePageParser {
 		} else {
 			return fixtureDate.get(Calendar.YEAR);
 		}
+	}
+
+	public void setPauser(Pauser pauser) {
+		this.pauser = pauser;
 	}
 }

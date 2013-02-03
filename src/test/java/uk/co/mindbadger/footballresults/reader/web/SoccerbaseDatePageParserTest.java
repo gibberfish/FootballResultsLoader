@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.Pauser;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.web.WebPageReader;
 
@@ -50,8 +51,8 @@ public class SoccerbaseDatePageParserTest {
 
 	private SoccerbaseDatePageParser objectUnderTest;
 
-	@Mock
-	private WebPageReader mockWebPageReader;
+	@Mock private WebPageReader mockWebPageReader;
+	@Mock private Pauser mockPauser;
 
 	@Before
 	public void setup() {
@@ -60,6 +61,7 @@ public class SoccerbaseDatePageParserTest {
 		objectUnderTest = new SoccerbaseDatePageParser();
 		objectUnderTest.setWebPageReader(mockWebPageReader);
 		objectUnderTest.setUrl(URL);
+		objectUnderTest.setPauser(mockPauser);
 	}
 
 	@Test
@@ -163,6 +165,8 @@ public class SoccerbaseDatePageParserTest {
 		assertNull(fixture4.getHomeGoals());
 		assertNull(fixture4.getAwayGoals());
 		assertNull(fixture4.getFixtureId());
+		
+		verify (mockPauser).pause();
 	}
 
 	private List<String> get2008BoxingDayPage() {

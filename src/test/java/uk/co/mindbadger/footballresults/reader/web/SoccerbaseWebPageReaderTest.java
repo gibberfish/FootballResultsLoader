@@ -11,6 +11,7 @@ import org.junit.*;
 import org.mockito.*;
 
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.Pauser;
 
 public class SoccerbaseWebPageReaderTest {
 	private static final String BOXING_DAY_2000 = "2000-12-26";

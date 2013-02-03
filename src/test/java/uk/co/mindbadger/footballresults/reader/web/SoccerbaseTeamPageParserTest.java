@@ -1,9 +1,7 @@
 package uk.co.mindbadger.footballresults.reader.web;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.Pauser;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.web.WebPageReader;
 
@@ -50,6 +49,7 @@ public class SoccerbaseTeamPageParserTest {
 	private SoccerbaseTeamPageParser objectUnderTest;
 	
 	@Mock private WebPageReader mockWebPageReader;
+	@Mock private Pauser mockPauser;
 	
 	@Before
 	public void setup() {
@@ -58,6 +58,7 @@ public class SoccerbaseTeamPageParserTest {
 		objectUnderTest = new SoccerbaseTeamPageParser();
 		objectUnderTest.setWebPageReader(mockWebPageReader);
 		objectUnderTest.setUrl(URL);
+		objectUnderTest.setPauser(mockPauser);
 	}
 	
 	@Test
@@ -123,6 +124,7 @@ public class SoccerbaseTeamPageParserTest {
 		assertNull(fixture4.getAwayGoals());
 		assertNull(fixture4.getFixtureId());
 
+		verify (mockPauser).pause();
 	}
 
 	@Test
