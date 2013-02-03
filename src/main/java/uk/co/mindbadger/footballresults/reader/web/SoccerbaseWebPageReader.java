@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
-import uk.co.mindbadger.util.Pauser;
 
 public class SoccerbaseWebPageReader implements FootballResultsReader {
+	Logger logger = Logger.getLogger(SoccerbaseWebPageReader.class);
+	
 	private SoccerbaseTeamPageParser teamPageParser;
 	private SoccerbaseDatePageParser datePageParser;
 	private FootballResultsMapping mapping;
@@ -37,7 +40,7 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 		}
 		
 		for (Integer teamId : boxingDayTeams) {
-			System.out.println("#### Parse fixture for team ID " + teamId);
+			logger.debug("#### Parse fixture for team ID " + teamId);
 			List<ParsedFixture> fixtures = teamPageParser.parseFixturesForTeam(season, teamId);
 			for (ParsedFixture fixture : fixtures) {
 				if (includedDivisions.contains(fixture.getDivisionId())) {

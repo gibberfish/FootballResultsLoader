@@ -12,9 +12,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
 public class XMLFileWriter {
+	Logger logger = Logger.getLogger(XMLFileWriter.class);
+	
 	public void writeXMLFile (String fullyQualifiedFileName, Document doc) throws TransformerException, FileNotFoundException {
       //set up a transformer
       TransformerFactory transfac = TransformerFactory.newInstance();
@@ -30,7 +33,7 @@ public class XMLFileWriter {
       String xmlString = sw.toString();
 
       //print xml
-      System.out.println("Here's the xml:\n\n" + xmlString);
+      logger.debug("Here's the xml:\n\n" + xmlString);
      
       PrintStream out = null;
       try {

@@ -5,12 +5,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import uk.co.mindbadger.footballresults.loader.FootballResultsLoader;
 
-public class LoadResultsFromXMLApplication {
+public class LoadSeasonFromXMLApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-xml-reader.xml");
 
+		Integer season = Integer.parseInt(args[0]);
+		
 		FootballResultsLoader loader = (FootballResultsLoader) context.getBean("loader");
-		loader.loadResultsForSeason(2004);
+		loader.loadResultsForSeason(season);
 	}
 }

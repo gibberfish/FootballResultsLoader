@@ -9,10 +9,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class XMLFileReader {
+	Logger logger = Logger.getLogger(XMLFileReader.class);
+	
 	private String rootDirectory;
 	
 	public Document readXMLFile (String fullyQualifiedFileName) throws ParserConfigurationException, SAXException, IOException{
@@ -25,7 +28,7 @@ public class XMLFileReader {
 	}
 
 	public List<String> getFilesInDirectory(String directory) {
-		System.out.println("getFilesInDirectory: " + directory);
+		logger.debug("getFilesInDirectory: " + directory);
 		File root = new File (directory);
 		File[] list = root.listFiles();
 

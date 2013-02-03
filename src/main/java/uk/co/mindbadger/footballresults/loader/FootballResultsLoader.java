@@ -1,8 +1,11 @@
 package uk.co.mindbadger.footballresults.loader;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
@@ -13,6 +16,8 @@ import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
 public class FootballResultsLoader {
+	Logger logger = Logger.getLogger(FootballResultsLoader.class);
+	
 	private String dialect;
 	private FootballResultsAnalyserDAO dao;
 	private FootballResultsReader reader;
@@ -73,7 +78,7 @@ public class FootballResultsLoader {
 						}
 						
 						String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());
-						System.out.println("Adding fixture: ssn:" + season + ",dt:"+dateString+",div:"+division.getDivisionName()+",hm:"+homeTeam.getTeamName()+",aw:"+awayTeam.getTeamName());
+						logger.debug("Adding fixture: ssn:" + season + ",dt:"+dateString+",div:"+division.getDivisionName()+",hm:"+homeTeam.getTeamName()+",aw:"+awayTeam.getTeamName());
 						dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
 					}
 				}
@@ -82,6 +87,14 @@ public class FootballResultsLoader {
 		} finally {
 			dao.closeSession();
 		}
+	}
+	
+	public void loadResultsForRecentlyPlayedFixtures() {
+		// Get distinct fixture dates that have fixtures without results
+		
+		// Loop through all dates and load them from the reader
+		
+		// 
 	}
 	
 	public String getDialect() {

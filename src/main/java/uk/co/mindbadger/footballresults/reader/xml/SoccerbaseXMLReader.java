@@ -1,11 +1,10 @@
 package uk.co.mindbadger.footballresults.reader.xml;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,6 +16,8 @@ import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.xml.XMLFileReader;
 
 public class SoccerbaseXMLReader implements FootballResultsReader {
+	Logger logger = Logger.getLogger(SoccerbaseXMLReader.class);
+	
 	private XMLFileReader xmlFileReader;
 	private String rootDirectory;
 
@@ -28,7 +29,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 
 		for (String fileName : fullyQualifiedSeasonFileNames) {
 			try {
-				System.out.println("READING FILE: " + fileName);
+				logger.debug("READING FILE: " + fileName);
 				Document doc = xmlFileReader.readXMLFile(fileName);
 
 				Element rootElement = doc.getDocumentElement();
@@ -48,7 +49,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 					Integer competitionId = Integer.parseInt(competition.getAttribute("competitionId"));
 					String competitionName = competition.getAttribute("competitionName");
 
-					System.out.println("  COMPETITION: " + competitionId + ", " + competitionName);
+					logger.debug("  COMPETITION: " + competitionId + ", " + competitionName);
 
 					NodeList games = competition.getElementsByTagName("Game");
 					for (int j = 0; j < games.getLength(); j++) {
@@ -64,7 +65,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 						String homeTeamName = game.getAttribute("homeTeamName");
 						String awayTeamName = game.getAttribute("awayTeamName");
 
-						System.out.println("    GAME: " + homeTeamName + " vs " + awayTeamName + " on " + fixtureDate);
+						logger.debug("    GAME: " + homeTeamName + " vs " + awayTeamName + " on " + fixtureDate);
 						
 						ParsedFixture fixture = new ParsedFixture();
 						fixture.setFixtureId(fixtureId);
@@ -92,7 +93,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 			}
 		}
 
-		System.out.println("WE HAVE PARSED " + fixtures.size()  + " FIXTURES");
+		logger.debug("WE HAVE PARSED " + fixtures.size()  + " FIXTURES");
 		
 		return fixtures;
 	}
