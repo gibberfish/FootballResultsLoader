@@ -1,6 +1,7 @@
 package uk.co.mindbadger.footballresults.reader.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.apache.log4j.Logger;
 import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReader;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.util.StringToCalendarConverter;
 
 public class SoccerbaseWebPageReader implements FootballResultsReader {
 	Logger logger = Logger.getLogger(SoccerbaseWebPageReader.class);
@@ -77,5 +79,14 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 
 	public void setMapping(FootballResultsMapping mapping) {
 		this.mapping = mapping;
+	}
+
+	@Override
+	public List<ParsedFixture> readFixturesForDate(Calendar date) {
+		String dateString = StringToCalendarConverter.convertCalendarToDateString(date);
+		
+		List<ParsedFixture> parsedFixtures = datePageParser.parseFixturesForDate(dateString);
+		
+		return parsedFixtures;
 	}
 }

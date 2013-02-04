@@ -183,6 +183,33 @@ public class SoccerbaseWebPageReaderTest {
 		assertTrue (parsedFixtures.contains(fixture4));
 	}
 	
+	@Test
+	public void shouldReadResultsForDate () {
+		// Given
+		Calendar date = Calendar.getInstance();
+		date.set(Calendar.YEAR, 2001);
+		date.set(Calendar.MONTH, Calendar.MAY);
+		date.set(Calendar.DAY_OF_MONTH, 23);
+		
+		String dateString = "2001-05-23";
+		
+		ParsedFixture fixture1 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 101, "Leeds", date , 3, 0);
+		ParsedFixture fixture2 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 104, "Liverpool", date , 1, 1);
+		List<ParsedFixture> parsedFixtures = new ArrayList<ParsedFixture> ();
+		parsedFixtures.add(fixture1);
+		parsedFixtures.add(fixture2);
+		
+		when(mockDatePageParser.parseFixturesForDate(dateString)).thenReturn(parsedFixtures );
+		
+		// When
+		List<ParsedFixture> fixtures = objectUnderTest.readFixturesForDate(date);
+		
+		// Then
+		verify(mockDatePageParser).parseFixturesForDate(dateString);
+		
+		assertEquals (2, fixtures.size());
+	}
+	
 	private ParsedFixture createParsedFixture (Integer fixtureId, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, Calendar fixtureDate, Integer homeGoals, Integer awayGoals) {
 		ParsedFixture parsedFixture = new ParsedFixture ();
 		parsedFixture.setFixtureId(fixtureId);

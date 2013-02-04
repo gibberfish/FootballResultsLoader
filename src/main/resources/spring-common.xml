@@ -23,11 +23,16 @@
   <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserHibernateDAO">
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
   </bean>
-  
-  <bean id="loader" class="uk.co.mindbadger.footballresults.loader.FootballResultsLoader">
+
+  <bean id="saver" class="uk.co.mindbadger.footballresults.loader.FootballResultsSaver">
   	<property name="dialect" value="soccerbase"/>
   	<property name="dao" ref="dao"/>
-  	<property name="reader" ref="reader"/>
   	<property name="mapping" ref="mapping"/>
+  </bean>
+  
+  <bean id="loader" class="uk.co.mindbadger.footballresults.loader.FootballResultsLoader">
+    <property name="reader" ref="reader"/>
+    <property name="saver" ref="saver"/>
+    <property name="dao" ref="dao"/>
   </bean>
 </beans>

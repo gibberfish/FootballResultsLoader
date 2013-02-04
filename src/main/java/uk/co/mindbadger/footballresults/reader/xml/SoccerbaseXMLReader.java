@@ -114,4 +114,9 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 		this.rootDirectory = rootDirectory;
 	}
 
+	@Override
+	public List<ParsedFixture> readFixturesForDate(Calendar date) {
+		throw new FootballResultsReaderException ("This method is not applicable for the XML reader");
+	}
+
 }

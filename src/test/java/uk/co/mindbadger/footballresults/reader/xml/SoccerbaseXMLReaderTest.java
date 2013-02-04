@@ -274,6 +274,21 @@ public class SoccerbaseXMLReaderTest {
 		assertEquals(new Integer(FIXTURE_5_AWAY_GOALS), fixture1.getAwayGoals());
 	}
 
+	@Test
+	public void shouldThrowExceptionWhenReadFixturesForDate () {
+		// Given
+		Calendar date = Calendar.getInstance();
+		
+		// When
+		try {
+			objectUnderTest.readFixturesForDate(date);
+			fail("Should throw a FootballResultsReaderException");
+		} catch (FootballResultsReaderException e) {
+			// Then
+			assertEquals ("This method is not applicable for the XML reader", e.getMessage());
+		}
+	}
+	
 	private Document getDocumentForDate1() throws ParserConfigurationException {
 		Document doc = createNewDocument();
 		Element root = createFixtureDateElement(doc, FIXTURE_DATE_1);
