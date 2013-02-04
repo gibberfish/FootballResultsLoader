@@ -75,7 +75,7 @@ public class FootballResultsSaver {
 						}
 						
 						String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());
-						logger.debug("Adding fixture: ssn:" + season + ",dt:"+dateString+",div:"+division.getDivisionName()+",hm:"+homeTeam.getTeamName()+",aw:"+awayTeam.getTeamName());
+						logger.debug("Adding fixture: ssn:" + season + ",dt:"+dateString+",div:"+division.getDivisionName()+",hm:"+homeTeam.getTeamName()+",aw:"+awayTeam.getTeamName()+",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
 						dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
 					}
 				}

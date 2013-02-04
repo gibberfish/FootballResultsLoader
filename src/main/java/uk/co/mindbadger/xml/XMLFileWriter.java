@@ -33,7 +33,7 @@ public class XMLFileWriter {
       String xmlString = sw.toString();
 
       //print xml
-      logger.debug("Here's the xml:\n\n" + xmlString);
+      // logger.debug("Here's the xml:\n\n" + xmlString);
      
       PrintStream out = null;
       try {
