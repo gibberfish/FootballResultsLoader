@@ -7,4 +7,6 @@ public interface FootballResultsReader {
 	public List<ParsedFixture> readFixturesForSeason (int season);
 	
 	public List<ParsedFixture> readFixturesForDate (Calendar date);
+	
+	public List<ParsedFixture> readFixturesForTeamInSeason (int season, int teamId);
 }

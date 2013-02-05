@@ -2,7 +2,9 @@ package uk.co.mindbadger.footballresults.reader.web;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -209,7 +211,38 @@ public class SoccerbaseWebPageReaderTest {
 		
 		assertEquals (2, fixtures.size());
 	}
-	
+
+	@Test
+	public void shouldReadResultsForTeamInSeason () {
+		// Given
+		Calendar date = Calendar.getInstance();
+		date.set(Calendar.YEAR, 2001);
+		date.set(Calendar.MONTH, Calendar.MAY);
+		date.set(Calendar.DAY_OF_MONTH, 23);
+
+		ParsedFixture fixture1 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 101, "Leeds", date , 3, 0);
+		ParsedFixture fixture2 = createParsedFixture(1000, 2000, 1, "Premier", 100, "Portsmouth", 104, "Liverpool", date , 1, 1);
+		List<ParsedFixture> parsedFixtures = new ArrayList<ParsedFixture> ();
+		parsedFixtures.add(fixture1);
+		parsedFixtures.add(fixture2);
+		when(mockTeamPageParser.parseFixturesForTeam(2000, 500)).thenReturn(parsedFixtures);
+
+		Map<Integer, Integer> teamMappings = new HashMap<Integer, Integer> ();
+		teamMappings.put(501, 101);
+		teamMappings.put(500, 100);
+		teamMappings.put(502, 102);
+		when(mockFootballResultsMapping.getTeamMappings("soccerbase")).thenReturn(teamMappings);
+		
+		// When
+		List<ParsedFixture> fixtures = objectUnderTest.readFixturesForTeamInSeason(2000, 100);
+		
+		// Then
+		verify(mockFootballResultsMapping).getTeamMappings("soccerbase");
+		verify(mockTeamPageParser).parseFixturesForTeam(2000, 500);
+		
+		assertEquals (2, fixtures.size());
+	}
+
 	private ParsedFixture createParsedFixture (Integer fixtureId, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, Calendar fixtureDate, Integer homeGoals, Integer awayGoals) {
 		ParsedFixture parsedFixture = new ParsedFixture ();
 		parsedFixture.setFixtureId(fixtureId);

@@ -89,4 +89,19 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 		
 		return parsedFixtures;
 	}
+
+	@Override
+	public List<ParsedFixture> readFixturesForTeamInSeason(int season, int teamId) {
+		Map<Integer, Integer> teamMappings = mapping.getTeamMappings("soccerbase");
+		Integer matchingSoccerbaseId = null;
+		for (Integer soccerbaseId : teamMappings.keySet()) {
+			
+			if (teamMappings.get(soccerbaseId).equals(teamId)) {
+				matchingSoccerbaseId = soccerbaseId;
+				break;
+			}
+		}
+		
+		return teamPageParser.parseFixturesForTeam(season, matchingSoccerbaseId);
+	}
 }

@@ -119,4 +119,9 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 		throw new FootballResultsReaderException ("This method is not applicable for the XML reader");
 	}
 
+	@Override
+	public List<ParsedFixture> readFixturesForTeamInSeason(int season, int teamId) {
+		throw new FootballResultsReaderException ("This method is not applicable for the XML reader");
+	}
+
 }

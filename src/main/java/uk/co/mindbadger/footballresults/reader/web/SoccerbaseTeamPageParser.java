@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.util.Pauser;
@@ -13,6 +15,8 @@ import uk.co.mindbadger.util.StringToCalendarConverter;
 import uk.co.mindbadger.web.WebPageReader;
 
 public class SoccerbaseTeamPageParser {
+	Logger logger = Logger.getLogger(SoccerbaseTeamPageParser.class);
+	
 	private static final String END_OF_TEAM_NAME = "</a> <span";
 	private static final String START_OF_TEAM_NAME = " team page\">";
 	private static final String END_OF_TEAM_ID = "&amp;season_id=";
@@ -38,6 +42,8 @@ public class SoccerbaseTeamPageParser {
 	
 	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, Integer teamId) {
 		Integer soccerbaseSeasonNumber = seasonNumber - 1870;
+		
+		logger.debug("ABOUT TO LOAD FIXTURES FOR TEAM " + teamId + " IN SEASON " + seasonNumber);
 		
 		String url = this.url.replace("{seasonNum}", soccerbaseSeasonNumber.toString());
 		url = url.replace("{teamId}", teamId.toString());
