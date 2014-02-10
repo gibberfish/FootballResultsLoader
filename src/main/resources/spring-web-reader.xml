@@ -15,7 +15,7 @@
    
    <bean id="teamPageParser" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser">
        <property name="webPageReader" ref="webPageReader"/>
-       <property name="url" value="http://www.soccerbase.com/teams/results.sd?season_id={seasonNum}&amp;team_id={teamId}&amp;teamTabs=results"/>
+       <property name="url" value="http://www.soccerbase.com/teams/team.sd?season_id={seasonNum}&amp;team_id={teamId}&amp;teamTabs=results"/>
        <property name="pauser" ref="pauser"/>
    </bean>
 

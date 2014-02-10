@@ -8,8 +8,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class WebPageReader {
+	Logger logger = Logger.getLogger(WebPageReader.class);
+	
 	public List<String> readWebPage(String pURL) throws FileNotFoundException, IOException {
+		
+		logger.debug("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
+		logger.debug("About to load web page: " + pURL);
+		logger.debug("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
+		
 		ArrayList<String> results = new ArrayList <String>();
 		BufferedReader in = null;
 		InputStreamReader webReader = null;
