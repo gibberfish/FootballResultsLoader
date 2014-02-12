@@ -27,6 +27,8 @@ public class FootballResultsLoader {
 	}
 	
 	public void loadResultsForRecentlyPlayedFixtures() {
+		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
+		
 		dao.startSession();
 		List<Fixture> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
 		List<Fixture> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
