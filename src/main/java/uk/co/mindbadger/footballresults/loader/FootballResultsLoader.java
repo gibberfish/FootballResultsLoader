@@ -27,12 +27,15 @@ public class FootballResultsLoader {
 	}
 	
 	public void loadResultsForRecentlyPlayedFixtures() {
+		System.out.println("I'm here!!!");
 		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
 		
 		dao.startSession();
 		List<Fixture> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
 		List<Fixture> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
 		dao.closeSession();
+		
+		System.out.println("Got fixtures!!!");
 		
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		

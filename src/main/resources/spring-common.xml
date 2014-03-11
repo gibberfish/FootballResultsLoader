@@ -1,51 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="props" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	  <property name="locations" value="file:///C:/Mark/appConfig/database.properties"/>
+	</bean>
 
   <bean id="xmlFileReader" class="uk.co.mindbadger.xml.XMLFileReader">
   </bean>
 
   <bean id="xmlFileWriter" class="uk.co.mindbadger.xml.XMLFileWriter">
-  </bean>
-  
-  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-    <property name="url" value="jdbc:mysql://localhost/football" />
-    <property name="username" value="root" />
-    <property name="password" value="sminge1" />
-  </bean>
-  
-  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource"></property>
-    <property name="annotatedClasses">
-      <list>
-        <value>uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl</value>
-        <value>uk.co.mindbadger.footballresultsanalyser.domain.DivisionImpl</value>
-        <value>uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl</value>
-        <value>uk.co.mindbadger.footballresultsanalyser.domain.SeasonDivisionImpl</value>
-        <value>uk.co.mindbadger.footballresultsanalyser.domain.SeasonDivisionTeamImpl</value>
-        <value>uk.co.mindbadger.footballresultsanalyser.domain.FixtureImpl</value>
-      </list>
-    </property>
-    <property name="hibernateProperties">
-      <props>
-        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-        <prop key="hibernate.show_sql">false</prop>
-        <prop key="hibernate.connection.pool_size">10</prop>
-        <prop key="hibernate.c3p0.min_size">5</prop>
-        <prop key="hibernate.c3p0.max_size">20</prop>
-        <prop key="hibernate.c3p0.timeout">300</prop>
-        <prop key="hibernate.c3p0.max_statements">50</prop>
-        <prop key="hibernate.c3p0.idle_test_period">3000</prop>
-        <prop key="hibernate.hbm2ddl.auto">none</prop>
-      </props>
-    </property>
-  </bean>
-  
-  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" p:sessionFactory-ref="sessionFactory">
   </bean>
   
   <bean id="mapping" class="uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping">
@@ -73,4 +46,65 @@
     <property name="saver" ref="saver"/>
     <property name="dao" ref="dao"/>
   </bean>
+
+  <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${database.driver_class}" />
+    <property name="url" value="${database.url}" />
+    <property name="username" value="${database.username}" />
+    <property name="password" value="${database.password}" />
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"/>
+    <property name="packagesToScan" value="uk.co.mindbadger.footballresultsanalyser.domain"/>
+	<property name="hibernateProperties">
+		<props>
+			<prop key="hibernate.c3p0.min_size">5</prop>
+			<prop key="hibernate.c3p0.max_size">20</prop>
+			<prop key="hibernate.c3p0.timeout">300</prop>
+			<prop key="hibernate.c3p0.max_statements">50</prop>
+			<prop key="hibernate.c3p0.idle_test_period">3000</prop>
+			<prop key="hibernate.hbm2ddl.auto">none</prop>
+  			<prop key="hibernate.dialect">${database.dialect}</prop>
+			<prop key="hibernate.show_sql">false</prop>
+		</props>
+    </property>
+  </bean>
+  
+   
+  <!--  
+  
+   <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <property name="mappingResources">
+        <list>
+          <value>hibernatemapping/Division.hbm.xml </value>
+          <value>hibernatemapping/Fixture.hbm.xml </value>
+          <value>hibernatemapping/Season.hbm.xml </value>
+          <value>hibernatemapping/SeasonDivision.hbm.xml </value>
+          <value>hibernatemapping/SeasonDivisionTeam.hbm.xml </value>
+          <value>hibernatemapping/Team.hbm.xml </value>
+        </list>
+      </property>
+      <property name="hibernateProperties">
+        <props>
+          <prop key="hibernate.c3p0.min_size">5</prop>
+          <prop key="hibernate.c3p0.max_size">20</prop>
+          <prop key="hibernate.c3p0.timeout">300</prop>
+          <prop key="hibernate.c3p0.max_statements">50</prop>
+          <prop key="hibernate.c3p0.idle_test_period">3000</prop>
+          <prop key="hibernate.hbm2ddl.auto">none</prop>
+          <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+          <prop key="hibernate.show_sql">true</prop>
+        </props>
+      </property>   
+    </bean>
+
+   -->     
+
 </beans>

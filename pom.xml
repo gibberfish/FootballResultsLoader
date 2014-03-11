@@ -136,6 +136,24 @@
  		<artifactId>spring-beans</artifactId>
 		<version>${spring.version}</version>
 	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+ 		<artifactId>spring-jdbc</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+ 		<artifactId>spring-orm</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.springframework</groupId>
+ 		<artifactId>spring-tx</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
 	
     <dependency>
       <groupId>uk.co.mindbadger.football-results-dao</groupId>
@@ -149,13 +167,38 @@
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
+    <dependency> <!-- Apache BasicDataSource -->
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.2.2</version>
+    </dependency>
+        
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.10</version>
+    </dependency>
+	
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
+    </dependency>
+	<!-- 
+    <dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-c3p0</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
+ 	-->
   </dependencies>
   
   
   
 	<properties>
 		<log4j.version>1.2.16</log4j.version>
-		<spring.version>3.1.2.RELEASE</spring.version>
+		<spring.version>3.2.0.RELEASE</spring.version>
+		<hibernate.version>4.1.2.Final</hibernate.version>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.compiler.source>1.7</maven.compiler.source>
       <maven.compiler.target>1.7</maven.compiler.target>
