@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.util.Pauser;
@@ -35,6 +36,8 @@ public class SoccerbaseDatePageParser {
 	private WebPageReader webPageReader;
 	private String url;
 	private Pauser pauser;
+	private FootballResultsMapping mapping;
+	private String dialect;
 	
 	public void setWebPageReader(WebPageReader webPageReader) {
 		this.webPageReader = webPageReader;
@@ -76,7 +79,7 @@ public class SoccerbaseDatePageParser {
 		Integer awayGoals = null;
 		Calendar fixtureDate = null;
 		Integer season = null;
-
+		boolean notInTrackedDivisionSoIgnore = false;
 		
 		for (String line : page) {
 			if (line.startsWith(START_OF_DIVISION_ID_LOCATION)) {
@@ -93,6 +96,8 @@ public class SoccerbaseDatePageParser {
 				divisionName = line.substring(divisionNameStartPos, divisionNameEndPos);
 				
 				logger.debug("####.. divisionName = " + divisionName);
+				
+				notInTrackedDivisionSoIgnore = !mapping.getIncludedDivisions(dialect).contains(divisionId);
 			}
 			
 			if (line.startsWith(START_OF_DATE_LOCATION)) {
@@ -140,7 +145,13 @@ public class SoccerbaseDatePageParser {
 					awayTeamName = line.substring(teamNameStartPos, teamNameEndPos);
 					logger.debug("####.. awayTeamName = " + awayTeamName);
 					
-					parsedFixtures.add(createFixture(divisionId, divisionName, homeTeamId, awayTeamId, homeTeamName, awayTeamName, homeGoals, awayGoals, fixtureDate, season));
+					if (notInTrackedDivisionSoIgnore) {
+						logger.debug("Ignoring Fixture, as it is not tracked");
+					} else {
+						ParsedFixture fixture = createFixture(divisionId, divisionName, homeTeamId, awayTeamId, homeTeamName, awayTeamName, homeGoals, awayGoals, fixtureDate, season);
+						parsedFixtures.add(fixture);
+						logger.info("Parsed Fixture: " + fixture);						
+					}
 					
 					logger.debug("####.. ADDED NEW FIXTURE");
 				} else {
@@ -202,4 +213,20 @@ public class SoccerbaseDatePageParser {
 	public void setPauser(Pauser pauser) {
 		this.pauser = pauser;
 	}
+
+	public FootballResultsMapping getMapping() {
+		return mapping;
+	}
+
+	public void setMapping(FootballResultsMapping mapping) {
+		this.mapping = mapping;
+	}
+	
+	public String getDialect() {
+		return dialect;
+	}
+	public void setDialect(String dialect) {
+		this.dialect = dialect;
+	}
+
 }

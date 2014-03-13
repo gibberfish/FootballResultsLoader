@@ -81,6 +81,32 @@ public class ParsedFixture {
 		this.awayGoals = awayGoals;
 	}
 	
+	@Override
+	public String toString () {
+		StringBuffer buf = new StringBuffer();
+		buf.append("[");
+		buf.append(String.format("%1$te-%1$tm-%1$tY", fixtureDate));
+		buf.append(" (");
+		buf.append(seasonId);
+		buf.append(")][Div=");
+		buf.append(divisionName);
+		buf.append("(");
+		buf.append(divisionId);
+		buf.append(")][");
+		buf.append(homeTeamName);
+		buf.append("(");
+		buf.append(homeTeamId);
+		buf.append(") ");
+		buf.append(homeGoals);
+		buf.append("-");
+		buf.append(awayGoals);
+		buf.append(" ");
+		buf.append(awayTeamName);
+		buf.append("(");
+		buf.append(awayTeamId);
+		buf.append(")]");
+		return buf.toString();
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -98,7 +124,4 @@ public class ParsedFixture {
 			return false;
 		}
 	}
-
-	
-	
 }

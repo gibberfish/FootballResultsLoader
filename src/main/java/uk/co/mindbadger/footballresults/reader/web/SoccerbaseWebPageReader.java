@@ -25,6 +25,8 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 	@Override
 	public List<ParsedFixture> readFixturesForSeason(int season) {
 		
+		logger.info("About to read fixtures for season " + season + " using boxing day's results");
+		
 		List<Integer> includedDivisions = mapping.getIncludedDivisions("soccerbase");
 		
 		Map <ParsedFixture, ParsedFixture> fixturesForSeason = new HashMap<ParsedFixture, ParsedFixture> ();
@@ -84,6 +86,8 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 	@Override
 	public List<ParsedFixture> readFixturesForDate(Calendar date) {
 		String dateString = StringToCalendarConverter.convertCalendarToDateString(date);
+		
+		logger.info("About to read fixtures for date " + dateString);
 		
 		List<ParsedFixture> parsedFixtures = datePageParser.parseFixturesForDate(dateString);
 		

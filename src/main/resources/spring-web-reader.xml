@@ -23,6 +23,8 @@
        <property name="webPageReader" ref="webPageReader"/>
        <property name="url" value="http://www.soccerbase.com/matches/results.sd?date={fixtureDate}"/>
        <property name="pauser" ref="pauser"/>
+       <property name="mapping" ref="mapping"/>
+       <property name="dialect" value="soccerbase"/>
    </bean>
    	
    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseWebPageReader">

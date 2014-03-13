@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.FootballResultsReaderException;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
 import uk.co.mindbadger.util.Pauser;
@@ -48,11 +49,13 @@ public class SoccerbaseDatePageParserTest {
 	private static final String TEAM_7_NAME = "TEAM7";
 	private static final Integer TEAM_8_ID = new Integer(107);
 	private static final String TEAM_8_NAME = "TEAM8";
+	private String DIALECT = "soccerbase";
 
 	private SoccerbaseDatePageParser objectUnderTest;
 
 	@Mock private WebPageReader mockWebPageReader;
 	@Mock private Pauser mockPauser;
+	@Mock private FootballResultsMapping mockMapping;
 
 	@Before
 	public void setup() {
@@ -62,6 +65,8 @@ public class SoccerbaseDatePageParserTest {
 		objectUnderTest.setWebPageReader(mockWebPageReader);
 		objectUnderTest.setUrl(URL);
 		objectUnderTest.setPauser(mockPauser);
+		objectUnderTest.setMapping(mockMapping);
+		objectUnderTest.setDialect(DIALECT);
 	}
 
 	@Test
@@ -105,9 +110,55 @@ public class SoccerbaseDatePageParserTest {
 	}
 
 	@Test
+	public void shouldExcludeDivisionsNotInTheMapping() throws Exception {
+		// Given
+		when(mockWebPageReader.readWebPage(URL_FOR_BOXING_DAY)).thenReturn(get2008BoxingDayPage());
+		List<Integer> listOfIncludedDivisions = new ArrayList<Integer> ();
+		listOfIncludedDivisions.add(DIV_1_ID);
+		when(mockMapping.getIncludedDivisions(DIALECT)).thenReturn(listOfIncludedDivisions);
+
+		// When
+		List<ParsedFixture> parsedFixtures = objectUnderTest.parseFixturesForDate("2008-12-26");
+
+		// Then
+		assertEquals(2, parsedFixtures.size());
+		ParsedFixture fixture1 = parsedFixtures.get(0);
+		assertEquals(SEASON, fixture1.getSeasonId());
+		assertEquals(DIV_1_ID, fixture1.getDivisionId());
+		assertEquals(DIV_1_NAME, fixture1.getDivisionName());
+		assertEquals(TEAM_1_ID, fixture1.getHomeTeamId());
+		assertEquals(TEAM_1_NAME, fixture1.getHomeTeamName());
+		assertEquals(TEAM_2_ID, fixture1.getAwayTeamId());
+		assertEquals(TEAM_2_NAME, fixture1.getAwayTeamName());
+		assertEquals(BOXING_DAY_DATE_STRING, StringToCalendarConverter.convertCalendarToDateString(fixture1.getFixtureDate()));
+		assertEquals(new Integer(5), fixture1.getHomeGoals());
+		assertEquals(new Integer(2), fixture1.getAwayGoals());
+		assertNull(fixture1.getFixtureId());
+
+		ParsedFixture fixture2 = parsedFixtures.get(1);
+		assertEquals(SEASON, fixture2.getSeasonId());
+		assertEquals(DIV_1_ID, fixture2.getDivisionId());
+		assertEquals(DIV_1_NAME, fixture2.getDivisionName());
+		assertEquals(TEAM_3_ID, fixture2.getHomeTeamId());
+		assertEquals(TEAM_3_NAME, fixture2.getHomeTeamName());
+		assertEquals(TEAM_4_ID, fixture2.getAwayTeamId());
+		assertEquals(TEAM_4_NAME, fixture2.getAwayTeamName());
+		assertEquals(BOXING_DAY_DATE_STRING, StringToCalendarConverter.convertCalendarToDateString(fixture2.getFixtureDate()));
+		assertEquals(new Integer(3), fixture2.getHomeGoals());
+		assertEquals(new Integer(0), fixture2.getAwayGoals());
+		assertNull(fixture2.getFixtureId());
+		
+		verify (mockPauser).pause();
+	}
+
+	@Test
 	public void shouldParseADatePage() throws Exception {
 		// Given
 		when(mockWebPageReader.readWebPage(URL_FOR_BOXING_DAY)).thenReturn(get2008BoxingDayPage());
+		List<Integer> listOfIncludedDivisions = new ArrayList<Integer> ();
+		listOfIncludedDivisions.add(DIV_1_ID);
+		listOfIncludedDivisions.add(DIV_2_ID);
+		when(mockMapping.getIncludedDivisions(DIALECT)).thenReturn(listOfIncludedDivisions);
 
 		// When
 		List<ParsedFixture> parsedFixtures = objectUnderTest.parseFixturesForDate("2008-12-26");

@@ -27,7 +27,6 @@ public class FootballResultsLoader {
 	}
 	
 	public void loadResultsForRecentlyPlayedFixtures() {
-		System.out.println("I'm here!!!");
 		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
 		
 		dao.startSession();
@@ -35,15 +34,13 @@ public class FootballResultsLoader {
 		List<Fixture> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
 		dao.closeSession();
 		
-		System.out.println("Got fixtures!!!");
-		
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		
 		Map<Calendar, Calendar> uniqueDates = new HashMap<Calendar, Calendar> ();
 		for (Fixture fixture : unplayedFixtures) {
 			uniqueDates.put(fixture.getFixtureDate(), fixture.getFixtureDate());
 		}
-		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + uniqueDates.size() + " fixture dates that need updating");
+		logger.debug("getUnplayedFixturesBeforeToday has found " + uniqueDates.size() + " fixture dates that need updating");
 		
 		for (Calendar fixtureDate : uniqueDates.keySet()) {
 			List<ParsedFixture> parsedFixtures = reader.readFixturesForDate(fixtureDate);
