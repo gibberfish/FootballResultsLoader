@@ -30,9 +30,17 @@
   <bean id="domainObjectFactory" class="uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl">
   </bean>
 
+<!--
   <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserHibernateDAO">
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
       <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+-->
+
+  <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserMongoDAO">
+      <property name="domainObjectFactory" ref="domainObjectFactory"/>
+      <property name="mongoHost" value="${mongoHost}" />
+      <property name="db" value="${mongoDb}" />
   </bean>
 
   <bean id="saver" class="uk.co.mindbadger.footballresults.loader.FootballResultsSaver">
