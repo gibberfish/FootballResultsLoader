@@ -22,7 +22,7 @@ import uk.co.mindbadger.footballresults.loader.FootballResultsLoaderException;
 import uk.co.mindbadger.xml.XMLFileReader;
 import uk.co.mindbadger.xml.XMLFileWriter;
 
-public class FootballResultsMapping {
+public class FootballResultsMapping<K> {
 	private XMLFileWriter xmlFileWriter;
 	private String mappingFile;
 	
@@ -108,11 +108,11 @@ public class FootballResultsMapping {
 		dialects.get(dialectName).getDivisionMappings().put(sourceDivId, fraDivId);
 	}
 
-	public Map<Integer, Integer> getDivisionMappings(String dialectName) {
+	public Map<Integer, K> getDivisionMappings(String dialectName) {
 		return dialects.get(dialectName).getDivisionMappings();
 	}
 	
-	public Map<Integer, Integer> getTeamMappings(String dialectName) {
+	public Map<Integer, K> getTeamMappings(String dialectName) {
 		return dialects.get(dialectName).getTeamMappings();
 	}
 	
@@ -182,11 +182,11 @@ public class FootballResultsMapping {
 		}
 	}
 	
-	private class Dialect {
+	private class Dialect<K> {
 		private String name;
 		private List<Integer> includedDivisions = new ArrayList<Integer>();
-		private Map<Integer, Integer> divisionMappings = new HashMap<Integer, Integer>();
-		private Map<Integer, Integer> teamMappings = new HashMap<Integer, Integer>();
+		private Map<Integer, K> divisionMappings = new HashMap<Integer, K>();
+		private Map<Integer, K> teamMappings = new HashMap<Integer, K>();
 
 		public Dialect(String name) {
 			this.name = name;
@@ -200,11 +200,11 @@ public class FootballResultsMapping {
 			return includedDivisions;
 		}
 
-		public Map<Integer, Integer> getDivisionMappings() {
+		public Map<Integer, K> getDivisionMappings() {
 			return divisionMappings;
 		}
 
-		public Map<Integer, Integer> getTeamMappings() {
+		public Map<Integer, K> getTeamMappings() {
 			return teamMappings;
 		}
 	}

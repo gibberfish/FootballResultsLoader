@@ -13,10 +13,10 @@ import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Fixture;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 
-public class FootballResultsLoader {
+public class FootballResultsLoader<K> {
 	Logger logger = Logger.getLogger(FootballResultsLoader.class);
 	
-	private FootballResultsAnalyserDAO dao;
+	private FootballResultsAnalyserDAO<K> dao;
 	private FootballResultsReader reader;
 	private FootballResultsSaver saver;
 
@@ -30,14 +30,14 @@ public class FootballResultsLoader {
 		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
 		
 		dao.startSession();
-		List<Fixture> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
-		List<Fixture> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
+		List<Fixture<K>> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
+		List<Fixture<K>> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
 		dao.closeSession();
 		
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		
 		Map<Calendar, Calendar> uniqueDates = new HashMap<Calendar, Calendar> ();
-		for (Fixture fixture : unplayedFixtures) {
+		for (Fixture<K> fixture : unplayedFixtures) {
 			uniqueDates.put(fixture.getFixtureDate(), fixture.getFixtureDate());
 		}
 		logger.debug("getUnplayedFixturesBeforeToday has found " + uniqueDates.size() + " fixture dates that need updating");
@@ -48,19 +48,19 @@ public class FootballResultsLoader {
 			saver.saveFixtures(parsedFixtures);
 		}
 		
-		for (Fixture fixture : fixturesWithoutDates) {
+		for (Fixture<K> fixture : fixturesWithoutDates) {
 			Integer seasonNumber = fixture.getSeason().getSeasonNumber();
-			Integer teamId = fixture.getHomeTeam().getTeamId();
+			String teamId = fixture.getHomeTeam().getTeamIdAsString();
 			List<ParsedFixture> parsedFixtures = reader.readFixturesForTeamInSeason(seasonNumber, teamId);
 			logger.debug("...got " + parsedFixtures.size() + " fixtures for team " + teamId + " in season " + seasonNumber);
 			saver.saveFixtures(parsedFixtures);
 		}
 	}
 	
-	public FootballResultsAnalyserDAO getDao() {
+	public FootballResultsAnalyserDAO<K> getDao() {
 		return dao;
 	}
-	public void setDao(FootballResultsAnalyserDAO dao) {
+	public void setDao(FootballResultsAnalyserDAO<K> dao) {
 		this.dao = dao;
 	}
 	public FootballResultsReader getReader() {
