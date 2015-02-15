@@ -43,7 +43,7 @@
   <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserMongoDAO">
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
       <property name="mongoHost" value="${mongoHost}" />
-      <property name="db" value="${mongoDb}" />
+      <property name="dbName" value="${mongoDb}" />
   </bean>
 
   <bean id="saver" class="uk.co.mindbadger.footballresults.loader.FootballResultsSaver">
@@ -57,6 +57,8 @@
     <property name="saver" ref="saver"/>
     <property name="dao" ref="dao"/>
   </bean>
+
+  <!--
 
   <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="${database.driver_class}" />
@@ -86,9 +88,6 @@
 		</props>
     </property>
   </bean>
-  
-   
-  <!--  
   
    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
       <property name="dataSource" ref="dataSource" />
