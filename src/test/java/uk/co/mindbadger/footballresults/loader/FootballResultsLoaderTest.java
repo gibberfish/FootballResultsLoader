@@ -24,25 +24,25 @@ import uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl;
 public class FootballResultsLoaderTest {
 	private static final int SEASON = 2000;
 	
-	private static final Integer READ_FIX_ID_1 = 100;
-	private static final Integer READ_FIX_ID_2 = 100;
+	private static final String READ_FIX_ID_1 = "100";
+	private static final String READ_FIX_ID_2 = "100";
 
-	private static final Integer READ_DIV_ID_1 = 1;
+	private static final String READ_DIV_ID_1 = "1";
 	private static final String READ_DIV_NAME_1 = "Premier";
 
-	private static final Integer READ_TEAM_ID_1 = 500;
+	private static final String READ_TEAM_ID_1 = "500";
 	private static final String READ_TEAM_NAME_1 = "Portsmouth";
-	private static final Integer READ_TEAM_ID_2 = 501;
+	private static final String READ_TEAM_ID_2 = "501";
 	private static final String READ_TEAM_NAME_2 = "Hull";
 
-	private FootballResultsLoader objectUnderTest;
+	private FootballResultsLoader<String> objectUnderTest;
 
 	@Mock
-	private FootballResultsAnalyserDAO mockDao;
+	private FootballResultsAnalyserDAO<String> mockDao;
 	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
-	private FootballResultsSaver mockSaver;
+	private FootballResultsSaver<String> mockSaver;
 
 	private Calendar date1;
 	private Calendar date2;
@@ -79,31 +79,31 @@ public class FootballResultsLoaderTest {
 	@Test
 	public void shouldLoadMissingFixtureDates () {
 		// Given
-		Fixture fixture1 = new FixtureImpl();
+		Fixture<String> fixture1 = new FixtureImpl();
 		fixture1.setFixtureDate(date1);
 		
-		Fixture fixture2 = new FixtureImpl();
+		Fixture<String> fixture2 = new FixtureImpl();
 		fixture2.setFixtureDate(date2);
 
-		Fixture fixture3 = new FixtureImpl();
+		Fixture<String> fixture3 = new FixtureImpl();
 		fixture3.setFixtureDate(date1);
 
-		List<Fixture> unplayedFixtures = new ArrayList<Fixture> ();
+		List<Fixture<String>> unplayedFixtures = new ArrayList<Fixture<String>> ();
 		unplayedFixtures.add(fixture1);
 		unplayedFixtures.add(fixture2);
 		unplayedFixtures.add(fixture3);
 		when(mockDao.getUnplayedFixturesBeforeToday()).thenReturn(unplayedFixtures);
 
-		Fixture fixture4 = new FixtureImpl();
+		Fixture<String> fixture4 = new FixtureImpl();
 		fixture4.setFixtureDate(null);
-		Season season = new SeasonImpl ();
+		Season<String> season = new SeasonImpl ();
 		season.setSeasonNumber(2000);
 		fixture4.setSeason(season );
-		Team homeTeam = new TeamImpl();
-		homeTeam.setTeamId(100);
+		Team<String> homeTeam = new TeamImpl();
+		homeTeam.setTeamId("100");
 		fixture4.setHomeTeam(homeTeam);
 		
-		List<Fixture> fixturesWithoutDates = new ArrayList<Fixture> ();
+		List<Fixture<String>> fixturesWithoutDates = new ArrayList<Fixture<String>> ();
 		fixturesWithoutDates.add(fixture4);
 		when(mockDao.getFixturesWithNoFixtureDate()).thenReturn(fixturesWithoutDates);
 
@@ -119,7 +119,7 @@ public class FootballResultsLoaderTest {
 		when (mockReader.readFixturesForDate(date1)).thenReturn(parsedFixturesForDate1);
 		when (mockReader.readFixturesForDate(date2)).thenReturn(parsedFixturesForDate2);
 		
-		when (mockReader.readFixturesForTeamInSeason(2000, 100)).thenReturn(parsedFixturesForTeam);
+		when (mockReader.readFixturesForTeamInSeason(2000, "100")).thenReturn(parsedFixturesForTeam);
 		
 		// When
 		objectUnderTest.loadResultsForRecentlyPlayedFixtures();
@@ -132,7 +132,7 @@ public class FootballResultsLoaderTest {
 		verify(mockSaver).saveFixtures(parsedFixturesForDate1);
 		verify(mockSaver).saveFixtures(parsedFixturesForDate2);
 		
-		verify(mockReader).readFixturesForTeamInSeason(2000, 100);
+		verify(mockReader).readFixturesForTeamInSeason(2000, "100");
 		
 		verify(mockSaver).saveFixtures(parsedFixturesForTeam);
 	}
@@ -144,7 +144,7 @@ public class FootballResultsLoaderTest {
 	}
 
 	private void createObjectToTestAndInjectDependencies() {
-		objectUnderTest = new FootballResultsLoader();
+		objectUnderTest = new FootballResultsLoader<String>();
 		objectUnderTest.setDao(mockDao);
 		objectUnderTest.setReader(mockReader);
 		objectUnderTest.setSaver(mockSaver);

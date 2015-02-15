@@ -29,25 +29,25 @@ public class SoccerbaseDatePageParserTest {
 	private static final String URL_FOR_BOXING_DAY = "http://www.soccerbase.com/matches/results.sd?date=" + BOXING_DAY_DATE_STRING;
 
 	private static final Integer SEASON = new Integer(2008);
-	private static final Integer DIV_1_ID = new Integer(1);
+	private static final String DIV_1_ID = "1";
 	private static final String DIV_1_NAME = "DIV1";
-	private static final Integer DIV_2_ID = new Integer(2);
+	private static final String DIV_2_ID = "2";
 	private static final String DIV_2_NAME = "DIV2";
-	private static final Integer TEAM_1_ID = new Integer(100);
+	private static final String TEAM_1_ID = "100";
 	private static final String TEAM_1_NAME = "TEAM1";
-	private static final Integer TEAM_2_ID = new Integer(101);
+	private static final String TEAM_2_ID = "101";
 	private static final String TEAM_2_NAME = "TEAM2";
-	private static final Integer TEAM_3_ID = new Integer(102);
+	private static final String TEAM_3_ID = "102";
 	private static final String TEAM_3_NAME = "TEAM3";
-	private static final Integer TEAM_4_ID = new Integer(103);
+	private static final String TEAM_4_ID = "103";
 	private static final String TEAM_4_NAME = "TEAM4";
-	private static final Integer TEAM_5_ID = new Integer(104);
+	private static final String TEAM_5_ID = "104";
 	private static final String TEAM_5_NAME = "TEAM5";
-	private static final Integer TEAM_6_ID = new Integer(105);
+	private static final String TEAM_6_ID = "105";
 	private static final String TEAM_6_NAME = "TEAM6";
-	private static final Integer TEAM_7_ID = new Integer(106);
+	private static final String TEAM_7_ID = "106";
 	private static final String TEAM_7_NAME = "TEAM7";
-	private static final Integer TEAM_8_ID = new Integer(107);
+	private static final String TEAM_8_ID = "107";
 	private static final String TEAM_8_NAME = "TEAM8";
 	private String DIALECT = "soccerbase";
 
@@ -113,7 +113,7 @@ public class SoccerbaseDatePageParserTest {
 	public void shouldExcludeDivisionsNotInTheMapping() throws Exception {
 		// Given
 		when(mockWebPageReader.readWebPage(URL_FOR_BOXING_DAY)).thenReturn(get2008BoxingDayPage());
-		List<Integer> listOfIncludedDivisions = new ArrayList<Integer> ();
+		List<String> listOfIncludedDivisions = new ArrayList<String> ();
 		listOfIncludedDivisions.add(DIV_1_ID);
 		when(mockMapping.getIncludedDivisions(DIALECT)).thenReturn(listOfIncludedDivisions);
 
@@ -155,7 +155,7 @@ public class SoccerbaseDatePageParserTest {
 	public void shouldParseADatePage() throws Exception {
 		// Given
 		when(mockWebPageReader.readWebPage(URL_FOR_BOXING_DAY)).thenReturn(get2008BoxingDayPage());
-		List<Integer> listOfIncludedDivisions = new ArrayList<Integer> ();
+		List<String> listOfIncludedDivisions = new ArrayList<String> ();
 		listOfIncludedDivisions.add(DIV_1_ID);
 		listOfIncludedDivisions.add(DIV_2_ID);
 		when(mockMapping.getIncludedDivisions(DIALECT)).thenReturn(listOfIncludedDivisions);
@@ -260,7 +260,7 @@ public class SoccerbaseDatePageParserTest {
 		return page;
 	}
 
-	private void addFixtureHTMLWithScore(List<String> page, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, Integer homeGoals, Integer awayGoals) {
+	private void addFixtureHTMLWithScore(List<String> page, String homeTeamId, String homeTeamName, String awayTeamId, String awayTeamName, Integer homeGoals, Integer awayGoals) {
 		page.add(" <a href=\"/matches/results.sd?date=" + BOXING_DAY_DATE_STRING + "\" title=\"We 26Dec 2008\">We 26Dec 2008</a>");
 		page.add(" <td class=\"team homeTeam\">");
 		page.add(" <a href=\"/teams/team.sd?team_id=" + homeTeamId + "\" title=\"Go to Everton team page\">" + homeTeamName + "</a> </td>");
@@ -270,7 +270,7 @@ public class SoccerbaseDatePageParserTest {
 		page.add(" <a href=\"/teams/team.sd?team_id=" + awayTeamId + "\" title=\"Go to Wigan team page\">" + awayTeamName + "</a> </td>");
 	}
 
-	private void addFixtureHTMLWithoutScore(List<String> page, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName) {
+	private void addFixtureHTMLWithoutScore(List<String> page, String homeTeamId, String homeTeamName, String awayTeamId, String awayTeamName) {
 		page.add(" <a href=\"/matches/results.sd?date=" + BOXING_DAY_DATE_STRING + "\" title=\"We 26Dec 2008\">We 26Dec 2008</a>");
 		page.add(" <td class=\"team homeTeam\">");
 		page.add(" <a href=\"/teams/team.sd?team_id=" + homeTeamId + "\" title=\"Go to Everton team page\">" + homeTeamName + "</a> </td>");
@@ -280,7 +280,7 @@ public class SoccerbaseDatePageParserTest {
 		page.add(" <a href=\"/teams/team.sd?team_id=" + awayTeamId + "\" title=\"Go to Wigan team page\">" + awayTeamName + "</a> </td>");
 	}
 
-	private void addDivisionHTML(List<String> page, Integer divisionId, String divisionName) {
+	private void addDivisionHTML(List<String> page, String divisionId, String divisionName) {
 		page.add(" <a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to English Premier competition page\">" + divisionName + "</a>");
 	}
 }

@@ -8,9 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ParsedFixtureTest {
-	private static final int TEAM_ID_2 = 1001;
-	private static final int TEAM_ID_1 = 1000;
-	private static final int DIV_ID = 1;
+	private static final String TEAM_ID_2 = "1001";
+	private static final String TEAM_ID_1 = "1000";
+	private static final String DIV_ID = "1";
 	private static final int SEASON = 2000;
 	private Calendar fixtureDate1;
 	private Calendar fixtureDate2;
@@ -35,7 +35,7 @@ public class ParsedFixtureTest {
 
 		ParsedFixture fixture2 = new ParsedFixture();
 		fixture2.setSeasonId(SEASON);
-		fixture2.setDivisionId(2);
+		fixture2.setDivisionId("2");
 		fixture2.setHomeTeamId(TEAM_ID_1);
 		fixture2.setAwayTeamId(TEAM_ID_2);
 		fixture2.setFixtureDate(fixtureDate1);
@@ -59,7 +59,7 @@ public class ParsedFixtureTest {
 
 		ParsedFixture fixture2 = new ParsedFixture();
 		fixture2.setSeasonId(SEASON);
-		fixture2.setDivisionId(9999);
+		fixture2.setDivisionId("9999");
 		fixture2.setHomeTeamId(TEAM_ID_1);
 		fixture2.setAwayTeamId(TEAM_ID_2);
 		fixture2.setFixtureDate(fixtureDate1);
@@ -84,7 +84,7 @@ public class ParsedFixtureTest {
 		ParsedFixture fixture2 = new ParsedFixture();
 		fixture2.setSeasonId(SEASON);
 		fixture2.setDivisionId(DIV_ID);
-		fixture2.setHomeTeamId(9999);
+		fixture2.setHomeTeamId("9999");
 		fixture2.setAwayTeamId(TEAM_ID_2);
 		fixture2.setFixtureDate(fixtureDate1);
 
@@ -109,7 +109,7 @@ public class ParsedFixtureTest {
 		fixture2.setSeasonId(SEASON);
 		fixture2.setDivisionId(DIV_ID);
 		fixture2.setHomeTeamId(TEAM_ID_1);
-		fixture2.setAwayTeamId(9999);
+		fixture2.setAwayTeamId("9999");
 		fixture2.setFixtureDate(fixtureDate1);
 
 		// When

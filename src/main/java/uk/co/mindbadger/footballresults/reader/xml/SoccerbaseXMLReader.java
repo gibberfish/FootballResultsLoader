@@ -46,7 +46,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 						throw new FootballResultsReaderException("Your xml file contains a season that is not in the correct folder");
 					}
 
-					Integer competitionId = Integer.parseInt(competition.getAttribute("competitionId"));
+					String competitionId = competition.getAttribute("competitionId");
 					String competitionName = competition.getAttribute("competitionName");
 
 					logger.debug("  COMPETITION: " + competitionId + ", " + competitionName);
@@ -56,12 +56,12 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 						Element game = (Element) games.item(j);
 
 						String fixtureIdString = game.getAttribute("gameId");
-						Integer fixtureId = null;
+						String fixtureId = null;
 						if (fixtureIdString != null && !"".equals(fixtureIdString)) {
-							fixtureId = Integer.parseInt(game.getAttribute("gameId"));
+							fixtureId = game.getAttribute("gameId");
 						}
-						Integer homeTeamId = Integer.parseInt(game.getAttribute("homeTeamId"));
-						Integer awayTeamId = Integer.parseInt(game.getAttribute("awayTeamId"));
+						String homeTeamId = game.getAttribute("homeTeamId");
+						String awayTeamId = game.getAttribute("awayTeamId");
 						String homeTeamName = game.getAttribute("homeTeamName");
 						String awayTeamName = game.getAttribute("awayTeamName");
 
@@ -120,7 +120,7 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 	}
 
 	@Override
-	public List<ParsedFixture> readFixturesForTeamInSeason(int season, int teamId) {
+	public List<ParsedFixture> readFixturesForTeamInSeason(int season, String teamId) {
 		throw new FootballResultsReaderException ("This method is not applicable for the XML reader");
 	}
 

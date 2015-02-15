@@ -121,105 +121,105 @@ public class SoccerbaseXMLReaderTest {
 		assertEquals(8, fixtures.size());
 
 		ParsedFixture fixture1 = fixtures.get(0);
-		assertEquals(new Integer(FIXTURE_1_ID), fixture1.getFixtureId());
+		assertEquals(FIXTURE_1_ID, fixture1.getFixtureId());
 		assertEquals(SEASON, fixture1.getSeasonId());
-		assertEquals(new Integer(COMPETITION_1_ID), fixture1.getDivisionId());
+		assertEquals(COMPETITION_1_ID, fixture1.getDivisionId());
 		assertEquals(COMPETITION_1_NAME, fixture1.getDivisionName());
 		assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture1.getFixtureDate()));
-		assertEquals(new Integer(TEAM_1_ID), fixture1.getHomeTeamId());
+		assertEquals(TEAM_1_ID, fixture1.getHomeTeamId());
 		assertEquals(TEAM_1_NAME, fixture1.getHomeTeamName());
-		assertEquals(new Integer(TEAM_2_ID), fixture1.getAwayTeamId());
+		assertEquals(TEAM_2_ID, fixture1.getAwayTeamId());
 		assertEquals(TEAM_2_NAME, fixture1.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_1_HOME_GOALS), fixture1.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_1_AWAY_GOALS), fixture1.getAwayGoals());
 
 		ParsedFixture fixture2 = fixtures.get(1);
-		assertEquals(new Integer(FIXTURE_2_ID), fixture2.getFixtureId());
+		assertEquals(FIXTURE_2_ID, fixture2.getFixtureId());
 		assertEquals(SEASON, fixture2.getSeasonId());
-		assertEquals(new Integer(COMPETITION_1_ID), fixture2.getDivisionId());
+		assertEquals(COMPETITION_1_ID, fixture2.getDivisionId());
 		assertEquals(COMPETITION_1_NAME, fixture2.getDivisionName());
 		assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture2.getFixtureDate()));
-		assertEquals(new Integer(TEAM_3_ID), fixture2.getHomeTeamId());
+		assertEquals(TEAM_3_ID, fixture2.getHomeTeamId());
 		assertEquals(TEAM_3_NAME, fixture2.getHomeTeamName());
-		assertEquals(new Integer(TEAM_4_ID), fixture2.getAwayTeamId());
+		assertEquals(TEAM_4_ID, fixture2.getAwayTeamId());
 		assertEquals(TEAM_4_NAME, fixture2.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_2_HOME_GOALS), fixture2.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_2_AWAY_GOALS), fixture2.getAwayGoals());
 
 		ParsedFixture fixture3 = fixtures.get(2);
-		assertEquals(new Integer(FIXTURE_3_ID), fixture3.getFixtureId());
+		assertEquals(FIXTURE_3_ID, fixture3.getFixtureId());
 		assertEquals(SEASON, fixture3.getSeasonId());
-		assertEquals(new Integer(COMPETITION_2_ID), fixture3.getDivisionId());
+		assertEquals(COMPETITION_2_ID, fixture3.getDivisionId());
 		assertEquals(COMPETITION_2_NAME, fixture3.getDivisionName());
 		assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture3.getFixtureDate()));
-		assertEquals(new Integer(TEAM_5_ID), fixture3.getHomeTeamId());
+		assertEquals(TEAM_5_ID, fixture3.getHomeTeamId());
 		assertEquals(TEAM_5_NAME, fixture3.getHomeTeamName());
-		assertEquals(new Integer(TEAM_6_ID), fixture3.getAwayTeamId());
+		assertEquals(TEAM_6_ID, fixture3.getAwayTeamId());
 		assertEquals(TEAM_6_NAME, fixture3.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_3_HOME_GOALS), fixture3.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_3_AWAY_GOALS), fixture3.getAwayGoals());
 
 		ParsedFixture fixture4 = fixtures.get(3);
-		assertEquals(new Integer(FIXTURE_4_ID), fixture4.getFixtureId());
+		assertEquals(FIXTURE_4_ID, fixture4.getFixtureId());
 		assertEquals(SEASON, fixture4.getSeasonId());
-		assertEquals(new Integer(COMPETITION_2_ID), fixture4.getDivisionId());
+		assertEquals(COMPETITION_2_ID, fixture4.getDivisionId());
 		assertEquals(COMPETITION_2_NAME, fixture4.getDivisionName());
 		assertEquals(FIXTURE_DATE_1, convertCalendarToString(fixture4.getFixtureDate()));
-		assertEquals(new Integer(TEAM_7_ID), fixture4.getHomeTeamId());
+		assertEquals(TEAM_7_ID, fixture4.getHomeTeamId());
 		assertEquals(TEAM_7_NAME, fixture4.getHomeTeamName());
-		assertEquals(new Integer(TEAM_8_ID), fixture4.getAwayTeamId());
+		assertEquals(TEAM_8_ID, fixture4.getAwayTeamId());
 		assertEquals(TEAM_8_NAME, fixture4.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_4_HOME_GOALS), fixture4.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_4_AWAY_GOALS), fixture4.getAwayGoals());
 
 		ParsedFixture fixture5 = fixtures.get(4);
-		assertEquals(new Integer(FIXTURE_5_ID), fixture5.getFixtureId());
+		assertEquals(FIXTURE_5_ID, fixture5.getFixtureId());
 		assertEquals(SEASON, fixture5.getSeasonId());
-		assertEquals(new Integer(COMPETITION_1_ID), fixture5.getDivisionId());
+		assertEquals(COMPETITION_1_ID, fixture5.getDivisionId());
 		assertEquals(COMPETITION_1_NAME, fixture5.getDivisionName());
 		assertEquals(FIXTURE_DATE_2, convertCalendarToString(fixture5.getFixtureDate()));
-		assertEquals(new Integer(TEAM_2_ID), fixture5.getHomeTeamId());
+		assertEquals(TEAM_2_ID, fixture5.getHomeTeamId());
 		assertEquals(TEAM_2_NAME, fixture5.getHomeTeamName());
-		assertEquals(new Integer(TEAM_1_ID), fixture5.getAwayTeamId());
+		assertEquals(TEAM_1_ID, fixture5.getAwayTeamId());
 		assertEquals(TEAM_1_NAME, fixture5.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_5_HOME_GOALS), fixture5.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_5_AWAY_GOALS), fixture5.getAwayGoals());
 
 		ParsedFixture fixture6 = fixtures.get(5);
-		assertEquals(new Integer(FIXTURE_6_ID), fixture6.getFixtureId());
+		assertEquals(FIXTURE_6_ID, fixture6.getFixtureId());
 		assertEquals(SEASON, fixture6.getSeasonId());
-		assertEquals(new Integer(COMPETITION_1_ID), fixture6.getDivisionId());
+		assertEquals(COMPETITION_1_ID, fixture6.getDivisionId());
 		assertEquals(COMPETITION_1_NAME, fixture6.getDivisionName());
 		assertEquals(FIXTURE_DATE_3, convertCalendarToString(fixture6.getFixtureDate()));
-		assertEquals(new Integer(TEAM_4_ID), fixture6.getHomeTeamId());
+		assertEquals(TEAM_4_ID, fixture6.getHomeTeamId());
 		assertEquals(TEAM_4_NAME, fixture6.getHomeTeamName());
-		assertEquals(new Integer(TEAM_3_ID), fixture6.getAwayTeamId());
+		assertEquals(TEAM_3_ID, fixture6.getAwayTeamId());
 		assertEquals(TEAM_3_NAME, fixture6.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_6_HOME_GOALS), fixture6.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_6_AWAY_GOALS), fixture6.getAwayGoals());
 
 		ParsedFixture fixture7 = fixtures.get(6);
-		assertEquals(new Integer(FIXTURE_7_ID), fixture7.getFixtureId());
+		assertEquals(FIXTURE_7_ID, fixture7.getFixtureId());
 		assertEquals(SEASON, fixture7.getSeasonId());
-		assertEquals(new Integer(COMPETITION_2_ID), fixture7.getDivisionId());
+		assertEquals(COMPETITION_2_ID, fixture7.getDivisionId());
 		assertEquals(COMPETITION_2_NAME, fixture7.getDivisionName());
 		assertEquals(FIXTURE_DATE_3, convertCalendarToString(fixture7.getFixtureDate()));
-		assertEquals(new Integer(TEAM_6_ID), fixture7.getHomeTeamId());
+		assertEquals(TEAM_6_ID, fixture7.getHomeTeamId());
 		assertEquals(TEAM_6_NAME, fixture7.getHomeTeamName());
-		assertEquals(new Integer(TEAM_5_ID), fixture7.getAwayTeamId());
+		assertEquals(TEAM_5_ID, fixture7.getAwayTeamId());
 		assertEquals(TEAM_5_NAME, fixture7.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_7_HOME_GOALS), fixture7.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_7_AWAY_GOALS), fixture7.getAwayGoals());
 
 		ParsedFixture fixture8 = fixtures.get(7);
-		assertEquals(new Integer(FIXTURE_8_ID), fixture8.getFixtureId());
+		assertEquals(FIXTURE_8_ID, fixture8.getFixtureId());
 		assertEquals(SEASON, fixture8.getSeasonId());
-		assertEquals(new Integer(COMPETITION_2_ID), fixture8.getDivisionId());
+		assertEquals(COMPETITION_2_ID, fixture8.getDivisionId());
 		assertEquals(COMPETITION_2_NAME, fixture8.getDivisionName());
 		assertEquals(FIXTURE_DATE_3, convertCalendarToString(fixture8.getFixtureDate()));
-		assertEquals(new Integer(TEAM_8_ID), fixture8.getHomeTeamId());
+		assertEquals(TEAM_8_ID, fixture8.getHomeTeamId());
 		assertEquals(TEAM_8_NAME, fixture8.getHomeTeamName());
-		assertEquals(new Integer(TEAM_7_ID), fixture8.getAwayTeamId());
+		assertEquals(TEAM_7_ID, fixture8.getAwayTeamId());
 		assertEquals(TEAM_7_NAME, fixture8.getAwayTeamName());
 		assertNull(fixture8.getHomeGoals());
 		assertNull(fixture8.getAwayGoals());
@@ -261,14 +261,14 @@ public class SoccerbaseXMLReaderTest {
 		assertEquals(1, fixtures.size());
 
 		ParsedFixture fixture1 = fixtures.get(0);
-		assertEquals(new Integer(FIXTURE_5_ID), fixture1.getFixtureId());
+		assertEquals(FIXTURE_5_ID, fixture1.getFixtureId());
 		assertEquals(SEASON, fixture1.getSeasonId());
-		assertEquals(new Integer(COMPETITION_1_ID), fixture1.getDivisionId());
+		assertEquals(COMPETITION_1_ID, fixture1.getDivisionId());
 		assertEquals(COMPETITION_1_NAME, fixture1.getDivisionName());
 		assertNull(fixture1.getFixtureDate());
-		assertEquals(new Integer(TEAM_2_ID), fixture1.getHomeTeamId());
+		assertEquals(TEAM_2_ID, fixture1.getHomeTeamId());
 		assertEquals(TEAM_2_NAME, fixture1.getHomeTeamName());
-		assertEquals(new Integer(TEAM_1_ID), fixture1.getAwayTeamId());
+		assertEquals(TEAM_1_ID, fixture1.getAwayTeamId());
 		assertEquals(TEAM_1_NAME, fixture1.getAwayTeamName());
 		assertEquals(new Integer(FIXTURE_5_HOME_GOALS), fixture1.getHomeGoals());
 		assertEquals(new Integer(FIXTURE_5_AWAY_GOALS), fixture1.getAwayGoals());
@@ -295,7 +295,7 @@ public class SoccerbaseXMLReaderTest {
 
 		// When
 		try {
-			objectUnderTest.readFixturesForTeamInSeason(2000, 1);
+			objectUnderTest.readFixturesForTeamInSeason(2000, "1");
 			fail("Should throw a FootballResultsReaderException");
 		} catch (FootballResultsReaderException e) {
 			// Then

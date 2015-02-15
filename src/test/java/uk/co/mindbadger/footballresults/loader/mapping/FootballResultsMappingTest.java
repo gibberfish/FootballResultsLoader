@@ -136,13 +136,13 @@ public class FootballResultsMappingTest{
 		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 
 		// When
-		List<Integer> includedDivisions = objectUnderTest.getIncludedDivisions (DIALECT);
+		List<String> includedDivisions = objectUnderTest.getIncludedDivisions (DIALECT);
 		
 		// Then
 		assertEquals (3, includedDivisions.size());
-		assertEquals (new Integer(SOURCE_DIV_ID_1), includedDivisions.get(0));
-		assertEquals (new Integer(SOURCE_DIV_ID_2), includedDivisions.get(1));
-		assertEquals (new Integer(SOURCE_DIV_ID_3), includedDivisions.get(2));
+		assertEquals (SOURCE_DIV_ID_1, includedDivisions.get(0));
+		assertEquals (SOURCE_DIV_ID_2, includedDivisions.get(1));
+		assertEquals (SOURCE_DIV_ID_3, includedDivisions.get(2));
 	}
 
 	@Test
@@ -167,13 +167,13 @@ public class FootballResultsMappingTest{
 		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 
 		// When
-		Map<Integer,Integer> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
+		Map<String,String> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
 		
 		// Then
 		assertEquals (2, divisionMappings.size());
 		
-		assertEquals (new Integer(FRA_DIV_ID_1), divisionMappings.get(new Integer (SOURCE_DIV_ID_1)));
-		assertEquals (new Integer(FRA_DIV_ID_2), divisionMappings.get(new Integer (SOURCE_DIV_ID_2)));
+		assertEquals (FRA_DIV_ID_1, divisionMappings.get(SOURCE_DIV_ID_1));
+		assertEquals (FRA_DIV_ID_2, divisionMappings.get(SOURCE_DIV_ID_2));
 	}
 
 	@Test
@@ -183,13 +183,13 @@ public class FootballResultsMappingTest{
 		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 
 		// When
-		Map<Integer,Integer> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
+		Map<String,String> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
 		
 		// Then
 		assertEquals (2, teamMappings.size());
 		
-		assertEquals (new Integer(FRA_TEAM_ID_1), teamMappings.get(new Integer (SOURCE_TEAM_ID_1)));
-		assertEquals (new Integer(FRA_TEAM_ID_2), teamMappings.get(new Integer (SOURCE_TEAM_ID_2)));
+		assertEquals (FRA_TEAM_ID_1, teamMappings.get(SOURCE_TEAM_ID_1));
+		assertEquals (FRA_TEAM_ID_2, teamMappings.get(SOURCE_TEAM_ID_2));
 	}
 	
 	@Test
@@ -199,15 +199,15 @@ public class FootballResultsMappingTest{
 		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 		
 		// When
-		objectUnderTest.addDivisionMapping (DIALECT, new Integer(SOURCE_DIV_ID_3), new Integer (FRA_DIV_ID_3));
+		objectUnderTest.addDivisionMapping (DIALECT, SOURCE_DIV_ID_3, FRA_DIV_ID_3);
 		
 		// Then
-		Map<Integer,Integer> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
+		Map<String,String> divisionMappings = objectUnderTest.getDivisionMappings (DIALECT);
 
 		assertEquals (3, divisionMappings.size());
-		assertEquals (new Integer(FRA_DIV_ID_1), divisionMappings.get(new Integer (SOURCE_DIV_ID_1)));
-		assertEquals (new Integer(FRA_DIV_ID_2), divisionMappings.get(new Integer (SOURCE_DIV_ID_2)));
-		assertEquals (new Integer(FRA_DIV_ID_3), divisionMappings.get(new Integer (SOURCE_DIV_ID_3)));
+		assertEquals (FRA_DIV_ID_1, divisionMappings.get(SOURCE_DIV_ID_1));
+		assertEquals (FRA_DIV_ID_2, divisionMappings.get(SOURCE_DIV_ID_2));
+		assertEquals (FRA_DIV_ID_3, divisionMappings.get(SOURCE_DIV_ID_3));
 	}
 
 	@Test
@@ -217,15 +217,15 @@ public class FootballResultsMappingTest{
 		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
 		
 		// When
-		objectUnderTest.addTeamMapping (DIALECT, new Integer(SOURCE_TEAM_ID_3), new Integer (FRA_TEAM_ID_3));
+		objectUnderTest.addTeamMapping (DIALECT, SOURCE_TEAM_ID_3, FRA_TEAM_ID_3);
 		
 		// Then
-		Map<Integer,Integer> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
+		Map<String,String> teamMappings = objectUnderTest.getTeamMappings (DIALECT);
 
 		assertEquals (3, teamMappings.size());
-		assertEquals (new Integer(FRA_TEAM_ID_1), teamMappings.get(new Integer (SOURCE_TEAM_ID_1)));
-		assertEquals (new Integer(FRA_TEAM_ID_2), teamMappings.get(new Integer (SOURCE_TEAM_ID_2)));
-		assertEquals (new Integer(FRA_TEAM_ID_3), teamMappings.get(new Integer (SOURCE_TEAM_ID_3)));
+		assertEquals (FRA_TEAM_ID_1, teamMappings.get(SOURCE_TEAM_ID_1));
+		assertEquals (FRA_TEAM_ID_2, teamMappings.get(SOURCE_TEAM_ID_2));
+		assertEquals (FRA_TEAM_ID_3, teamMappings.get(SOURCE_TEAM_ID_3));
 	}
 	
 	@Test

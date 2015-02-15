@@ -24,23 +24,23 @@ public class SoccerbaseTeamPageParserTest {
 	private static final Integer SEASON = 2012;
 	private static final Integer SOCCERBASE_SEASON_2012 = 142;
 	
-	private static final Integer DIV_1_ID = 1;
+	private static final String DIV_1_ID = "1";
 	private static final String DIV_1_NAME = "DIV 1";
-	private static final Integer DIV_2_ID = 2;
+	private static final String DIV_2_ID = "2";
 	private static final String DIV_2_NAME = "CUP 1";
 	private static final String FIXTURE_DATE_1 = "2012-08-10";
 	private static final String FIXTURE_DATE_2 = "2012-09-10";
 	private static final String FIXTURE_DATE_3 = "2013-01-09";
 	private static final String FIXTURE_DATE_4 = "2013-03-12";
-	private static final Integer TEAM_1_ID = 100;
+	private static final String TEAM_1_ID = "100";
 	private static final String TEAM_1_NAME = "TEAM1";
-	private static final Integer TEAM_2_ID = 101;
+	private static final String TEAM_2_ID = "101";
 	private static final String TEAM_2_NAME = "TEAM2";
-	private static final Integer TEAM_3_ID = 102;
+	private static final String TEAM_3_ID = "102";
 	private static final String TEAM_3_NAME = "TEAM3";
-	private static final Integer TEAM_4_ID = 103;
+	private static final String TEAM_4_ID = "103";
 	private static final String TEAM_4_NAME = "TEAM4";
-	private static final Integer TEAM_5_ID = 104;
+	private static final String TEAM_5_ID = "104";
 	private static final String TEAM_5_NAME = "TEAM5";
 
 	private static final String URL = "http://www.soccerbase.com/teams/results.sd?season_id={seasonNum}&team_id={teamId}&teamTabs=results";
@@ -187,7 +187,7 @@ public class SoccerbaseTeamPageParserTest {
 		return page;
 	}
 
-	private void addFixtureWithScore(List<String> page, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, String fixtureDate, int homeGoals, int awayGoals) {
+	private void addFixtureWithScore(List<String> page, Integer season, String divisionId, String divisionName, String homeTeamId, String homeTeamName, String awayTeamId, String awayTeamName, String fixtureDate, int homeGoals, int awayGoals) {
 		page.add(" <tr class=\"match\" id=\"tgc663960\">");
 		page.add(" <a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to " + divisionName + " competition page\">" + divisionName + "</a> <span class=\"hide\">");
 		page.add(" <a href=\"/matches/results.sd?date=" + fixtureDate + "\" title=\"Tu 28Aug 2012\">Tu 28Aug 2012</a>");
@@ -201,7 +201,7 @@ public class SoccerbaseTeamPageParserTest {
 		page.add(" </tr>");
 	}
 
-	private void addFixtureWithoutScore(List<String> page, Integer season, Integer divisionId, String divisionName, Integer homeTeamId, String homeTeamName, Integer awayTeamId, String awayTeamName, String fixtureDate) {
+	private void addFixtureWithoutScore(List<String> page, Integer season, String divisionId, String divisionName, String homeTeamId, String homeTeamName, String awayTeamId, String awayTeamName, String fixtureDate) {
 		page.add(" <tr class=\"match\" id=\"tgc663960\">");
 		page.add(" <a href=\"/tournaments/tournament.sd?comp_id=" + divisionId + "\" title=\"Go to " + divisionName + " competition page\">" + divisionName + "</a> <span class=\"hide\">");
 		page.add(" <a href=\"/matches/results.sd?date=" + fixtureDate + "\" title=\"Tu 28Aug 2012\">Tu 28Aug 2012</a>");

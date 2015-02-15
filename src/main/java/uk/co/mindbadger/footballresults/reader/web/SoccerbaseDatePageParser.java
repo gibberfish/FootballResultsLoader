@@ -67,12 +67,12 @@ public class SoccerbaseDatePageParser {
 		
 		List<ParsedFixture> parsedFixtures = new ArrayList<ParsedFixture> ();
 		
-		Integer divisionId = null;
+		String divisionId = null;
 		String divisionName = null;
 		String dateString = null;
 		boolean lookingForAwayTeam = false;
-		Integer homeTeamId = null;
-		Integer awayTeamId = null;
+		String homeTeamId = null;
+		String awayTeamId = null;
 		String homeTeamName = null;
 		String awayTeamName = null;
 		Integer homeGoals = null;
@@ -87,7 +87,7 @@ public class SoccerbaseDatePageParser {
 				
 				int divisionIdStartPos = line.indexOf(START_OF_DIVISION_ID_LOCATION) + START_OF_DIVISION_ID_LOCATION.length();
 				int divisionIdEndPos = line.indexOf(END_OF_DIVISION_ID_LOCATION,divisionIdStartPos);
-				divisionId = Integer.parseInt(line.substring(divisionIdStartPos, divisionIdEndPos));
+				divisionId = line.substring(divisionIdStartPos, divisionIdEndPos);
 				
 				logger.debug("####.. divisionId = " + divisionId);
 				
@@ -131,10 +131,10 @@ public class SoccerbaseDatePageParser {
 				int teamIdStartPos = line.indexOf(START_OF_TEAM_ID_LOCATION) + START_OF_TEAM_ID_LOCATION.length();
 				int teamIdEndPos = line.indexOf(END_OF_TEAM_ID_LOCATION,teamIdStartPos);
 				if (lookingForAwayTeam) {
-					awayTeamId = Integer.parseInt(line.substring(teamIdStartPos, teamIdEndPos));
+					awayTeamId = line.substring(teamIdStartPos, teamIdEndPos);
 					logger.debug("####.. awayTeamId = " + awayTeamId);
 				} else {
-					homeTeamId = Integer.parseInt(line.substring(teamIdStartPos, teamIdEndPos));
+					homeTeamId = line.substring(teamIdStartPos, teamIdEndPos);
 					logger.debug("####.. homeTeamId = " + homeTeamId);
 				}
 				
@@ -184,7 +184,7 @@ public class SoccerbaseDatePageParser {
 		return parsedFixtures;
 	}
 
-	private ParsedFixture createFixture(Integer divisionId, String divisionName, Integer homeTeamId, Integer awayTeamId, String homeTeamName, String awayTeamName, Integer homeGoals, Integer awayGoals, Calendar fixtureDate,
+	private ParsedFixture createFixture(String divisionId, String divisionName, String homeTeamId, String awayTeamId, String homeTeamName, String awayTeamName, Integer homeGoals, Integer awayGoals, Calendar fixtureDate,
 			Integer season) {
 		ParsedFixture parsedFixture = new ParsedFixture();
 		parsedFixture.setSeasonId(season);

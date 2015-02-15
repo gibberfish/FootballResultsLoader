@@ -2,22 +2,22 @@ package uk.co.mindbadger.footballresults.reader;
 
 import java.util.Calendar;
 
-public class ParsedFixture<K> {
-	private K fixtureId;
+public class ParsedFixture {
+	private String fixtureId;
 	private Integer seasonId;
 	private Calendar fixtureDate;
-	private K divisionId;
+	private String divisionId;
 	private String divisionName;
-	private K homeTeamId;
+	private String homeTeamId;
 	private String homeTeamName;
-	private K awayTeamId;
+	private String awayTeamId;
 	private String awayTeamName;
 	private Integer homeGoals;
 	private Integer awayGoals;
-	public K getFixtureId() {
+	public String getFixtureId() {
 		return fixtureId;
 	}
-	public void setFixtureId(K fixtureId) {
+	public void setFixtureId(String fixtureId) {
 		this.fixtureId = fixtureId;
 	}
 	public Integer getSeasonId() {
@@ -32,10 +32,10 @@ public class ParsedFixture<K> {
 	public void setFixtureDate(Calendar fixtureDate) {
 		this.fixtureDate = fixtureDate;
 	}
-	public K getDivisionId() {
+	public String getDivisionId() {
 		return divisionId;
 	}
-	public void setDivisionId(K divisionId) {
+	public void setDivisionId(String divisionId) {
 		this.divisionId = divisionId;
 	}
 	public String getDivisionName() {
@@ -44,10 +44,10 @@ public class ParsedFixture<K> {
 	public void setDivisionName(String divisionName) {
 		this.divisionName = divisionName;
 	}
-	public K getHomeTeamId() {
+	public String getHomeTeamId() {
 		return homeTeamId;
 	}
-	public void setHomeTeamId(K homeTeamId) {
+	public void setHomeTeamId(String homeTeamId) {
 		this.homeTeamId = homeTeamId;
 	}
 	public String getHomeTeamName() {
@@ -56,10 +56,10 @@ public class ParsedFixture<K> {
 	public void setHomeTeamName(String homeTeamName) {
 		this.homeTeamName = homeTeamName;
 	}
-	public K getAwayTeamId() {
+	public String getAwayTeamId() {
 		return awayTeamId;
 	}
-	public void setAwayTeamId(K awayTeamId) {
+	public void setAwayTeamId(String awayTeamId) {
 		this.awayTeamId = awayTeamId;
 	}
 	public String getAwayTeamName() {

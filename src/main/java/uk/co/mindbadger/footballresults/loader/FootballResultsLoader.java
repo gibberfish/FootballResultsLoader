@@ -18,7 +18,7 @@ public class FootballResultsLoader<K> {
 	
 	private FootballResultsAnalyserDAO<K> dao;
 	private FootballResultsReader reader;
-	private FootballResultsSaver saver;
+	private FootballResultsSaver<K> saver;
 
 	public void loadResultsForSeason(int seasonNum) {
 		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
@@ -69,7 +69,7 @@ public class FootballResultsLoader<K> {
 	public void setReader(FootballResultsReader reader) {
 		this.reader = reader;
 	}
-	public void setSaver(FootballResultsSaver saver) {
+	public void setSaver(FootballResultsSaver<K> saver) {
 		this.saver = saver;
 	}
 }

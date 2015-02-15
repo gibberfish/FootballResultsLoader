@@ -40,13 +40,13 @@ public class SoccerbaseTeamPageParser {
 	private WebPageReader webPageReader;
 	private Pauser pauser;
 	
-	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, Integer teamId) {
+	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, String teamId) {
 		Integer soccerbaseSeasonNumber = seasonNumber - 1870;
 		
 		logger.debug("ABOUT TO LOAD FIXTURES FOR TEAM " + teamId + " IN SEASON " + seasonNumber);
 		
 		String url = this.url.replace("{seasonNum}", soccerbaseSeasonNumber.toString());
-		url = url.replace("{teamId}", teamId.toString());
+		url = url.replace("{teamId}", teamId);
 		
 		try {
 			List<String> page = webPageReader.readWebPage(url);
@@ -65,10 +65,10 @@ public class SoccerbaseTeamPageParser {
 	private List<ParsedFixture> parsePage(List<String> page) {
 		List<ParsedFixture> parsedFixtures = new ArrayList<ParsedFixture> ();
 		
-		Integer divisionId = null;
+		String divisionId = null;
 		String divisionName = null;
-		Integer homeTeamId = null;
-		Integer awayTeamId = null;
+		String homeTeamId = null;
+		String awayTeamId = null;
 		String homeTeamName = null;
 		String awayTeamName = null;
 		Integer homeGoals = null;
@@ -95,7 +95,7 @@ public class SoccerbaseTeamPageParser {
 			if (line.startsWith(START_OF_DIVISION_LINE)) {
 				int divisionIdStartPos = line.indexOf(START_OF_DIVISION_LINE) + START_OF_DIVISION_LINE.length();
 				int divisionIdEndPos = line.indexOf(END_OF_DIVISION_ID,divisionIdStartPos);
-				divisionId = Integer.parseInt(line.substring(divisionIdStartPos, divisionIdEndPos));
+				divisionId = line.substring(divisionIdStartPos, divisionIdEndPos);
 				
 				int divisionNameStartPos = line.indexOf(START_OF_DIVISION_NAME, divisionIdEndPos) + START_OF_DIVISION_NAME.length();
 				int divisionNameEndPos = line.indexOf(END_OF_DIVISION_NAME, divisionIdStartPos);
@@ -122,9 +122,9 @@ public class SoccerbaseTeamPageParser {
 				int teamIdStartPos = line.indexOf(START_OF_TEAM_ID) + START_OF_TEAM_ID.length();
 				int teamIdEndPos = line.indexOf(END_OF_TEAM_ID,teamIdStartPos);
 				if (lookingForAwayTeam) {
-					awayTeamId = Integer.parseInt(line.substring(teamIdStartPos, teamIdEndPos));
+					awayTeamId = line.substring(teamIdStartPos, teamIdEndPos);
 				} else {
-					homeTeamId = Integer.parseInt(line.substring(teamIdStartPos, teamIdEndPos));
+					homeTeamId = line.substring(teamIdStartPos, teamIdEndPos);
 				}
 				
 				int seasonStartPos = line.indexOf(END_OF_TEAM_ID, teamIdEndPos) + END_OF_TEAM_ID.length();
@@ -162,7 +162,7 @@ public class SoccerbaseTeamPageParser {
 		return parsedFixtures;
 	}
 
-	private ParsedFixture createFixture(Integer divisionId, String divisionName, Integer homeTeamId, Integer awayTeamId, String homeTeamName, String awayTeamName, Integer homeGoals, Integer awayGoals, Calendar fixtureDate,
+	private ParsedFixture createFixture(String divisionId, String divisionName, String homeTeamId, String awayTeamId, String homeTeamName, String awayTeamName, Integer homeGoals, Integer awayGoals, Calendar fixtureDate,
 			Integer season) {
 		ParsedFixture parsedFixture = new ParsedFixture();
 		parsedFixture.setSeasonId(season);

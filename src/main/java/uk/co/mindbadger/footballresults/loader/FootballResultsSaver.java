@@ -20,7 +20,7 @@ public class FootballResultsSaver<K> {
 	private FootballResultsAnalyserDAO<K> dao;
 	private FootballResultsMapping mapping;
 
-	public void saveFixtures(List<ParsedFixture<K>> fixturesRead) {
+	public void saveFixtures(List<ParsedFixture> fixturesRead) {
 		try {
 			logger.debug("About to saveFixtures: " + fixturesRead.size());
 			
@@ -32,11 +32,11 @@ public class FootballResultsSaver<K> {
 			if (fixturesRead.size() > 0) {
 	
 				logger.debug("Getting mappings");
-				List<Integer> includedDivisions = mapping.getIncludedDivisions(dialect);
-				Map<Integer, K> divisionMappings = mapping.getDivisionMappings(dialect);
-				Map<Integer, K> teamMappings = mapping.getTeamMappings(dialect);
+				List<String> includedDivisions = mapping.getIncludedDivisions(dialect);
+				Map<String, String> divisionMappings = mapping.getDivisionMappings(dialect);
+				Map<String, String> teamMappings = mapping.getTeamMappings(dialect);
 				
-				for (ParsedFixture<K> parsedFixture : fixturesRead) {
+				for (ParsedFixture parsedFixture : fixturesRead) {
 					logger.debug("Saving fixture: " + parsedFixture);
 					
 					
@@ -44,9 +44,9 @@ public class FootballResultsSaver<K> {
 					Team<K> homeTeam = null;
 					Team<K> awayTeam = null;
 	
-					K readDivisionId = parsedFixture.getDivisionId();
-					K readHomeTeamId = parsedFixture.getHomeTeamId();
-					K readAwayTeamId = parsedFixture.getAwayTeamId();
+					String readDivisionId = parsedFixture.getDivisionId();
+					String readHomeTeamId = parsedFixture.getHomeTeamId();
+					String readAwayTeamId = parsedFixture.getAwayTeamId();
 					
 					if (includedDivisions.contains(readDivisionId)) {
 						logger.debug("This is a division we want to track: " + readDivisionId);
@@ -60,31 +60,31 @@ public class FootballResultsSaver<K> {
 						}
 						logger.debug("..got " + season);
 						
-						Integer fraDivisionId = divisionMappings.get(readDivisionId);
+						String fraDivisionId = divisionMappings.get(readDivisionId);
 						division = divisionsInDatabase.get(fraDivisionId);
 						if (division == null) {
 							logger.debug("We don't have this division, so add it");
 							division = dao.addDivision(parsedFixture.getDivisionName());
 							divisionsInDatabase.put(division.getDivisionId(), division);
-							divisionMappings.put(readDivisionId, division.getDivisionId());
+							divisionMappings.put(readDivisionId, division.getDivisionIdAsString());
 						}
 	
-						Integer fraHomeTeamId = teamMappings.get(readHomeTeamId);
+						String fraHomeTeamId = teamMappings.get(readHomeTeamId);
 						homeTeam = teamsInDatabase.get(fraHomeTeamId);
 						if (homeTeam == null) {
 							logger.debug("We don't have this home team, so add it");
 							homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
 							teamsInDatabase.put(homeTeam.getTeamId(), homeTeam);
-							teamMappings.put(readHomeTeamId, homeTeam.getTeamId());
+							teamMappings.put(readHomeTeamId, homeTeam.getTeamIdAsString());
 						}
 	
-						Integer fraAwayTeamId = teamMappings.get(readAwayTeamId);
+						String fraAwayTeamId = teamMappings.get(readAwayTeamId);
 						awayTeam = teamsInDatabase.get(fraAwayTeamId);
 						if (awayTeam == null) {
 							logger.debug("We don't have this away team, so add it");
 							awayTeam = dao.addTeam(parsedFixture.getAwayTeamName());
 							teamsInDatabase.put(awayTeam.getTeamId(), awayTeam);
-							teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
+							teamMappings.put(readAwayTeamId, awayTeam.getTeamIdAsString());
 						}
 						
 						String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());

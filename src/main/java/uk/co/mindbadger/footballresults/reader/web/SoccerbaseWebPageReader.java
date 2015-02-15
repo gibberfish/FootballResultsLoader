@@ -27,11 +27,11 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 		
 		logger.info("About to read fixtures for season " + season + " using boxing day's results");
 		
-		List<Integer> includedDivisions = mapping.getIncludedDivisions("soccerbase");
+		List<String> includedDivisions = mapping.getIncludedDivisions("soccerbase");
 		
 		Map <ParsedFixture, ParsedFixture> fixturesForSeason = new HashMap<ParsedFixture, ParsedFixture> ();
-		Set <Integer> boxingDayTeams = new HashSet <Integer> ();
-		Set <Integer> otherTeams = new HashSet <Integer> ();
+		Set <String> boxingDayTeams = new HashSet <String> ();
+		Set <String> otherTeams = new HashSet <String> ();
 		
 		String boxingDay = season + "-12-26";
 		List<ParsedFixture> boxingDayFixtures = datePageParser.parseFixturesForDate(boxingDay);
@@ -43,7 +43,7 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 			}
 		}
 		
-		for (Integer teamId : boxingDayTeams) {
+		for (String teamId : boxingDayTeams) {
 			logger.debug("#### Parse fixture for team ID " + teamId);
 			List<ParsedFixture> fixtures = teamPageParser.parseFixturesForTeam(season, teamId);
 			for (ParsedFixture fixture : fixtures) {
@@ -61,7 +61,7 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 			}
 		}
 		
-		for (Integer teamId : otherTeams) {
+		for (String teamId : otherTeams) {
 			List<ParsedFixture> fixtures = teamPageParser.parseFixturesForTeam(season, teamId);
 			for (ParsedFixture fixture : fixtures) {
 				fixturesForSeason.put(fixture, fixture);
@@ -95,10 +95,10 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 	}
 
 	@Override
-	public List<ParsedFixture> readFixturesForTeamInSeason(int season, int teamId) {
-		Map<Integer, Integer> teamMappings = mapping.getTeamMappings("soccerbase");
-		Integer matchingSoccerbaseId = null;
-		for (Integer soccerbaseId : teamMappings.keySet()) {
+	public List<ParsedFixture> readFixturesForTeamInSeason(int season, String teamId) {
+		Map<String, String> teamMappings = mapping.getTeamMappings("soccerbase");
+		String matchingSoccerbaseId = null;
+		for (String soccerbaseId : teamMappings.keySet()) {
 			
 			if (teamMappings.get(soccerbaseId).equals(teamId)) {
 				matchingSoccerbaseId = soccerbaseId;

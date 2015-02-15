@@ -31,28 +31,25 @@ import uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl;
 public class FootballResultsSaverTest {
 	private static final int SEASON = 2000;
 	private static final String DIALECT = "soccerbase";
-	private static final Integer DIVISION_NOT_INCLUDED_IN_MAPPING = 5;
-	private static final Integer READ_FIX_ID_1 = 100;
+	private static final String READ_FIX_ID_1 = "100";
 
-	private static final Integer READ_DIV_ID_1 = 1;
+	private static final String READ_DIV_ID_1 = "1";
 	private static final String READ_DIV_NAME_1 = "Premier";
-	private static final Integer MAPPED_DIV_ID_1 = 10;
+	private static final String MAPPED_DIV_ID_1 = "10";
 
-	private static final Integer READ_DIV_ID_2 = 2;
-	private static final String READ_DIV_NAME_2 = "Championship";
-	private static final Integer MAPPED_DIV_ID_2 = 11;
+	private static final String READ_DIV_ID_2 = "2";
 
-	private static final Integer READ_TEAM_ID_1 = 500;
+	private static final String READ_TEAM_ID_1 = "500";
 	private static final String READ_TEAM_NAME_1 = "Portsmouth";
-	private static final Integer MAPPED_TEAM_ID_1 = 600;
-	private static final Integer READ_TEAM_ID_2 = 501;
+	private static final String MAPPED_TEAM_ID_1 = "600";
+	private static final String READ_TEAM_ID_2 = "501";
 	private static final String READ_TEAM_NAME_2 = "Hull";
-	private static final Integer MAPPED_TEAM_ID_2 = 601;
+	private static final String MAPPED_TEAM_ID_2 = "601";
 
-	private FootballResultsSaver objectUnderTest;
+	private FootballResultsSaver<String> objectUnderTest;
 
 	@Mock
-	private FootballResultsAnalyserDAO mockDao;
+	private FootballResultsAnalyserDAO<String> mockDao;
 	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
@@ -61,12 +58,12 @@ public class FootballResultsSaverTest {
 	private Calendar date1;
 	private Calendar date2;
 
-	private Map<Integer, Division> divisionsFromDatabase;
-	private Map<Integer, Team> teamsFromDatabase;
-	private List<Integer> includedDivisions;
+	private Map<String, Division<String>> divisionsFromDatabase;
+	private Map<String, Team<String>> teamsFromDatabase;
+	private List<String> includedDivisions;
 	private List<ParsedFixture> fixturesReadFromReader;
-	private Map<Integer, Integer> mappedDivisions;
-	private Map<Integer, Integer> mappedTeams;
+	private Map<String, String> mappedDivisions;
+	private Map<String, String> mappedTeams;
 
 	//private List<ParsedFixture> fixtures;
 	
@@ -137,28 +134,28 @@ public class FootballResultsSaverTest {
 		verify(mockDao, never()).addSeason(SEASON);
 		verify(mockDao, never()).addDivision((String) any());
 		verify(mockDao, never()).addTeam((String) any());
-		verify(mockDao, never()).addFixture((Season) any(), (Calendar) any(), (Division) any(), (Team) any(), (Team) any(), (Integer) any(), (Integer) any());
+		verify(mockDao, never()).addFixture((Season<String>) any(), (Calendar) any(), (Division<String>) any(), (Team<String>) any(), (Team<String>) any(), (Integer) any(), (Integer) any());
 	}
 
 	@Test
 	public void shouldNotCreateNewSeasonIfExistsInDatabase() {
 		// Given
-		Season season = new SeasonImpl();
+		Season<String> season = new SeasonImpl();
 		when(mockDao.getSeason(SEASON)).thenReturn(season);
 		fixturesReadFromReader.add(createParsedFixture1());
 		includedDivisions.add(READ_DIV_ID_1);
 		
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 		
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -180,17 +177,17 @@ public class FootballResultsSaverTest {
 		fixturesReadFromReader.add(createParsedFixture1());
 		includedDivisions.add(READ_DIV_ID_1);
 		
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 		
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -217,7 +214,7 @@ public class FootballResultsSaverTest {
 		// Then
 		verify(mockDao, never()).addDivision((String) any());
 		verify(mockDao, never()).addTeam((String) any());
-		verify(mockDao, never()).addFixture((Season) any(), (Calendar) any(), (Division) any(), (Team) any(), (Team) any(), (Integer) any(), (Integer) any());
+		verify(mockDao, never()).addFixture((Season<String>) any(), (Calendar) any(), (Division<String>) any(), (Team<String>) any(), (Team<String>) any(), (Integer) any(), (Integer) any());
 	}
 
 	@Test
@@ -227,17 +224,17 @@ public class FootballResultsSaverTest {
 
 		includedDivisions.add(READ_DIV_ID_1);
 
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -252,19 +249,19 @@ public class FootballResultsSaverTest {
 	@Test
 	public void shouldCreateNewDivisionIfNotExistsInListReadFromDatabase() {
 		// Given
-		Season season = new SeasonImpl();
+		Season<String> season = new SeasonImpl();
 		when(mockDao.getSeason(SEASON)).thenReturn(season);
 
-		Division division = new DivisionImpl();
+		Division<String> division = new DivisionImpl();
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		when(mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -287,17 +284,17 @@ public class FootballResultsSaverTest {
 
 		includedDivisions.add(READ_DIV_ID_1);
 
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -316,17 +313,17 @@ public class FootballResultsSaverTest {
 
 		includedDivisions.add(READ_DIV_ID_1);
 
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		when(mockDao.addTeam(READ_TEAM_NAME_1)).thenReturn(team1);
 
@@ -344,14 +341,14 @@ public class FootballResultsSaverTest {
 
 		includedDivisions.add(READ_DIV_ID_1);
 
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 
@@ -373,17 +370,17 @@ public class FootballResultsSaverTest {
 
 		includedDivisions.add(READ_DIV_ID_1);
 
-		Division division1 = new DivisionImpl();
+		Division<String> division1 = new DivisionImpl();
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		when(mockDao.addTeam(READ_TEAM_NAME_2)).thenReturn(team2);
 
@@ -397,19 +394,19 @@ public class FootballResultsSaverTest {
 	@Test
 	public void shouldReuseAPreviouslyAddedDivision() {
 		// Given
-		Season season = new SeasonImpl();
+		Season<String> season = new SeasonImpl();
 		when(mockDao.getSeason(SEASON)).thenReturn(season);
 
-		Division division = new DivisionImpl();
+		Division<String> division = new DivisionImpl();
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		when(mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -429,19 +426,19 @@ public class FootballResultsSaverTest {
 	@Test
 	public void shouldReuseAPreviouslyAddedHomeTeam() {
 		// Given
-		Season season = new SeasonImpl();
+		Season<String> season = new SeasonImpl();
 		when(mockDao.getSeason(SEASON)).thenReturn(season);
 
-		Division division = new DivisionImpl();
+		Division<String> division = new DivisionImpl();
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		when(mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		when(mockDao.addTeam(READ_TEAM_NAME_1)).thenReturn(team1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 
@@ -462,19 +459,19 @@ public class FootballResultsSaverTest {
 	@Test
 	public void shouldReuseAPreviouslyAddedAwayTeam() {
 		// Given
-		Season season = new SeasonImpl();
+		Season<String> season = new SeasonImpl();
 		when(mockDao.getSeason(SEASON)).thenReturn(season);
 
-		Division division = new DivisionImpl();
+		Division<String> division = new DivisionImpl();
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		when(mockDao.addDivision(READ_DIV_NAME_1)).thenReturn(division);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		when(mockDao.addTeam(READ_TEAM_NAME_2)).thenReturn(team2);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 
@@ -495,20 +492,20 @@ public class FootballResultsSaverTest {
 	@Test
 	public void shouldCreateFixture() {
 		// Given
-		Season season = new SeasonImpl();
+		Season<String> season = new SeasonImpl();
 		when(mockDao.getSeason(SEASON)).thenReturn(season);
 
-		Division division = new DivisionImpl();
+		Division<String> division = new DivisionImpl();
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
 
-		Team team1 = new TeamImpl();
+		Team<String> team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
 		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
 
-		Team team2 = new TeamImpl();
+		Team<String> team2 = new TeamImpl();
 		team2.setTeamId(MAPPED_TEAM_ID_2);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
 		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
@@ -527,16 +524,16 @@ public class FootballResultsSaverTest {
 	// ----------------------------------------------------------------------------------------------------------
 
 	private void initialiseAllListsAsEmpty() {
-		divisionsFromDatabase = new HashMap<Integer, Division>();
-		teamsFromDatabase = new HashMap<Integer, Team>();
+		divisionsFromDatabase = new HashMap<String, Division<String>>();
+		teamsFromDatabase = new HashMap<String, Team<String>>();
 		fixturesReadFromReader = new ArrayList<ParsedFixture>();
-		includedDivisions = new ArrayList<Integer>();
-		mappedDivisions = new HashMap<Integer, Integer>();
-		mappedTeams = new HashMap<Integer, Integer>();
+		includedDivisions = new ArrayList<String>();
+		mappedDivisions = new HashMap<String, String>();
+		mappedTeams = new HashMap<String, String>();
 	}
 
 	private void createObjectToTestAndInjectDependencies() {
-		objectUnderTest = new FootballResultsSaver();
+		objectUnderTest = new FootballResultsSaver<String>();
 		objectUnderTest.setDao(mockDao);
 		objectUnderTest.setMapping(mockMapping);
 		objectUnderTest.setDialect(DIALECT);
