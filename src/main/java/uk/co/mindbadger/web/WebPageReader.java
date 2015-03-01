@@ -13,10 +13,12 @@ import org.apache.log4j.Logger;
 public class WebPageReader {
 	Logger logger = Logger.getLogger(WebPageReader.class);
 	
+	private String httpAgent;
+	
 	public List<String> readWebPage(String pURL) throws FileNotFoundException, IOException {
 		
 		logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
-		logger.info("About to load web page: " + pURL);
+		logger.info("About to load web page: " + pURL + "...");
 		logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
 		
 		ArrayList<String> results = new ArrayList <String>();
@@ -25,7 +27,9 @@ public class WebPageReader {
 
 		try {
 			URL url = new URL(pURL);
+			
 			webReader = new InputStreamReader(url.openStream());
+			
 			in = new BufferedReader(webReader);
 
 			String line;
@@ -41,16 +45,25 @@ public class WebPageReader {
 					;
 				}
 		}
-
 		return results;
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		WebPageReader reader = new WebPageReader();
-		List<String> output = reader.readWebPage("http://www.soccerbase.com/teams/team.sd?team_id=2802&teamTabs=results");
+		reader.setHttpAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36");
+		//List<String> output = reader.readWebPage("http://www.soccerbase.com/teams/team.sd?team_id=2802&teamTabs=results");
+		List<String> output = reader.readWebPage("http://www.soccerbase.com/matches/results.sd?date=1998-12-26");
 		for (String line : output) {
 			System.out.println(line);
 		}
 	}
 
+	public String getHttpAgent() {
+		return httpAgent;
+	}
+
+	public void setHttpAgent(String httpAgent) {
+		this.httpAgent = httpAgent;
+		System.setProperty("http.agent", httpAgent);
+	}
 }

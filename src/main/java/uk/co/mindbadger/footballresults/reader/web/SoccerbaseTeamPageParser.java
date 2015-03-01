@@ -17,24 +17,23 @@ import uk.co.mindbadger.web.WebPageReader;
 public class SoccerbaseTeamPageParser {
 	Logger logger = Logger.getLogger(SoccerbaseTeamPageParser.class);
 	
-	private static final String END_OF_TEAM_NAME = "</a> <span";
-	private static final String START_OF_TEAM_NAME = " team page\">";
-	private static final String END_OF_TEAM_ID = "&amp;season_id=";
-	private static final String START_OF_TEAM_ID = " <a href=\"/teams/team.sd?team_id=";
-	private static final String END_OF_FIXTURE_DATE = "\" title=\"";
-	private static final String START_OF_FIXTURE_DATE = " <a href=\"/matches/results.sd?date=";
-	private static final String END_OF_DIVISION_NAME = "</a> <span ";
-	private static final String START_OF_DIVISION_NAME = " competition page\">";
-	private static final String END_OF_DIVISION_ID = "\" title=\"Go to ";
-	private static final String START_OF_DIVISION_LINE = " <a href=\"/tournaments/tournament.sd?comp_id=";
 	private static final String START_OF_MATCH = " <tr class=\"match\"";
+	private static final String START_OF_DIVISION_LINE = " <a href=\"/tournaments/tournament.sd?comp_id=";
+	private static final String END_OF_DIVISION_ID = "\"";
+	private static final String START_OF_DIVISION_NAME = " competition page\">";
+	private static final String END_OF_DIVISION_NAME = "</a>";
+	private static final String START_OF_FIXTURE_DATE = " <a href=\"/matches/results.sd?date=";
+	private static final String END_OF_FIXTURE_DATE = "\" title=\"";
+	private static final String START_OF_TEAM_ID = " <a href=\"/teams/team.sd?team_id=";
+	private static final String END_OF_TEAM_ID = "&amp;season_id=";
+	private static final String START_OF_TEAM_NAME = " team page\">";
+	private static final String END_OF_TEAM_NAME = "</a> <span";
 	private static final String START_OF_HOME_TEAM_SECTION = " <td class=\"team homeTeam";
 	private static final String START_OF_AWAY_TEAM_SECTION = " <td class=\"team awayTeam";
 	private static final String START_OF_SCORE_SECTION = " <td class=\"score\">";
+	private static final String START_OF_HOME_GOALS_LOCATION = " <a href=\"#\" class=\"vs\" title=\"View Match info\"><em>";
 	private static final String END_OF_HOME_GOALS_LOCATION = "</em>&nbsp;-&nbsp;<em>";
 	private static final String END_OF_AWAY_GOALS_LOCATION = "</em></a>";
-	private static final String START_OF_HOME_GOALS_LOCATION = " <a href=\"#\" class=\"vs\" title=\"View Match info\"><em>";
-
 
 	private String url;
 	private WebPageReader webPageReader;
@@ -79,6 +78,7 @@ public class SoccerbaseTeamPageParser {
 		boolean lookingForAwayTeam = false;
 
 		for (String line : page) {
+			
 			if (line.startsWith(START_OF_MATCH)) {
 				divisionId = null;
 				divisionName = null;
@@ -90,6 +90,8 @@ public class SoccerbaseTeamPageParser {
 				awayGoals = null;
 				fixtureDate = null;
 				season = null;
+				
+				logger.debug("   Start of match");
 			}
 			
 			if (line.startsWith(START_OF_DIVISION_LINE)) {
@@ -100,6 +102,8 @@ public class SoccerbaseTeamPageParser {
 				int divisionNameStartPos = line.indexOf(START_OF_DIVISION_NAME, divisionIdEndPos) + START_OF_DIVISION_NAME.length();
 				int divisionNameEndPos = line.indexOf(END_OF_DIVISION_NAME, divisionIdStartPos);
 				divisionName = line.substring(divisionNameStartPos, divisionNameEndPos);
+				
+				logger.debug("   Got division, id: " + divisionId + ", name: " + divisionName);
 			}
 			
 			if (line.startsWith(START_OF_FIXTURE_DATE)) {
@@ -108,13 +112,17 @@ public class SoccerbaseTeamPageParser {
 				String fixtureDateString = line.substring(fixtureDateStartPos, fixtureDateEndPos);
 				
 				fixtureDate = StringToCalendarConverter.convertDateStringToCalendar(fixtureDateString);
+				
+				logger.debug("   Got fixture date: " + fixtureDate);
 			}
 			
 			if (line.startsWith(START_OF_HOME_TEAM_SECTION)) {
+				logger.debug("   Start of home team section");
 				lookingForAwayTeam = false;
 			}
 			
 			if (line.startsWith(START_OF_AWAY_TEAM_SECTION)) {
+				logger.debug("   Start of away team section");
 				lookingForAwayTeam = true;
 			}
 
@@ -135,16 +143,19 @@ public class SoccerbaseTeamPageParser {
 				int teamNameEndPos = line.indexOf(END_OF_TEAM_NAME, teamNameStartPos);
 				if (lookingForAwayTeam) {
 					awayTeamName = line.substring(teamNameStartPos, teamNameEndPos);
+					logger.debug("   Got Away team: " + awayTeamName);
 					
 					parsedFixtures.add(createFixture(divisionId, divisionName, homeTeamId, awayTeamId, homeTeamName, awayTeamName, homeGoals, awayGoals, fixtureDate, season));
 				} else {
 					homeTeamName = line.substring(teamNameStartPos, teamNameEndPos);
+					logger.debug("   Got Home team: " + homeTeamName);
 				}
 			}
 			
 			if (line.startsWith(START_OF_SCORE_SECTION)) {
 				homeGoals = null;
 				awayGoals = null;
+				logger.debug("   Start of score section");
 			}
 
 			if (line.startsWith(START_OF_HOME_GOALS_LOCATION)) {
@@ -155,6 +166,8 @@ public class SoccerbaseTeamPageParser {
 				int awayGoalsStartPos = homeGoalsEndPos + END_OF_HOME_GOALS_LOCATION.length();
 				int awayGoalsEndPos = line.indexOf(END_OF_AWAY_GOALS_LOCATION, awayGoalsStartPos);
 				awayGoals = Integer.parseInt(line.substring(awayGoalsStartPos, awayGoalsEndPos));
+				
+				logger.debug("   Got Score: " + homeGoals + "-" + awayGoals);
 			}
 
 		}		

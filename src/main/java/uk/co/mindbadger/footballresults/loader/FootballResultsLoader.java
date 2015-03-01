@@ -22,7 +22,9 @@ public class FootballResultsLoader<K> {
 
 	public void loadResultsForSeason(int seasonNum) {
 		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
-
+		
+		logger.info("Ready to save " + fixturesRead.size() + " fixtures");
+		
 		saver.saveFixtures(fixturesRead);
 	}
 	
