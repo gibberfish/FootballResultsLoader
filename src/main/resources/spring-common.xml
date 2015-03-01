@@ -40,10 +40,20 @@
   </bean>
 -->
 
+	<bean id="mongoClient" class="com.mongodb.MongoClient">
+		<constructor-arg value="${mongoHost}"/>
+	</bean>
+	
+	<bean id="mongoMapper" class="uk.co.mindbadger.footballresultsanalyser.dao.MongoMapper">
+		<property name="domainObjectFactory" ref="domainObjectFactory"/>
+		<property name="dao" ref="dao"/>
+	</bean>
+	
   <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserMongoDAO">
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
-      <property name="mongoHost" value="${mongoHost}" />
+      <property name="mongoClient" ref="mongoClient" />
       <property name="dbName" value="${mongoDb}" />
+      <property name="mongoMapper" ref="mongoMapper"/>
   </bean>
 
   <bean id="saver" class="uk.co.mindbadger.footballresults.loader.FootballResultsSaver">

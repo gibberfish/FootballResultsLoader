@@ -1,6 +1,7 @@
 package uk.co.mindbadger.footballresults.loader;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
+import uk.co.mindbadger.footballresultsanalyser.dao.ChangeScoreException;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
@@ -35,6 +37,9 @@ public class FootballResultsSaver<K> {
 				List<String> includedDivisions = mapping.getIncludedDivisions(dialect);
 				Map<String, String> divisionMappings = mapping.getDivisionMappings(dialect);
 				Map<String, String> teamMappings = mapping.getTeamMappings(dialect);
+				
+				// Ensure that we add the fixtures in chronological order so that we don't try to add playoffs before the main games
+				Collections.sort(fixturesRead);
 				
 				for (ParsedFixture parsedFixture : fixturesRead) {
 					logger.debug("Saving fixture: " + parsedFixture);
@@ -96,7 +101,12 @@ public class FootballResultsSaver<K> {
 								",hm:"+parsedFixture.getHomeTeamName()+
 								",aw:"+parsedFixture.getAwayTeamName()+
 								",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
-						dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
+						
+						try {
+							dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
+						} catch (ChangeScoreException e) {
+							logger.info("Ignoring play-off result...");
+						}
 					}
 				}
 			}

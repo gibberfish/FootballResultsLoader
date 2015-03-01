@@ -2,7 +2,7 @@ package uk.co.mindbadger.footballresults.reader;
 
 import java.util.Calendar;
 
-public class ParsedFixture {
+public class ParsedFixture implements Comparable {
 	private String fixtureId;
 	private Integer seasonId;
 	private Calendar fixtureDate;
@@ -85,7 +85,11 @@ public class ParsedFixture {
 	public String toString () {
 		StringBuffer buf = new StringBuffer();
 		buf.append("[");
-		buf.append(String.format("%1$te-%1$tm-%1$tY", fixtureDate));
+		if (fixtureDate != null) {
+			buf.append(String.format("%1$te-%1$tm-%1$tY", fixtureDate));
+		} else {
+			buf.append("NODATE");
+		}
 		buf.append(" (");
 		buf.append(seasonId);
 		buf.append(")][Div=");
@@ -114,7 +118,7 @@ public class ParsedFixture {
 			ParsedFixture parsedFixture = (ParsedFixture) obj;
 			
 			boolean equals = parsedFixture.getSeasonId().equals(this.seasonId);
-			equals = equals && ((parsedFixture.getFixtureDate() == null && this.fixtureDate == null) || (parsedFixture.getFixtureDate().equals(this.fixtureDate)));
+			equals = equals && ((parsedFixture.getFixtureDate() == null && this.fixtureDate == null) || (parsedFixture != null && parsedFixture.getFixtureDate() != null && parsedFixture.getFixtureDate().equals(this.fixtureDate)));
 			equals = equals && parsedFixture.getHomeTeamId().equals(this.homeTeamId);
 			equals = equals && parsedFixture.getAwayTeamId().equals(this.awayTeamId);
 			equals = equals && parsedFixture.getDivisionId().equals(this.divisionId);
@@ -124,4 +128,47 @@ public class ParsedFixture {
 			return false;
 		}
 	}
+	
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof ParsedFixture) {
+			ParsedFixture compareFixture = (ParsedFixture) o;
+			
+			// Season
+			int compareSeason = this.getSeasonId().compareTo(compareFixture.getSeasonId());
+			if (compareSeason != 0) return compareSeason;
+			
+			// Fixture Date
+			String thisObjectDate = null;
+			if (this.fixtureDate != null) {
+				thisObjectDate = String.format("%1$tY-%1$tm-%1$te", this.fixtureDate);
+			}
+			
+			String compareObjectDate = null;
+			if (compareFixture.getFixtureDate() != null) {
+				compareObjectDate = String.format("%1$tY-%1$tm-%1$te", compareFixture.getFixtureDate());
+			}
+			
+			if (thisObjectDate == null && compareObjectDate != null) {
+				return -1;
+			}
+			
+			if (thisObjectDate != null && compareObjectDate == null) {
+				return 1;
+			}
+			
+			int compareDate = 0;
+			if (thisObjectDate != null && compareObjectDate != null) {
+				compareDate = thisObjectDate.compareTo(compareObjectDate);
+			}
+			if (compareDate != 0) return compareDate;
+			
+			// Home Team
+			return this.getHomeTeamName().compareTo(compareFixture.getHomeTeamName());
+		}		
+		
+		return 0;
+	}
+	
+	
 }

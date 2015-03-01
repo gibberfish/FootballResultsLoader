@@ -89,7 +89,9 @@ public class SoccerbaseXMLReader implements FootballResultsReader {
 					}
 				}
 			} catch (Exception e) {
-				throw new FootballResultsReaderException(e);
+				logger.error("IGNORING FILE: " + e.getMessage());
+				//e.printStackTrace();
+				//throw new FootballResultsReaderException(e);
 			}
 		}
 
