@@ -46,10 +46,10 @@ public class FootballResultsSaverTest {
 	private static final String READ_TEAM_NAME_2 = "Hull";
 	private static final String MAPPED_TEAM_ID_2 = "601";
 
-	private FootballResultsSaver<String> objectUnderTest;
+	private FootballResultsSaver<String,String,String> objectUnderTest;
 
 	@Mock
-	private FootballResultsAnalyserDAO<String> mockDao;
+	private FootballResultsAnalyserDAO<String,String,String> mockDao;
 	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
@@ -533,7 +533,7 @@ public class FootballResultsSaverTest {
 	}
 
 	private void createObjectToTestAndInjectDependencies() {
-		objectUnderTest = new FootballResultsSaver<String>();
+		objectUnderTest = new FootballResultsSaver<String,String,String>();
 		objectUnderTest.setDao(mockDao);
 		objectUnderTest.setMapping(mockMapping);
 		objectUnderTest.setDialect(DIALECT);

@@ -15,11 +15,11 @@ import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
-public class FootballResultsSaver<K> {
+public class FootballResultsSaver<K,L,M> {
 	Logger logger = Logger.getLogger(FootballResultsSaver.class);
 	
 	private String dialect;
-	private FootballResultsAnalyserDAO<K> dao;
+	private FootballResultsAnalyserDAO<K,L,M> dao;
 	private FootballResultsMapping mapping;
 
 	public void saveFixtures(List<ParsedFixture> fixturesRead) {
@@ -123,10 +123,10 @@ public class FootballResultsSaver<K> {
 	public void setDialect(String dialect) {
 		this.dialect = dialect;
 	}
-	public FootballResultsAnalyserDAO<K> getDao() {
+	public FootballResultsAnalyserDAO<K,L,M> getDao() {
 		return dao;
 	}
-	public void setDao(FootballResultsAnalyserDAO<K> dao) {
+	public void setDao(FootballResultsAnalyserDAO<K,L,M> dao) {
 		this.dao = dao;
 	}
 	public FootballResultsMapping getMapping() {

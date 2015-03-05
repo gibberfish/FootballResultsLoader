@@ -225,6 +225,7 @@ public class SoccerbaseXMLReaderTest {
 		assertNull(fixture8.getAwayGoals());
 	}
 
+	@Ignore ("Changed the process to not bomb-out if an xml file is found out of context - not sure if this test is still required")
 	@Test
 	public void shouldThrowExceptionIfTheSeasonDoesntMatchTheFolder() throws Exception {
 		// Given

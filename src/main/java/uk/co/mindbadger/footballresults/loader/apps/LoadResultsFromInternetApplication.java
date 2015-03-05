@@ -12,7 +12,7 @@ public class LoadResultsFromInternetApplication {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
 
 		System.out.println("About to get the loader");
-		FootballResultsLoader<String> loader = (FootballResultsLoader<String>) context.getBean("loader");
+		FootballResultsLoader<String,String,String> loader = (FootballResultsLoader<String,String,String>) context.getBean("loader");
 		
 		System.out.println("About to call the loader");
 		loader.loadResultsForRecentlyPlayedFixtures();

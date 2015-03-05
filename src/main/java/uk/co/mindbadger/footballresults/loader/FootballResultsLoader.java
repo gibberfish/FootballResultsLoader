@@ -13,12 +13,12 @@ import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Fixture;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 
-public class FootballResultsLoader<K> {
+public class FootballResultsLoader<K,L,M> {
 	Logger logger = Logger.getLogger(FootballResultsLoader.class);
 	
-	private FootballResultsAnalyserDAO<K> dao;
+	private FootballResultsAnalyserDAO<K,L,M> dao;
 	private FootballResultsReader reader;
-	private FootballResultsSaver<K> saver;
+	private FootballResultsSaver<K,L,M> saver;
 
 	public void loadResultsForSeason(int seasonNum) {
 		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
@@ -59,10 +59,10 @@ public class FootballResultsLoader<K> {
 		}
 	}
 	
-	public FootballResultsAnalyserDAO<K> getDao() {
+	public FootballResultsAnalyserDAO<K,L,M> getDao() {
 		return dao;
 	}
-	public void setDao(FootballResultsAnalyserDAO<K> dao) {
+	public void setDao(FootballResultsAnalyserDAO<K,L,M> dao) {
 		this.dao = dao;
 	}
 	public FootballResultsReader getReader() {
@@ -71,7 +71,7 @@ public class FootballResultsLoader<K> {
 	public void setReader(FootballResultsReader reader) {
 		this.reader = reader;
 	}
-	public void setSaver(FootballResultsSaver<K> saver) {
+	public void setSaver(FootballResultsSaver<K,L,M> saver) {
 		this.saver = saver;
 	}
 }

@@ -12,7 +12,7 @@ public class LoadSeasonFromInternetApplication {
 
       Integer season = Integer.parseInt(args[0]);
       
-      FootballResultsLoader<String> loader = (FootballResultsLoader<String>) context.getBean("loader");
+      FootballResultsLoader<String,String,String> loader = (FootballResultsLoader<String,String,String>) context.getBean("loader");
 		loader.loadResultsForSeason(season);
 	}
 }

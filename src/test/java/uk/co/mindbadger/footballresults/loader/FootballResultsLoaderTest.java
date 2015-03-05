@@ -35,14 +35,14 @@ public class FootballResultsLoaderTest {
 	private static final String READ_TEAM_ID_2 = "501";
 	private static final String READ_TEAM_NAME_2 = "Hull";
 
-	private FootballResultsLoader<String> objectUnderTest;
+	private FootballResultsLoader<String,String,String> objectUnderTest;
 
 	@Mock
-	private FootballResultsAnalyserDAO<String> mockDao;
+	private FootballResultsAnalyserDAO<String,String,String> mockDao;
 	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
-	private FootballResultsSaver<String> mockSaver;
+	private FootballResultsSaver<String,String,String> mockSaver;
 
 	private Calendar date1;
 	private Calendar date2;
@@ -144,7 +144,7 @@ public class FootballResultsLoaderTest {
 	}
 
 	private void createObjectToTestAndInjectDependencies() {
-		objectUnderTest = new FootballResultsLoader<String>();
+		objectUnderTest = new FootballResultsLoader<String,String,String>();
 		objectUnderTest.setDao(mockDao);
 		objectUnderTest.setReader(mockReader);
 		objectUnderTest.setSaver(mockSaver);
