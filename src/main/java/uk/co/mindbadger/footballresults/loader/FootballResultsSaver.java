@@ -13,6 +13,7 @@ import uk.co.mindbadger.footballresultsanalyser.dao.ChangeScoreException;
 import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
+import uk.co.mindbadger.footballresultsanalyser.domain.SeasonDivision;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
 public class FootballResultsSaver<K,L,M> {
@@ -103,6 +104,9 @@ public class FootballResultsSaver<K,L,M> {
 								",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
 						
 						try {
+							SeasonDivision<K,L> seasonDivision = dao.addSeasonDivision(season, division, 0);
+							dao.addSeasonDivisionTeam(seasonDivision, homeTeam);
+							dao.addSeasonDivisionTeam(seasonDivision, awayTeam);
 							dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
 						} catch (ChangeScoreException e) {
 							logger.info("Ignoring play-off result...");

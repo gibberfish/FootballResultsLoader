@@ -1,6 +1,6 @@
 package uk.co.mindbadger.footballresults.loader;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,6 +24,8 @@ import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Division;
 import uk.co.mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.Season;
+import uk.co.mindbadger.footballresultsanalyser.domain.SeasonDivision;
+import uk.co.mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
 import uk.co.mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 import uk.co.mindbadger.footballresultsanalyser.domain.TeamImpl;
@@ -520,6 +522,74 @@ public class FootballResultsSaverTest {
 		// Then
 		verify(mockDao, times(1)).addFixture(season, date1, division, team1, team2, 4, 5);
 	}
+
+	@Test
+	public void shouldCreateSeasonDivision () {
+		// Given
+		Season<String> season = new SeasonImpl();
+		when(mockDao.getSeason(SEASON)).thenReturn(season);
+
+		Division<String> division = new DivisionImpl();
+		division.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division);
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+
+		Team<String> team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		Team<String> team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
+
+		fixturesReadFromReader.add(createParsedFixture1());
+
+		includedDivisions.add(READ_DIV_ID_1);
+
+		// When
+		objectUnderTest.saveFixtures(fixturesReadFromReader);
+
+		// Then
+		verify(mockDao, times(1)).addSeasonDivision(season, division, 0);
+		// The DAO will take care of if there is an existing season division already or not
+	}
+
+	@Test
+	public void shouldCreateSeasonDivisionTeams () {
+		// Given
+		Season<String> season = new SeasonImpl();
+		when(mockDao.getSeason(SEASON)).thenReturn(season);
+
+		Division<String> division = new DivisionImpl();
+		division.setDivisionId(MAPPED_DIV_ID_1);
+		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division);
+		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+
+		Team<String> team1 = new TeamImpl();
+		team1.setTeamId(MAPPED_TEAM_ID_1);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
+		mappedTeams.put(READ_TEAM_ID_1, MAPPED_TEAM_ID_1);
+
+		Team<String> team2 = new TeamImpl();
+		team2.setTeamId(MAPPED_TEAM_ID_2);
+		teamsFromDatabase.put(MAPPED_TEAM_ID_2, team2);
+		mappedTeams.put(READ_TEAM_ID_2, MAPPED_TEAM_ID_2);
+
+		fixturesReadFromReader.add(createParsedFixture1());
+
+		includedDivisions.add(READ_DIV_ID_1);
+
+		// When
+		objectUnderTest.saveFixtures(fixturesReadFromReader);
+
+		// Then
+		verify(mockDao, times(1)).addSeasonDivisionTeam((SeasonDivision<String, String>)any(), eq(team1));
+		verify(mockDao, times(1)).addSeasonDivisionTeam((SeasonDivision<String, String>)any(), eq(team2));
+		// The DAO will take care of if there is an existing season division already or not
+	}
+
 
 	// ----------------------------------------------------------------------------------------------------------
 
