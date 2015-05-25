@@ -27,7 +27,7 @@ public class FootballResultsSaver<K,L,M> {
 		try {
 			logger.debug("About to saveFixtures: " + fixturesRead.size());
 			
-			dao.startSession();
+//			dao.startSession();
 
 			Map<K, Division<K>> divisionsInDatabase = dao.getAllDivisions();
 			Map<K, Team<K>> teamsInDatabase = dao.getAllTeams();
@@ -117,7 +117,7 @@ public class FootballResultsSaver<K,L,M> {
 			logger.debug("Saving mappings");
 			mapping.saveMappings();
 		} finally {
-			dao.closeSession();
+//			dao.closeSession();
 		}
 	}
 		
