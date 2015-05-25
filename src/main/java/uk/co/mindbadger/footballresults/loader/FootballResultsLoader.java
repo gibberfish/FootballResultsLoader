@@ -34,7 +34,6 @@ public class FootballResultsLoader<K,L,M> {
 		dao.startSession();
 		List<Fixture<K>> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
 		List<Fixture<K>> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
-		dao.closeSession();
 		
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		
@@ -57,6 +56,8 @@ public class FootballResultsLoader<K,L,M> {
 			logger.debug("...got " + parsedFixtures.size() + " fixtures for team " + teamId + " in season " + seasonNumber);
 			saver.saveFixtures(parsedFixtures);
 		}
+		
+		dao.closeSession();
 	}
 	
 	public FootballResultsAnalyserDAO<K,L,M> getDao() {
