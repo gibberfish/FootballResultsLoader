@@ -16,11 +16,11 @@ import uk.co.mindbadger.footballresultsanalyser.domain.Season;
 import uk.co.mindbadger.footballresultsanalyser.domain.SeasonDivision;
 import uk.co.mindbadger.footballresultsanalyser.domain.Team;
 
-public class FootballResultsSaver<K,L,M> {
+public class FootballResultsSaver {
 	Logger logger = Logger.getLogger(FootballResultsSaver.class);
 	
 	private String dialect;
-	private FootballResultsAnalyserDAO<K,L,M> dao;
+	private FootballResultsAnalyserDAO dao;
 	private FootballResultsMapping mapping;
 
 	public void saveFixtures(List<ParsedFixture> fixturesRead) {
@@ -29,8 +29,8 @@ public class FootballResultsSaver<K,L,M> {
 			
 //			dao.startSession();
 
-			Map<K, Division<K>> divisionsInDatabase = dao.getAllDivisions();
-			Map<K, Team<K>> teamsInDatabase = dao.getAllTeams();
+			Map<String, Division> divisionsInDatabase = dao.getAllDivisions();
+			Map<String, Team> teamsInDatabase = dao.getAllTeams();
 			
 			if (fixturesRead.size() > 0) {
 	
@@ -46,9 +46,9 @@ public class FootballResultsSaver<K,L,M> {
 					logger.debug("Saving fixture: " + parsedFixture);
 					
 					
-					Division<K> division = null;
-					Team<K> homeTeam = null;
-					Team<K> awayTeam = null;
+					Division division = null;
+					Team homeTeam = null;
+					Team awayTeam = null;
 	
 					String readDivisionId = parsedFixture.getDivisionId();
 					String readHomeTeamId = parsedFixture.getHomeTeamId();
@@ -60,7 +60,7 @@ public class FootballResultsSaver<K,L,M> {
 						Integer seasonNumberForFixture = parsedFixture.getSeasonId();
 						
 						logger.debug("Get the season from the database");
-						Season<K> season = dao.getSeason(seasonNumberForFixture);
+						Season season = dao.getSeason(seasonNumberForFixture);
 						if (season == null) {
 							season = dao.addSeason(seasonNumberForFixture);
 						}
@@ -72,7 +72,7 @@ public class FootballResultsSaver<K,L,M> {
 							logger.debug("We don't have this division, so add it");
 							division = dao.addDivision(parsedFixture.getDivisionName());
 							divisionsInDatabase.put(division.getDivisionId(), division);
-							divisionMappings.put(readDivisionId, division.getDivisionIdAsString());
+							divisionMappings.put(readDivisionId, division.getDivisionId());
 						}
 	
 						String fraHomeTeamId = teamMappings.get(readHomeTeamId);
@@ -104,7 +104,7 @@ public class FootballResultsSaver<K,L,M> {
 								",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
 						
 						try {
-							SeasonDivision<K,L> seasonDivision = dao.addSeasonDivision(season, division, 0);
+							SeasonDivision seasonDivision = dao.addSeasonDivision(season, division, 0);
 							dao.addSeasonDivisionTeam(seasonDivision, homeTeam);
 							dao.addSeasonDivisionTeam(seasonDivision, awayTeam);
 							dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
@@ -127,10 +127,10 @@ public class FootballResultsSaver<K,L,M> {
 	public void setDialect(String dialect) {
 		this.dialect = dialect;
 	}
-	public FootballResultsAnalyserDAO<K,L,M> getDao() {
+	public FootballResultsAnalyserDAO getDao() {
 		return dao;
 	}
-	public void setDao(FootballResultsAnalyserDAO<K,L,M> dao) {
+	public void setDao(FootballResultsAnalyserDAO dao) {
 		this.dao = dao;
 	}
 	public FootballResultsMapping getMapping() {

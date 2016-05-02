@@ -1,20 +1,24 @@
 package uk.co.mindbadger.footballresults.reader.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import uk.co.mindbadger.footballresults.reader.ParsedFixture;
-import uk.co.mindbadger.util.Pauser;
 
 public class SoccerbaseWebPageReaderTest {
 	private static final String BOXING_DAY_2000 = "2000-12-26";
@@ -41,7 +45,7 @@ public class SoccerbaseWebPageReaderTest {
 		// Given
 		
 		// When
-		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
+		objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
 		
 		// Then
 		verify(mockDatePageParser).parseFixturesForDate(BOXING_DAY_2000);
@@ -52,7 +56,7 @@ public class SoccerbaseWebPageReaderTest {
 		// Given
 		
 		// When
-		List<ParsedFixture> parsedFixtures = objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
+		objectUnderTest.readFixturesForSeason(SEASON_NUMBER);
 		
 		// Then
 		verify(mockFootballResultsMapping).getIncludedDivisions("soccerbase");

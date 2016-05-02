@@ -35,14 +35,14 @@ public class FootballResultsLoaderTest {
 	private static final String READ_TEAM_ID_2 = "501";
 	private static final String READ_TEAM_NAME_2 = "Hull";
 
-	private FootballResultsLoader<String,String,String> objectUnderTest;
+	private FootballResultsLoader objectUnderTest;
 
 	@Mock
-	private FootballResultsAnalyserDAO<String,String,String> mockDao;
+	private FootballResultsAnalyserDAO mockDao;
 	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
-	private FootballResultsSaver<String,String,String> mockSaver;
+	private FootballResultsSaver mockSaver;
 
 	private Calendar date1;
 	private Calendar date2;
@@ -79,31 +79,31 @@ public class FootballResultsLoaderTest {
 	@Test
 	public void shouldLoadMissingFixtureDates () {
 		// Given
-		Fixture<String> fixture1 = new FixtureImpl();
+		Fixture fixture1 = new FixtureImpl();
 		fixture1.setFixtureDate(date1);
 		
-		Fixture<String> fixture2 = new FixtureImpl();
+		Fixture fixture2 = new FixtureImpl();
 		fixture2.setFixtureDate(date2);
 
-		Fixture<String> fixture3 = new FixtureImpl();
+		Fixture fixture3 = new FixtureImpl();
 		fixture3.setFixtureDate(date1);
 
-		List<Fixture<String>> unplayedFixtures = new ArrayList<Fixture<String>> ();
+		List<Fixture> unplayedFixtures = new ArrayList<Fixture> ();
 		unplayedFixtures.add(fixture1);
 		unplayedFixtures.add(fixture2);
 		unplayedFixtures.add(fixture3);
 		when(mockDao.getUnplayedFixturesBeforeToday()).thenReturn(unplayedFixtures);
 
-		Fixture<String> fixture4 = new FixtureImpl();
+		Fixture fixture4 = new FixtureImpl();
 		fixture4.setFixtureDate(null);
-		Season<String> season = new SeasonImpl ();
+		Season season = new SeasonImpl ();
 		season.setSeasonNumber(2000);
 		fixture4.setSeason(season );
-		Team<String> homeTeam = new TeamImpl();
+		Team homeTeam = new TeamImpl();
 		homeTeam.setTeamId("100");
 		fixture4.setHomeTeam(homeTeam);
 		
-		List<Fixture<String>> fixturesWithoutDates = new ArrayList<Fixture<String>> ();
+		List<Fixture> fixturesWithoutDates = new ArrayList<Fixture> ();
 		fixturesWithoutDates.add(fixture4);
 		when(mockDao.getFixturesWithNoFixtureDate()).thenReturn(fixturesWithoutDates);
 
@@ -144,7 +144,7 @@ public class FootballResultsLoaderTest {
 	}
 
 	private void createObjectToTestAndInjectDependencies() {
-		objectUnderTest = new FootballResultsLoader<String,String,String>();
+		objectUnderTest = new FootballResultsLoader();
 		objectUnderTest.setDao(mockDao);
 		objectUnderTest.setReader(mockReader);
 		objectUnderTest.setSaver(mockSaver);

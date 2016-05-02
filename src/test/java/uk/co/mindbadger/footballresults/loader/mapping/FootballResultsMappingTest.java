@@ -1,7 +1,11 @@
 package uk.co.mindbadger.footballresults.loader.mapping;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,9 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.ietf.jgss.Oid;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -39,6 +41,7 @@ public class FootballResultsMappingTest{
 	private static final String SOURCE_DIV_ID_3 = "1025";
 	private static final String SOURCE_DIV_ID_2 = "1024";
 	private static final String SOURCE_DIV_ID_1 = "1023";
+	//TODO Need to wire an example mapping XML file into the build
 	private static final String MAPPING_FILE = "C:\\mapping\\mapping.xml";
 	private static final String DIALECT = "soccerbase";
 
@@ -248,8 +251,8 @@ public class FootballResultsMappingTest{
 		Element root = createRootElement(doc);
 
 		Element source = createSourceElement(doc, root, "soccerbase");
-		Element includedDivisions = createIncludedDivisionsElement(doc, source);
-		Element teamMapping = createTeamMappingsElement(doc, source);
+		createIncludedDivisionsElement(doc, source);
+		createTeamMappingsElement(doc, source);
 		
 		return doc;
 	}
@@ -282,8 +285,8 @@ public class FootballResultsMappingTest{
 		Element root = createRootElement(doc);
 
 		Element source = createSourceElement(doc, root, "soccerbase");
-		Element divisionMapping = createDivisionMappingsElement(doc, source);
-		Element teamMapping = createTeamMappingsElement(doc, source);
+		createDivisionMappingsElement(doc, source);
+		createTeamMappingsElement(doc, source);
 		
 		return doc;
 	}

@@ -13,12 +13,12 @@ import uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import uk.co.mindbadger.footballresultsanalyser.domain.Fixture;
 import uk.co.mindbadger.util.StringToCalendarConverter;
 
-public class FootballResultsLoader<K,L,M> {
+public class FootballResultsLoader {
 	Logger logger = Logger.getLogger(FootballResultsLoader.class);
 	
-	private FootballResultsAnalyserDAO<K,L,M> dao;
+	private FootballResultsAnalyserDAO dao;
 	private FootballResultsReader reader;
-	private FootballResultsSaver<K,L,M> saver;
+	private FootballResultsSaver saver;
 
 	public void loadResultsForSeason(int seasonNum) {
 		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
@@ -32,13 +32,13 @@ public class FootballResultsLoader<K,L,M> {
 		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
 		
 		dao.startSession();
-		List<Fixture<K>> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
-		List<Fixture<K>> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
+		List<Fixture> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
+		List<Fixture> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
 		
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		
 		Map<Calendar, Calendar> uniqueDates = new HashMap<Calendar, Calendar> ();
-		for (Fixture<K> fixture : unplayedFixtures) {
+		for (Fixture fixture : unplayedFixtures) {
 			uniqueDates.put(fixture.getFixtureDate(), fixture.getFixtureDate());
 		}
 		logger.debug("getUnplayedFixturesBeforeToday has found " + uniqueDates.size() + " fixture dates that need updating");
@@ -49,7 +49,7 @@ public class FootballResultsLoader<K,L,M> {
 			saver.saveFixtures(parsedFixtures);
 		}
 		
-		for (Fixture<K> fixture : fixturesWithoutDates) {
+		for (Fixture fixture : fixturesWithoutDates) {
 			Integer seasonNumber = fixture.getSeason().getSeasonNumber();
 			String teamId = fixture.getHomeTeam().getTeamIdAsString();
 			List<ParsedFixture> parsedFixtures = reader.readFixturesForTeamInSeason(seasonNumber, teamId);
@@ -60,10 +60,10 @@ public class FootballResultsLoader<K,L,M> {
 		dao.closeSession();
 	}
 	
-	public FootballResultsAnalyserDAO<K,L,M> getDao() {
+	public FootballResultsAnalyserDAO getDao() {
 		return dao;
 	}
-	public void setDao(FootballResultsAnalyserDAO<K,L,M> dao) {
+	public void setDao(FootballResultsAnalyserDAO dao) {
 		this.dao = dao;
 	}
 	public FootballResultsReader getReader() {
@@ -72,7 +72,7 @@ public class FootballResultsLoader<K,L,M> {
 	public void setReader(FootballResultsReader reader) {
 		this.reader = reader;
 	}
-	public void setSaver(FootballResultsSaver<K,L,M> saver) {
+	public void setSaver(FootballResultsSaver saver) {
 		this.saver = saver;
 	}
 }
