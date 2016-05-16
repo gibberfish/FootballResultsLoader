@@ -81,7 +81,7 @@ public class FootballResultsSaver {
 							logger.debug("We don't have this home team, so add it");
 							homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
 							teamsInDatabase.put(homeTeam.getTeamId(), homeTeam);
-							teamMappings.put(readHomeTeamId, homeTeam.getTeamIdAsString());
+							teamMappings.put(readHomeTeamId, homeTeam.getTeamId());
 						}
 	
 						String fraAwayTeamId = teamMappings.get(readAwayTeamId);
@@ -90,7 +90,7 @@ public class FootballResultsSaver {
 							logger.debug("We don't have this away team, so add it");
 							awayTeam = dao.addTeam(parsedFixture.getAwayTeamName());
 							teamsInDatabase.put(awayTeam.getTeamId(), awayTeam);
-							teamMappings.put(readAwayTeamId, awayTeam.getTeamIdAsString());
+							teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
 						}
 						
 						String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());

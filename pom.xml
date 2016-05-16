@@ -168,8 +168,8 @@
     </dependency>
  -->
     <dependency>
-      <groupId>uk.co.mindbadger.football-results-mongo-dao</groupId>
-      <artifactId>football-results-mongo-dao</artifactId>
+      <groupId>uk.co.mindbadger.football-results-couchbase-dao</groupId>
+      <artifactId>football-results-couchbase-dao</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
@@ -179,24 +179,6 @@
       <version>1.2.2</version>
     </dependency>
         
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.10</version>
-    </dependency>
-	
-    <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-core</artifactId>
-        <version>${hibernate.version}</version>
-    </dependency>
-	<!-- 
-    <dependency>
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate-c3p0</artifactId>
-		<version>${hibernate.version}</version>
-	</dependency>
- 	-->
   </dependencies>
   
   

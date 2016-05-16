@@ -51,7 +51,7 @@ public class FootballResultsLoader {
 		
 		for (Fixture fixture : fixturesWithoutDates) {
 			Integer seasonNumber = fixture.getSeason().getSeasonNumber();
-			String teamId = fixture.getHomeTeam().getTeamIdAsString();
+			String teamId = fixture.getHomeTeam().getTeamId();
 			List<ParsedFixture> parsedFixtures = reader.readFixturesForTeamInSeason(seasonNumber, teamId);
 			logger.debug("...got " + parsedFixtures.size() + " fixtures for team " + teamId + " in season " + seasonNumber);
 			saver.saveFixtures(parsedFixtures);

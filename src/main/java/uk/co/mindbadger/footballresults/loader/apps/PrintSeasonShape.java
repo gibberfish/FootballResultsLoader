@@ -42,7 +42,7 @@ public class PrintSeasonShape {
 				System.out.println("  (" + seasonDivisionTeams.size() + " teams:");
 				
 				for (SeasonDivisionTeam seasonDivisionTeam : seasonDivisionTeams) {
-					Team team = dao.getTeam(seasonDivisionTeam.getTeam().getTeamIdAsString());
+					Team team = dao.getTeam(seasonDivisionTeam.getTeam().getTeamId());
 					System.out.println("    Team: " + team.getTeamName());
 				}
 			}

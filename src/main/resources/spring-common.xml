@@ -38,7 +38,7 @@
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
       <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
--->
+
 
 	<bean id="mongoClient" class="com.mongodb.MongoClient">
 		<constructor-arg type="java.lang.String">
@@ -56,6 +56,12 @@
       <property name="mongoClient" ref="mongoClient" />
       <property name="dbName" value="${mongoDb}" />
       <property name="mongoMapper" ref="mongoMapper"/>
+  </bean>
+-->
+
+  <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserCouchbaseDAO">
+      <property name="bucketName" value="football"/>
+      <property name="domainObjectFactory" ref="domainObjectFactory"/>
   </bean>
 
   <bean id="saver" class="uk.co.mindbadger.footballresults.loader.FootballResultsSaver">
