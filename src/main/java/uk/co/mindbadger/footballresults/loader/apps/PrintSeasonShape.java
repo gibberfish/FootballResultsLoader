@@ -1,7 +1,6 @@
 package uk.co.mindbadger.footballresults.loader.apps;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -29,7 +28,7 @@ public class PrintSeasonShape {
 		for (Season season : seasons) {
 			System.out.println("Season: " + season.getSeasonNumber());
 			
-			Set<SeasonDivision> seasonDivisions = dao.getDivisionsForSeason(season);
+			List<SeasonDivision> seasonDivisions = dao.getDivisionsForSeason(season);
 			
 			System.out.println("(" + seasonDivisions.size() + " divisions:");
 			
@@ -37,7 +36,7 @@ public class PrintSeasonShape {
 				Division division = dao.getDivision(seasonDivision.getDivision().getDivisionId());
 				System.out.println("  Division: " + division.getDivisionName());
 				
-				Set<SeasonDivisionTeam> seasonDivisionTeams = dao.getTeamsForDivisionInSeason(seasonDivision);
+				List<SeasonDivisionTeam> seasonDivisionTeams = dao.getTeamsForDivisionInSeason(seasonDivision);
 				
 				System.out.println("  (" + seasonDivisionTeams.size() + " teams:");
 				
