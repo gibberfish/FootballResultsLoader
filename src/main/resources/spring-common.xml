@@ -25,39 +25,13 @@
   </bean>
   
   <bean id="mapping" class="uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping">
-      <constructor-arg value="C:\\Mark\\appConfig\\fra_mapping.xml"/>
+      <constructor-arg value="C:\\Mark\\appConfig\\fra_mapping_cb.xml"/>
       <constructor-arg ref="xmlFileReader"/>
       <constructor-arg ref="xmlFileWriter"/>
   </bean>
   
   <bean id="domainObjectFactory" class="uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl">
   </bean>
-
-<!--
-  <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserHibernateDAO">
-      <property name="domainObjectFactory" ref="domainObjectFactory"/>
-      <property name="sessionFactory" ref="sessionFactory"/>
-  </bean>
-
-
-	<bean id="mongoClient" class="com.mongodb.MongoClient">
-		<constructor-arg type="java.lang.String">
-			<value>${mongoHost}</value>
-		</constructor-arg>
-	</bean>
-	
-	<bean id="mongoMapper" class="uk.co.mindbadger.footballresultsanalyser.dao.MongoMapper">
-		<property name="domainObjectFactory" ref="domainObjectFactory"/>
-		<property name="dao" ref="dao"/>
-	</bean>
-	
-  <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserMongoDAO">
-      <property name="domainObjectFactory" ref="domainObjectFactory"/>
-      <property name="mongoClient" ref="mongoClient" />
-      <property name="dbName" value="${mongoDb}" />
-      <property name="mongoMapper" ref="mongoMapper"/>
-  </bean>
--->
 
   <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserCouchbaseDAO">
       <property name="bucketName" value="football"/>
@@ -75,64 +49,4 @@
     <property name="saver" ref="saver"/>
     <property name="dao" ref="dao"/>
   </bean>
-
-  <!--
-
-  <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="${database.driver_class}" />
-    <property name="url" value="${database.url}" />
-    <property name="username" value="${database.username}" />
-    <property name="password" value="${database.password}" />
-  </bean>
-
-  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-    <property name="sessionFactory" ref="sessionFactory"/>
-    <property name="dataSource" ref="dataSource"/>
-  </bean>
-
-  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-	<property name="dataSource" ref="dataSource"/>
-    <property name="packagesToScan" value="uk.co.mindbadger.footballresultsanalyser.domain"/>
-	<property name="hibernateProperties">
-		<props>
-			<prop key="hibernate.c3p0.min_size">5</prop>
-			<prop key="hibernate.c3p0.max_size">20</prop>
-			<prop key="hibernate.c3p0.timeout">300</prop>
-			<prop key="hibernate.c3p0.max_statements">50</prop>
-			<prop key="hibernate.c3p0.idle_test_period">3000</prop>
-			<prop key="hibernate.hbm2ddl.auto">none</prop>
-  			<prop key="hibernate.dialect">${database.dialect}</prop>
-			<prop key="hibernate.show_sql">false</prop>
-		</props>
-    </property>
-  </bean>
-  
-   <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-      <property name="dataSource" ref="dataSource" />
-      <property name="mappingResources">
-        <list>
-          <value>hibernatemapping/Division.hbm.xml </value>
-          <value>hibernatemapping/Fixture.hbm.xml </value>
-          <value>hibernatemapping/Season.hbm.xml </value>
-          <value>hibernatemapping/SeasonDivision.hbm.xml </value>
-          <value>hibernatemapping/SeasonDivisionTeam.hbm.xml </value>
-          <value>hibernatemapping/Team.hbm.xml </value>
-        </list>
-      </property>
-      <property name="hibernateProperties">
-        <props>
-          <prop key="hibernate.c3p0.min_size">5</prop>
-          <prop key="hibernate.c3p0.max_size">20</prop>
-          <prop key="hibernate.c3p0.timeout">300</prop>
-          <prop key="hibernate.c3p0.max_statements">50</prop>
-          <prop key="hibernate.c3p0.idle_test_period">3000</prop>
-          <prop key="hibernate.hbm2ddl.auto">none</prop>
-          <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-          <prop key="hibernate.show_sql">true</prop>
-        </props>
-      </property>   
-    </bean>
-
-   -->     
-
 </beans>
