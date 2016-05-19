@@ -214,6 +214,24 @@ public class FootballResultsMappingTest{
 	}
 
 	@Test
+	public void shouldGetIndexOfDivisionMapping () throws Exception {
+		// Given
+		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());
+		objectUnderTest = new FootballResultsMapping(MAPPING_FILE, mockXmlFileReader, mockXmlFileWriter);
+		objectUnderTest.addDivisionMapping (DIALECT, SOURCE_DIV_ID_3, FRA_DIV_ID_3);
+		
+		// When
+		int indexOfDivision1 = objectUnderTest.getIndexForDivision(DIALECT, FRA_DIV_ID_1);
+		int indexOfDivision2 = objectUnderTest.getIndexForDivision(DIALECT, FRA_DIV_ID_2);
+		int indexOfDivision3 = objectUnderTest.getIndexForDivision(DIALECT, FRA_DIV_ID_3);
+		
+		// Then
+		assertEquals (0, indexOfDivision1);
+		assertEquals (1, indexOfDivision2);
+		assertEquals (2, indexOfDivision3);
+	}
+
+	@Test
 	public void shouldAddTeamMapping () throws Exception {
 		// Given
 		when (mockXmlFileReader.readXMLFile(MAPPING_FILE)).thenReturn(getValidDocument());

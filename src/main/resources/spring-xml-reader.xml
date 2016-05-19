@@ -9,7 +9,7 @@
 
     <bean id="reader" class="uk.co.mindbadger.footballresults.reader.xml.SoccerbaseXMLReader">
         <property name="xmlFileReader" ref="xmlFileReader"/>
-        <property name="rootDirectory" value="C:\m\soccerbase-downloads"/>
+        <property name="rootDirectory" value="C:\Mark\soccerbase-downloads"/>
     </bean>
  
 </beans>

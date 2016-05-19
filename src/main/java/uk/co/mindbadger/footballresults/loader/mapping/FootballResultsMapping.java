@@ -72,6 +72,7 @@ public class FootballResultsMapping {
 					String sourceDivisionId = divisionMapping.getAttribute("sourceId");
 					String fraDivisionId = divisionMapping.getAttribute("fraId");
 					dialect.getDivisionMappings().put(sourceDivisionId, fraDivisionId);
+					dialect.getOrderedListOfDivisions().add(fraDivisionId);
 				}
 
 				NodeList teamMappingsContainer = source.getElementsByTagName("TeamMappings");
@@ -105,8 +106,24 @@ public class FootballResultsMapping {
 	
 	public void addDivisionMapping(String dialectName, String sourceDivId, String fraDivId) {
 		dialects.get(dialectName).getDivisionMappings().put(sourceDivId, fraDivId);
+		dialects.get(dialectName).getOrderedListOfDivisions().add(fraDivId);
+		for (String s : dialects.get(dialectName).getOrderedListOfDivisions()) {
+			System.out.println("ADD " + fraDivId + " : " + s);
+		}
 	}
 
+	public int getIndexForDivision(String dialectName, String fraDivId) {
+		for (String s : dialects.get(dialectName).getOrderedListOfDivisions()) {
+			System.out.println("GET " + fraDivId + " : " + s);
+		}
+		
+		return dialects.get(dialectName).getOrderedListOfDivisions().indexOf(fraDivId);
+	}
+	
+	public List<String> getOrderedListOfDivisions(String dialectName) {
+		return dialects.get(dialectName).getOrderedListOfDivisions();
+	}
+	
 	public Map<String, String> getDivisionMappings(String dialectName) {
 		return dialects.get(dialectName).getDivisionMappings();
 	}
@@ -186,6 +203,7 @@ public class FootballResultsMapping {
 		private List<String> includedDivisions = new ArrayList<String>();
 		private Map<String, String> divisionMappings = new HashMap<String, String>();
 		private Map<String, String> teamMappings = new HashMap<String, String>();
+		private List<String> orderedListOfDivisions = new ArrayList<String> ();
 
 		public Dialect(String name) {
 			this.name = name;
@@ -205,6 +223,10 @@ public class FootballResultsMapping {
 
 		public Map<String, String> getTeamMappings() {
 			return teamMappings;
+		}
+
+		public List<String> getOrderedListOfDivisions() {
+			return orderedListOfDivisions;
 		}
 	}
 }

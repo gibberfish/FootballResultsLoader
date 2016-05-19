@@ -38,6 +38,7 @@ public class FootballResultsSaver {
 				List<String> includedDivisions = mapping.getIncludedDivisions(dialect);
 				Map<String, String> divisionMappings = mapping.getDivisionMappings(dialect);
 				Map<String, String> teamMappings = mapping.getTeamMappings(dialect);
+				List<String> orderedListOfDivisions = mapping.getOrderedListOfDivisions(dialect);
 				
 				// Ensure that we add the fixtures in chronological order so that we don't try to add playoffs before the main games
 				Collections.sort(fixturesRead);
@@ -104,7 +105,8 @@ public class FootballResultsSaver {
 								",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
 						
 						try {
-							SeasonDivision seasonDivision = dao.addSeasonDivision(season, division, 0);
+							int indexOfDivision = orderedListOfDivisions.indexOf(division.getDivisionId());
+							SeasonDivision seasonDivision = dao.addSeasonDivision(season, division, indexOfDivision);
 							dao.addSeasonDivisionTeam(seasonDivision, homeTeam);
 							dao.addSeasonDivisionTeam(seasonDivision, awayTeam);
 							dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
