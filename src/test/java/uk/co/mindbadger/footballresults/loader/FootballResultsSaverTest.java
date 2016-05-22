@@ -67,6 +67,7 @@ public class FootballResultsSaverTest {
 	private List<ParsedFixture> fixturesReadFromReader;
 	private Map<String, String> mappedDivisions;
 	private Map<String, String> mappedTeams;
+	private List<String> orderedListOfDivisions;
 
 	//private List<ParsedFixture> fixtures;
 	
@@ -86,6 +87,7 @@ public class FootballResultsSaverTest {
 		when(mockMapping.getIncludedDivisions(DIALECT)).thenReturn(includedDivisions);
 		when(mockMapping.getDivisionMappings(DIALECT)).thenReturn(mappedDivisions);
 		when(mockMapping.getTeamMappings(DIALECT)).thenReturn(mappedTeams);
+		when(mockMapping.getOrderedListOfDivisions(DIALECT)).thenReturn(orderedListOfDivisions);
 	}
 
 	// ----------------------------------------------------------------------------------------------
@@ -153,6 +155,7 @@ public class FootballResultsSaverTest {
 		division1.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division1);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
+		orderedListOfDivisions.add(MAPPED_DIV_ID_1);
 		
 		Team team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
@@ -535,7 +538,8 @@ public class FootballResultsSaverTest {
 		division.setDivisionId(MAPPED_DIV_ID_1);
 		divisionsFromDatabase.put(MAPPED_DIV_ID_1, division);
 		mappedDivisions.put(READ_DIV_ID_1, MAPPED_DIV_ID_1);
-
+		orderedListOfDivisions.add(MAPPED_DIV_ID_1);
+		
 		Team team1 = new TeamImpl();
 		team1.setTeamId(MAPPED_TEAM_ID_1);
 		teamsFromDatabase.put(MAPPED_TEAM_ID_1, team1);
@@ -602,6 +606,7 @@ public class FootballResultsSaverTest {
 		includedDivisions = new ArrayList<String>();
 		mappedDivisions = new HashMap<String, String>();
 		mappedTeams = new HashMap<String, String>();
+		orderedListOfDivisions = new ArrayList<String> ();
 	}
 
 	private void createObjectToTestAndInjectDependencies() {

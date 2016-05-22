@@ -106,6 +106,11 @@ public class FootballResultsSaver {
 						
 						try {
 							int indexOfDivision = orderedListOfDivisions.indexOf(division.getDivisionId());
+							
+							System.out.println("divisonId="+division.getDivisionId());
+							System.out.println("orderedListOfDivisions="+orderedListOfDivisions);
+							
+							
 							SeasonDivision seasonDivision = dao.addSeasonDivision(season, division, indexOfDivision);
 							dao.addSeasonDivisionTeam(seasonDivision, homeTeam);
 							dao.addSeasonDivisionTeam(seasonDivision, awayTeam);
