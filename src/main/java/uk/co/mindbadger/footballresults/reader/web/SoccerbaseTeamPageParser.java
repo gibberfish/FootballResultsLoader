@@ -39,7 +39,7 @@ public class SoccerbaseTeamPageParser {
 	private WebPageReader webPageReader;
 	private Pauser pauser;
 	
-	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, String teamId) {
+	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, String teamId, boolean retry) {
 		Integer soccerbaseSeasonNumber = seasonNumber - 1870;
 		
 		logger.debug("ABOUT TO LOAD FIXTURES FOR TEAM " + teamId + " IN SEASON " + seasonNumber);
@@ -54,13 +54,25 @@ public class SoccerbaseTeamPageParser {
 			
 			return parsePage(page);
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			throw new FootballResultsReaderException("No page found for team ID " + teamId);
 		} catch (IOException e) {
-			throw new FootballResultsReaderException("Cannot load page for team ID " + teamId);
+			e.printStackTrace();
+			
+			if (retry) {
+				// retry once
+				return parseFixturesForTeam(seasonNumber, teamId, true);
+			} else {
+				throw new FootballResultsReaderException("Cannot load page for team ID " + teamId);
+			}
 		}
 
 	}
-	
+
+	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, String teamId) {
+		return parseFixturesForTeam(seasonNumber, teamId, true);
+	}
+
 	private List<ParsedFixture> parsePage(List<String> page) {
 		List<ParsedFixture> parsedFixtures = new ArrayList<ParsedFixture> ();
 		
