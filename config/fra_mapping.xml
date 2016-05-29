@@ -1,0 +1,143 @@
+<Mapping>
+<Source dialect="soccerbase">
+<IncludedDivisions>
+<Div sourceId="1"/>
+<Div sourceId="2"/>
+<Div sourceId="3"/>
+<Div sourceId="4"/>
+<Div sourceId="5"/>
+<Div sourceId="6"/>
+<Div sourceId="7"/>
+<Div sourceId="8"/>
+</IncludedDivisions>
+<DivisionMappings>
+<Div fraId="3" sourceId="1"/>
+<Div fraId="1" sourceId="2"/>
+<Div fraId="2" sourceId="3"/>
+<Div fraId="0" sourceId="4"/>
+<Div fraId="4" sourceId="5"/>
+<Div fraId="7" sourceId="6"/>
+<Div fraId="6" sourceId="7"/>
+<Div fraId="5" sourceId="8"/>
+</DivisionMappings>
+<TeamMappings>
+<Team fraId="15" sourceId="1186"/>
+<Team fraId="60" sourceId="2393"/>
+<Team fraId="3" sourceId="1855"/>
+<Team fraId="106" sourceId="990"/>
+<Team fraId="98" sourceId="1216"/>
+<Team fraId="8" sourceId="354"/>
+<Team fraId="40" sourceId="1699"/>
+<Team fraId="99" sourceId="1732"/>
+<Team fraId="85" sourceId="234"/>
+<Team fraId="77" sourceId="1697"/>
+<Team fraId="115" sourceId="237"/>
+<Team fraId="11" sourceId="359"/>
+<Team fraId="65" sourceId="2783"/>
+<Team fraId="101" sourceId="92"/>
+<Team fraId="33" sourceId="1190"/>
+<Team fraId="12" sourceId="483"/>
+<Team fraId="93" sourceId="362"/>
+<Team fraId="116" sourceId="1070"/>
+<Team fraId="21" sourceId="485"/>
+<Team fraId="100" sourceId="760"/>
+<Team fraId="111" sourceId="1864"/>
+<Team fraId="14" sourceId="643"/>
+<Team fraId="50" sourceId="2036"/>
+<Team fraId="112" sourceId="2432"/>
+<Team fraId="5" sourceId="646"/>
+<Team fraId="94" sourceId="800"/>
+<Team fraId="72" sourceId="527"/>
+<Team fraId="104" sourceId="649"/>
+<Team fraId="34" sourceId="1628"/>
+<Team fraId="42" sourceId="1867"/>
+<Team fraId="105" sourceId="4194"/>
+<Team fraId="71" sourceId="2330"/>
+<Team fraId="27" sourceId="2054"/>
+<Team fraId="54" sourceId="2175"/>
+<Team fraId="58" sourceId="2328"/>
+<Team fraId="49" sourceId="1996"/>
+<Team fraId="69" sourceId="376"/>
+<Team fraId="109" sourceId="530"/>
+<Team fraId="1" sourceId="2325"/>
+<Team fraId="23" sourceId="652"/>
+<Team fraId="43" sourceId="378"/>
+<Team fraId="59" sourceId="2049"/>
+<Team fraId="35" sourceId="1871"/>
+<Team fraId="18" sourceId="656"/>
+<Team fraId="74" sourceId="536"/>
+<Team fraId="70" sourceId="2848"/>
+<Team fraId="56" sourceId="2180"/>
+<Team fraId="24" sourceId="1098"/>
+<Team fraId="89" sourceId="1372"/>
+<Team fraId="61" sourceId="381"/>
+<Team fraId="87" sourceId="142"/>
+<Team fraId="80" sourceId="1524"/>
+<Team fraId="10" sourceId="388"/>
+<Team fraId="96" sourceId="663"/>
+<Team fraId="113" sourceId="2850"/>
+<Team fraId="81" sourceId="942"/>
+<Team fraId="102" sourceId="427"/>
+<Team fraId="4" sourceId="308"/>
+<Team fraId="20" sourceId="947"/>
+<Team fraId="46" sourceId="1924"/>
+<Team fraId="68" sourceId="2859"/>
+<Team fraId="57" sourceId="2737"/>
+<Team fraId="82" sourceId="1527"/>
+<Team fraId="97" sourceId="42"/>
+<Team fraId="38" sourceId="1660"/>
+<Team fraId="25" sourceId="2473"/>
+<Team fraId="79" sourceId="2471"/>
+<Team fraId="114" sourceId="392"/>
+<Team fraId="88" sourceId="2590"/>
+<Team fraId="13" sourceId="394"/>
+<Team fraId="83" sourceId="154"/>
+<Team fraId="45" sourceId="2744"/>
+<Team fraId="110" sourceId="1655"/>
+<Team fraId="31" sourceId="2589"/>
+<Team fraId="29" sourceId="2741"/>
+<Team fraId="9" sourceId="435"/>
+<Team fraId="6" sourceId="317"/>
+<Team fraId="95" sourceId="2905"/>
+<Team fraId="51" sourceId="1537"/>
+<Team fraId="55" sourceId="719"/>
+<Team fraId="47" sourceId="2083"/>
+<Team fraId="19" sourceId="2910"/>
+<Team fraId="64" sourceId="2513"/>
+<Team fraId="26" sourceId="1148"/>
+<Team fraId="37" sourceId="2598"/>
+<Team fraId="62" sourceId="2477"/>
+<Team fraId="2" sourceId="208"/>
+<Team fraId="28" sourceId="1309"/>
+<Team fraId="66" sourceId="2519"/>
+<Team fraId="107" sourceId="1824"/>
+<Team fraId="91" sourceId="1823"/>
+<Team fraId="108" sourceId="2253"/>
+<Team fraId="53" sourceId="291"/>
+<Team fraId="86" sourceId="2493"/>
+<Team fraId="52" sourceId="2093"/>
+<Team fraId="30" sourceId="1436"/>
+<Team fraId="41" sourceId="2125"/>
+<Team fraId="7" sourceId="1310"/>
+<Team fraId="16" sourceId="579"/>
+<Team fraId="67" sourceId="612"/>
+<Team fraId="92" sourceId="2123"/>
+<Team fraId="73" sourceId="1718"/>
+<Team fraId="32" sourceId="1559"/>
+<Team fraId="75" sourceId="2802"/>
+<Team fraId="22" sourceId="1055"/>
+<Team fraId="39" sourceId="2263"/>
+<Team fraId="17" sourceId="1723"/>
+<Team fraId="36" sourceId="2812"/>
+<Team fraId="48" sourceId="1964"/>
+<Team fraId="63" sourceId="2898"/>
+<Team fraId="0" sourceId="344"/>
+<Team fraId="76" sourceId="621"/>
+<Team fraId="103" sourceId="2499"/>
+<Team fraId="84" sourceId="1563"/>
+<Team fraId="78" sourceId="747"/>
+<Team fraId="44" sourceId="1845"/>
+<Team fraId="90" sourceId="1724"/>
+</TeamMappings>
+</Source>
+</Mapping>
