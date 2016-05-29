@@ -148,23 +148,20 @@ public class SoccerbaseTeamPageParserTest {
 	}
 
 	@Test
-	public void shouldThrowRuntimeExceptionIfIOExceptionThrownDuringReadOfWebPage() throws Exception {
+	public void shouldRetryIfIOExceptionThrownDuringReadOfWebPage() throws Exception {
 		// Given
 		Calendar fixtureDate = Calendar.getInstance();
 		fixtureDate.set(Calendar.YEAR, 2008);
 		fixtureDate.set(Calendar.MONTH, 12);
 		fixtureDate.set(Calendar.DAY_OF_MONTH, 26);
 
-		when(mockWebPageReader.readWebPage(URL_FOR_TEAM)).thenThrow(new IOException());
+		when(mockWebPageReader.readWebPage(URL_FOR_TEAM)).thenThrow(new IOException()).thenReturn(getTeamPage());
 
 		// When
-		try {
-			objectUnderTest.parseFixturesForTeam(SEASON, TEAM_1_ID);
-			fail("Should throw a FootballResultsReaderException");
-		} catch (FootballResultsReaderException e) {
-			// Then
-			assertEquals(e.getMessage(), "Cannot load page for team ID 100");
-		}
+		objectUnderTest.parseFixturesForTeam(SEASON, TEAM_1_ID);
+
+		// Then
+		verify(mockWebPageReader, times(2)).readWebPage(URL_FOR_TEAM);
 	}
 	
 	private List<String> getTeamPage() {
