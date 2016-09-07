@@ -13,38 +13,38 @@
 
 	<bean id="props" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 <!--
-	  <property name="locations" value="file:///C:/Mark/appConfig/database.properties"/>
+	  <property name="locations" value="file:///E:/Mark/appConfig/database.properties"/>
  -->
- 		<property name="locations" value="file:///C:/Mark/appConfig/mongo.properties"/>
+ 		<property name="locations" value="file:///E:/Mark/appConfig/mongo.properties"/>
 	</bean>
 
-  <bean id="xmlFileReader" class="uk.co.mindbadger.xml.XMLFileReader">
+  <bean id="xmlFileReader" class="mindbadger.xml.XMLFileReader">
   </bean>
 
-  <bean id="xmlFileWriter" class="uk.co.mindbadger.xml.XMLFileWriter">
+  <bean id="xmlFileWriter" class="mindbadger.xml.XMLFileWriter">
   </bean>
   
-  <bean id="mapping" class="uk.co.mindbadger.footballresults.loader.mapping.FootballResultsMapping">
-      <constructor-arg value="C:\\Mark\\appConfig\\fra_mapping_cb.xml"/>
+  <bean id="mapping" class="mindbadger.footballresults.loader.mapping.FootballResultsMapping">
+      <constructor-arg value="E:\\Mark\\appConfig\\fra_mapping_cb.xml"/>
       <constructor-arg ref="xmlFileReader"/>
       <constructor-arg ref="xmlFileWriter"/>
   </bean>
   
-  <bean id="domainObjectFactory" class="uk.co.mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl">
+  <bean id="domainObjectFactory" class="mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl">
   </bean>
 
-  <bean id="dao" class="uk.co.mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserCouchbaseDAO">
+  <bean id="dao" class="mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserCouchbaseDAO">
       <property name="bucketName" value="football"/>
       <property name="domainObjectFactory" ref="domainObjectFactory"/>
   </bean>
 
-  <bean id="saver" class="uk.co.mindbadger.footballresults.loader.FootballResultsSaver">
+  <bean id="saver" class="mindbadger.footballresults.loader.FootballResultsSaver">
   	<property name="dialect" value="soccerbase"/>
   	<property name="dao" ref="dao"/>
   	<property name="mapping" ref="mapping"/>
   </bean>
   
-  <bean id="loader" class="uk.co.mindbadger.footballresults.loader.FootballResultsLoader">
+  <bean id="loader" class="mindbadger.footballresults.loader.FootballResultsLoader">
     <property name="reader" ref="reader"/>
     <property name="saver" ref="saver"/>
     <property name="dao" ref="dao"/>

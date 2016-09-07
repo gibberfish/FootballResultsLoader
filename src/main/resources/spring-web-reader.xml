@@ -7,20 +7,20 @@
 
    <import resource="spring-common.xml"/>
    
-   <bean id="webPageReader" class="uk.co.mindbadger.web.WebPageReader">
+   <bean id="webPageReader" class="mindbadger.web.WebPageReader">
    		<property name="httpAgent" value="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36" />
    </bean>
 
-   <bean id="pauser" class="uk.co.mindbadger.util.Pauser">
+   <bean id="pauser" class="mindbadger.util.Pauser">
    </bean>
    
-   <bean id="teamPageParser" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser">
+   <bean id="teamPageParser" class="mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser">
        <property name="webPageReader" ref="webPageReader"/>
        <property name="url" value="http://www.soccerbase.com/teams/team.sd?season_id={seasonNum}&amp;team_id={teamId}&amp;teamTabs=results"/>
        <property name="pauser" ref="pauser"/>
    </bean>
 
-   <bean id="datePageParser" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseDatePageParser">
+   <bean id="datePageParser" class="mindbadger.footballresults.reader.web.SoccerbaseDatePageParser">
        <property name="webPageReader" ref="webPageReader"/>
        <property name="url" value="http://www.soccerbase.com/matches/results.sd?date={fixtureDate}"/>
        <property name="pauser" ref="pauser"/>
@@ -28,7 +28,7 @@
        <property name="dialect" value="soccerbase"/>
    </bean>
    	
-   <bean id="reader" class="uk.co.mindbadger.footballresults.reader.web.SoccerbaseWebPageReader">
+   <bean id="reader" class="mindbadger.footballresults.reader.web.SoccerbaseWebPageReader">
       <property name="teamPageParser" ref="teamPageParser"/>
       <property name="datePageParser" ref="datePageParser"/>
       <property name="mapping" ref="mapping"/>

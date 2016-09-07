@@ -7,9 +7,9 @@
 
     <import resource="spring-common.xml"/>
 
-    <bean id="reader" class="uk.co.mindbadger.footballresults.reader.xml.SoccerbaseXMLReader">
+    <bean id="reader" class="mindbadger.footballresults.reader.xml.SoccerbaseXMLReader">
         <property name="xmlFileReader" ref="xmlFileReader"/>
-        <property name="rootDirectory" value="C:\Mark\soccerbase-downloads"/>
+        <property name="rootDirectory" value="E:\CopiedFromOldDEV\FootballResults\soccerbase-downloads"/>
     </bean>
  
 </beans>
