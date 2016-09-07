@@ -40,7 +40,12 @@ public class SoccerbaseTeamPageParser {
 	private Pauser pauser;
 	
 	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, String teamId, boolean retry) {
-		Integer soccerbaseSeasonNumber = seasonNumber - 1870;
+		Integer soccerbaseSeasonNumber = null;
+		if (seasonNumber > 2015) {
+			soccerbaseSeasonNumber = seasonNumber - 1867;
+		} else {
+			soccerbaseSeasonNumber = seasonNumber - 1870;
+		}
 		
 		logger.debug("ABOUT TO LOAD FIXTURES FOR TEAM " + teamId + " IN SEASON " + seasonNumber);
 		
@@ -149,7 +154,13 @@ public class SoccerbaseTeamPageParser {
 				
 				int seasonStartPos = line.indexOf(END_OF_TEAM_ID, teamIdEndPos) + END_OF_TEAM_ID.length();
 				int seasonEndPos = line.indexOf("&amp;teamTabs=results\" title", seasonStartPos);
-				season = Integer.parseInt(line.substring(seasonStartPos, seasonEndPos)) + 1870;
+				
+				season = Integer.parseInt(line.substring(seasonStartPos, seasonEndPos));
+				if (season >= 149) {
+					season+=1867;
+				} else {
+					season+=1870;
+				}
 				
 				int teamNameStartPos = line.indexOf(START_OF_TEAM_NAME, seasonEndPos) + START_OF_TEAM_NAME.length();
 				int teamNameEndPos = line.indexOf(END_OF_TEAM_NAME, teamNameStartPos);
@@ -202,6 +213,14 @@ public class SoccerbaseTeamPageParser {
 		parsedFixture.setAwayGoals(awayGoals);
 		
 		return parsedFixture;
+	}
+
+	private Integer getSeasonFromFixturedate(Calendar fixtureDate) {
+		if (fixtureDate.get(Calendar.MONTH) < 7) {
+			return (fixtureDate.get(Calendar.YEAR) -1);
+		} else {
+			return fixtureDate.get(Calendar.YEAR);
+		}
 	}
 	
 	public void setWebPageReader(WebPageReader webPageReader) {

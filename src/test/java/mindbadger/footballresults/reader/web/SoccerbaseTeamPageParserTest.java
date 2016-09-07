@@ -23,7 +23,9 @@ import org.mockito.MockitoAnnotations;
 
 public class SoccerbaseTeamPageParserTest {
 	private static final Integer SEASON = 2012;
+	private static final Integer SEASON_2016 = 2016;
 	private static final Integer SOCCERBASE_SEASON_2012 = 142;
+	private static final Integer SOCCERBASE_SEASON_2016 = 149;
 	
 	private static final String DIV_1_ID = "1";
 	private static final String DIV_1_NAME = "DIV 1";
@@ -46,6 +48,7 @@ public class SoccerbaseTeamPageParserTest {
 
 	private static final String URL = "http://www.soccerbase.com/teams/results.sd?season_id={seasonNum}&team_id={teamId}&teamTabs=results";
 	private static final String URL_FOR_TEAM = "http://www.soccerbase.com/teams/results.sd?season_id=" + SOCCERBASE_SEASON_2012 + "&team_id=" + TEAM_1_ID + "&teamTabs=results";
+	private static final String URL_FOR_TEAM_2016 = "http://www.soccerbase.com/teams/results.sd?season_id=" + SOCCERBASE_SEASON_2016 + "&team_id=" + TEAM_1_ID + "&teamTabs=results";
 
 	private SoccerbaseTeamPageParser objectUnderTest;
 	
@@ -129,6 +132,46 @@ public class SoccerbaseTeamPageParserTest {
 	}
 
 	@Test
+	public void shouldParseATeamPageInADivisionAfter2015 () throws Exception {
+		// Given
+		when(mockWebPageReader.readWebPage(URL_FOR_TEAM_2016)).thenReturn(getTeamPage2016());
+		
+		// When
+		List<ParsedFixture> parsedFixtures = objectUnderTest.parseFixturesForTeam(SEASON_2016, TEAM_1_ID);
+		
+		// Then
+		assertEquals(2, parsedFixtures.size());
+		
+		ParsedFixture fixture1 = parsedFixtures.get(0);
+		assertEquals(SEASON_2016, fixture1.getSeasonId());
+		assertEquals(DIV_1_ID, fixture1.getDivisionId());
+		assertEquals(DIV_1_NAME, fixture1.getDivisionName());
+		assertEquals(TEAM_1_ID, fixture1.getHomeTeamId());
+		assertEquals(TEAM_1_NAME, fixture1.getHomeTeamName());
+		assertEquals(TEAM_2_ID, fixture1.getAwayTeamId());
+		assertEquals(TEAM_2_NAME, fixture1.getAwayTeamName());
+		assertEquals(FIXTURE_DATE_1, StringToCalendarConverter.convertCalendarToDateString(fixture1.getFixtureDate()));
+		assertEquals(new Integer(5), fixture1.getHomeGoals());
+		assertEquals(new Integer(2), fixture1.getAwayGoals());
+		assertNull(fixture1.getFixtureId());
+
+		ParsedFixture fixture4 = parsedFixtures.get(1);
+		assertEquals(SEASON_2016, fixture4.getSeasonId());
+		assertEquals(DIV_1_ID, fixture4.getDivisionId());
+		assertEquals(DIV_1_NAME, fixture4.getDivisionName());
+		assertEquals(TEAM_1_ID, fixture4.getHomeTeamId());
+		assertEquals(TEAM_1_NAME, fixture4.getHomeTeamName());
+		assertEquals(TEAM_5_ID, fixture4.getAwayTeamId());
+		assertEquals(TEAM_5_NAME, fixture4.getAwayTeamName());
+		assertEquals(FIXTURE_DATE_4, StringToCalendarConverter.convertCalendarToDateString(fixture4.getFixtureDate()));
+		assertNull(fixture4.getHomeGoals());
+		assertNull(fixture4.getAwayGoals());
+		assertNull(fixture4.getFixtureId());
+
+		verify (mockPauser).pause();
+	}
+
+	@Test
 	public void shouldThrowRuntimeExceptionIfFileNotFoundExceptionThrownDuringReadOfWebPage() throws Exception {
 		// Given
 		Calendar fixtureDate = Calendar.getInstance();
@@ -177,6 +220,24 @@ public class SoccerbaseTeamPageParserTest {
 		addFixtureWithScore(page, SOCCERBASE_SEASON_2012, DIV_1_ID, DIV_1_NAME, TEAM_3_ID, TEAM_3_NAME, TEAM_1_ID, TEAM_1_NAME, FIXTURE_DATE_2, 3, 0);
 		addFixtureWithScore(page, SOCCERBASE_SEASON_2012, DIV_2_ID, DIV_2_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_4_ID, TEAM_4_NAME, FIXTURE_DATE_3, 1, 4);
 		addFixtureWithoutScore(page, SOCCERBASE_SEASON_2012, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_5_ID, TEAM_5_NAME, FIXTURE_DATE_4);
+		
+		page.add("</script>                ");
+		page.add("</body>");
+		page.add("");
+		page.add("</html>");
+		return page;
+	}
+
+	private List<String> getTeamPage2016() {
+		List<String> page = new ArrayList<String>();
+
+		page.add("<html>");
+		page.add("<head>");
+		page.add("");
+		page.add("");
+
+		addFixtureWithScore(page, SOCCERBASE_SEASON_2016, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_2_ID, TEAM_2_NAME, FIXTURE_DATE_1, 5, 2);
+		addFixtureWithoutScore(page, SOCCERBASE_SEASON_2016, DIV_1_ID, DIV_1_NAME, TEAM_1_ID, TEAM_1_NAME, TEAM_5_ID, TEAM_5_NAME, FIXTURE_DATE_4);
 		
 		page.add("</script>                ");
 		page.add("</body>");
