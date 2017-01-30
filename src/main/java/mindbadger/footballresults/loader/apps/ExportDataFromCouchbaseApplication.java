@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,38 +40,67 @@ public class ExportDataFromCouchbaseApplication {
 		Path path = Paths.get(FILE_NAME);
 
 		try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+			
+			writer.write("{");
+			writer.newLine();
+			writer.write(" divisions: [");
+			writer.newLine();
+			
 			Map<String, Division> divisions = dao.getAllDivisions();
-			for (Division division : divisions.values()) {
+			List<Division> divisionList = new ArrayList<Division>(divisions.values());
+			Division lastDivision = divisionList.get(divisionList.size()-1);
+			for (Division division : divisionList) {
 				writer.write("{ type: 'division', ");
 				
 				writer.write("  id: '" + division.getDivisionId() + "', ");
 				writer.write("  name: '" + division.getDivisionName() + "'");
 				
 				writer.write("}");
-				
+
+				if (division != lastDivision) {
+					writer.write(",");
+				}
+
 				writer.newLine();
 				writer.flush();
 			}
-			
+
+			writer.write("],");
+			writer.newLine();
+			writer.write(" teams: [");
+			writer.newLine();
+
 			Map<String, Team> teams = dao.getAllTeams();
-			for (Team team : teams.values()) {
+			List<Team> teamList = new ArrayList<Team>(teams.values());
+			Team lastTeam = teamList.get(teamList.size()-1);
+			for (Team team : teamList) {
 				writer.write("{ type: 'team', ");
 				
 				writer.write("  id: '" + team.getTeamId() + "', ");
 				writer.write("  name: '" + team.getTeamName() + "'");
 				
 				writer.write("}");
-				
+
+				if (team != lastTeam) {
+					writer.write(",");
+				}
+
 				writer.newLine();
 				writer.flush();
 			}
-			
+
+			writer.write("],");
+			writer.newLine();
+			writer.write(" seasons: [");
+			writer.newLine();
+
 			List<Season> seasons = dao.getSeasons();
+			Season lastSeason = seasons.get(seasons.size()-1);
 			
 			for (Season season : seasons) {
 				writer.write("{ type: 'season', ");
 				
-				writer.write("  seasonNumber: '" + season.getSeasonNumber() + "'");
+				writer.write("  seasonNumber: '" + season.getSeasonNumber() + "',");
 
 				writer.write("  divisionsInSeason: [");
 				writer.newLine();
@@ -103,15 +133,24 @@ public class ExportDataFromCouchbaseApplication {
 				writer.newLine();
 
 				writer.write("}");
-				
+
+				if (season != lastSeason) {
+					writer.write(",");
+				}
+
 				writer.newLine();
 
 				
 				writer.flush();
 			}
-			
+
+			writer.write("],");
+			writer.newLine();
+			writer.write(" fixtures: [");
+			writer.newLine();
 
 			List<Fixture> fixtures = dao.getFixtures();
+			Fixture lastFixture = fixtures.get(fixtures.size()-1);
 			for (Fixture fixture : fixtures) {
 				writer.write("{ type: 'fixture', ");
 				writer.write("  season: '" + fixture.getSeason().getSeasonNumber() + "', ");
@@ -134,9 +173,18 @@ public class ExportDataFromCouchbaseApplication {
 				
 				writer.write("}");
 				
+				if (fixture != lastFixture) {
+					writer.write(",");
+				}
+				
 				writer.newLine();
 				writer.flush();
 			}
+			
+			writer.write("]");
+			writer.newLine();
+			writer.write("}");
+			writer.newLine();
 		}
 		
 		dao.closeSession();
