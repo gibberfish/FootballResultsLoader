@@ -45,7 +45,7 @@ public class ImportDataFromJSONToDB implements Command {
 	public static final String FILE_NAME = "E:\\_temp\\export_from_couchbase.json";
 	
 	public void readFile () throws IOException {
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
+		//ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
 		
 		String content = new String(Files.readAllBytes(Paths.get(FILE_NAME)));
 		
