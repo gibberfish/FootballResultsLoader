@@ -8,12 +8,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import mindbadger.footballresults.loader.apps.Command;
+import mindbadger.footballresults.loader.apps.ImportDataFromJSONToDB;
+
 @SpringBootApplication(scanBasePackages="mindbadger")
 public class LoaderEntryPointApplication {
 
-
 	@Autowired
 	IntegrationTest integrationTest;
+	
+	@Autowired
+	ImportDataFromJSONToDB importDataFromJSONToDB;
 
 	private static final Logger log = LoggerFactory.getLogger(LoaderEntryPointApplication.class);
 	
@@ -25,16 +30,23 @@ public class LoaderEntryPointApplication {
 	public CommandLineRunner demo() {
 		return (args) -> {
 			if (args.length > 0) {
-				String command = args[0];
+				String commandString = args[0];
+				log.info("Command to run: " + commandString);
 				
-				if ("INT_TEST".equals(command)) {
-					integrationTest.runIntegrationTest();
+				Command command = null;
+				
+				if ("INT_TEST".equals(commandString)) {
+					command = integrationTest;
+				} else if ("IMPORT_FROM_JSON".equals(commandString)) {
+					command = importDataFromJSONToDB;
 				} else {
-					log.info("*** SORRY, I DON'T RECOGNISE COMMAND " + command + " ***");
+					throw new IllegalArgumentException("*** SORRY, I DON'T RECOGNISE COMMAND " + commandString + " ***");
 				}
 				
+				command.run(args);
+				
 			} else {
-				log.info("*** PLEASE SPECIFY A COMMAND TO RUN ***");
+				throw new IllegalArgumentException("*** PLEASE SPECIFY A COMMAND TO RUN ***");
 			}
 			
 		};

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import mindbadger.football.repository.DivisionRepository;
 import mindbadger.football.repository.SeasonRepository;
 import mindbadger.football.repository.TeamRepository;
+import mindbadger.footballresults.loader.apps.Command;
 import mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import mindbadger.footballresultsanalyser.domain.SeasonDivision;
 import mindbadger.footballresultsanalyser.domain.SeasonDivisionImpl;
@@ -21,7 +22,7 @@ import mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import mindbadger.footballresultsanalyser.domain.TeamImpl;
 
 @Component
-public class IntegrationTest {
+public class IntegrationTest implements Command {
 
 	@Autowired
 	DivisionRepository divisionRepository;
@@ -34,7 +35,8 @@ public class IntegrationTest {
 	
 	private static final Logger log = LoggerFactory.getLogger(LoaderEntryPointApplication.class);
 	
-	public void runIntegrationTest () {
+	@Override
+	public void run(String[] args) {
 		log.error("************ STEP 1: Create new division *************");
 		
 		DivisionImpl division1 = new DivisionImpl("100", "Premier Fish");

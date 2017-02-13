@@ -22,7 +22,7 @@ import mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 
 @Component
-public class ImportDataFromJSONToDB {
+public class ImportDataFromJSONToDB implements Command {
 
 	@Autowired
 	DivisionRepository divisionRepository;
@@ -43,11 +43,6 @@ public class ImportDataFromJSONToDB {
 	DomainObjectFactory domainObjectFactory;
 	
 	public static final String FILE_NAME = "E:\\_temp\\export_from_couchbase.json";
-	
-//	public static void main(String[] args) throws IOException {
-//		ImportDataFromJSONToDB app = new ImportDataFromJSONToDB ();
-//		app.readFile();
-//	}
 	
 	public void readFile () throws IOException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
@@ -72,5 +67,11 @@ public class ImportDataFromJSONToDB {
 			
 			divisionRepository.save(divisionImpl);
 		}
+	}
+
+	@Override
+	public void run(String[] args) throws IOException {
+		ImportDataFromJSONToDB app = new ImportDataFromJSONToDB ();
+		app.readFile();		
 	}
 }
