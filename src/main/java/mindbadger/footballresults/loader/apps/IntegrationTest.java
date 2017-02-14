@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import mindbadger.LoaderEntryPointApplication;
-import mindbadger.football.repository.DivisionRepository;
-import mindbadger.football.repository.SeasonRepository;
-import mindbadger.football.repository.TeamRepository;
 import mindbadger.footballresultsanalyser.domain.Division;
 import mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import mindbadger.footballresultsanalyser.domain.Season;
@@ -23,6 +20,9 @@ import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeamImpl;
 import mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import mindbadger.footballresultsanalyser.domain.Team;
 import mindbadger.footballresultsanalyser.domain.TeamImpl;
+import mindbadger.footballresultsanalyser.repository.DivisionRepository;
+import mindbadger.footballresultsanalyser.repository.SeasonRepository;
+import mindbadger.footballresultsanalyser.repository.TeamRepository;
 
 @Component
 public class IntegrationTest implements Command {

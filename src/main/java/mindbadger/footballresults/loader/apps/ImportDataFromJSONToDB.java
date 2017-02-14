@@ -11,15 +11,8 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import mindbadger.football.dao.FootballResultsAnalyserJPADAO;
-import mindbadger.football.repository.DivisionRepository;
-import mindbadger.football.repository.FixtureRepository;
-import mindbadger.football.repository.SeasonRepository;
-import mindbadger.football.repository.TeamRepository;
 import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.Division;
 import mindbadger.footballresultsanalyser.domain.DivisionImpl;
@@ -32,6 +25,10 @@ import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
 import mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import mindbadger.footballresultsanalyser.domain.Team;
 import mindbadger.footballresultsanalyser.domain.TeamImpl;
+import mindbadger.footballresultsanalyser.repository.DivisionRepository;
+import mindbadger.footballresultsanalyser.repository.FixtureRepository;
+import mindbadger.footballresultsanalyser.repository.SeasonRepository;
+import mindbadger.footballresultsanalyser.repository.TeamRepository;
 
 @Component
 public class ImportDataFromJSONToDB implements Command {
