@@ -1,4 +1,4 @@
-package mindbadger;
+package mindbadger.footballresults.loader.apps;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import mindbadger.LoaderEntryPointApplication;
 import mindbadger.football.repository.DivisionRepository;
 import mindbadger.football.repository.SeasonRepository;
 import mindbadger.football.repository.TeamRepository;
-import mindbadger.footballresults.loader.apps.Command;
 import mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import mindbadger.footballresultsanalyser.domain.SeasonDivision;
 import mindbadger.footballresultsanalyser.domain.SeasonDivisionImpl;

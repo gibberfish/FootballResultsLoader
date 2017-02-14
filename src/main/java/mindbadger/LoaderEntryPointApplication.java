@@ -11,9 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 import mindbadger.footballresults.loader.apps.Command;
 import mindbadger.footballresults.loader.apps.ImportDataFromJSONToDB;
+import mindbadger.footballresults.loader.apps.IntegrationTest;
 
-@SpringBootApplication(scanBasePackages="mindbadger")
-@ComponentScan("mindbadger")
+@SpringBootApplication(scanBasePackages="**/mindbadger/**/*")
 public class LoaderEntryPointApplication {
 
 	@Autowired
