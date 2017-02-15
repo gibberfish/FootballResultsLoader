@@ -13,6 +13,7 @@ import mindbadger.footballresults.loader.commands.Command;
 import mindbadger.footballresults.loader.commands.ImportDataFromJSONToDB;
 import mindbadger.footballresults.loader.commands.IntegrationTest;
 import mindbadger.footballresults.loader.commands.LoadRecentResultsFromInternet;
+import mindbadger.footballresults.loader.commands.LoadSeasonFromInternet;
 import mindbadger.footballresults.loader.commands.PrintSeasonShape;
 
 @SpringBootApplication(scanBasePackages="**/mindbadger/**/*")
@@ -26,6 +27,9 @@ public class LoaderEntryPointApplication {
 
 	@Autowired
 	PrintSeasonShape printSeasonShape;
+	
+	@Autowired
+	LoadSeasonFromInternet loadSeasonFromInternet;
 	
 	@Autowired
 	LoadRecentResultsFromInternet loadResultsFromInternetApplication;
@@ -53,6 +57,8 @@ public class LoaderEntryPointApplication {
 					command = printSeasonShape;
 				} else if ("LOAD_RESULTS".equals(commandString)) {
 					command = loadResultsFromInternetApplication;
+				} else if ("LOAD_SEASON".equals(commandString)) {
+					command = loadSeasonFromInternet;
 				} else {
 					throw new IllegalArgumentException("*** SORRY, I DON'T RECOGNISE COMMAND " + commandString + " ***");
 				}
