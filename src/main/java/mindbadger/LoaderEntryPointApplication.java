@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import mindbadger.footballresults.loader.apps.Command;
 import mindbadger.footballresults.loader.apps.ImportDataFromJSONToDB;
 import mindbadger.footballresults.loader.apps.IntegrationTest;
+import mindbadger.footballresults.loader.apps.LoadResultsFromInternetApplication;
 import mindbadger.footballresults.loader.apps.PrintSeasonShape;
 
 @SpringBootApplication(scanBasePackages="**/mindbadger/**/*")
@@ -25,6 +26,9 @@ public class LoaderEntryPointApplication {
 
 	@Autowired
 	PrintSeasonShape printSeasonShape;
+	
+	@Autowired
+	LoadResultsFromInternetApplication loadResultsFromInternetApplication;
 	
 	private static final Logger log = LoggerFactory.getLogger(LoaderEntryPointApplication.class);
 	
@@ -47,6 +51,8 @@ public class LoaderEntryPointApplication {
 					command = importDataFromJSONToDB;
 				} else if ("PRINT_SEASON".equals(commandString)) {
 					command = printSeasonShape;
+				} else if ("LOAD_RESULTS".equals(commandString)) {
+					command = loadResultsFromInternetApplication;
 				} else {
 					throw new IllegalArgumentException("*** SORRY, I DON'T RECOGNISE COMMAND " + commandString + " ***");
 				}

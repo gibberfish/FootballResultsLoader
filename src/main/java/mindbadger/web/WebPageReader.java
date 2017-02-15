@@ -3,13 +3,17 @@ package mindbadger.web;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WebPageReader {
 	Logger logger = Logger.getLogger(WebPageReader.class);
 	
@@ -17,8 +21,11 @@ public class WebPageReader {
 	
 	public List<String> readWebPage(String pURL) throws FileNotFoundException, IOException {
 		
+		if (httpAgent == null) throw new RuntimeException("Must set httpAgent");
+		
 		logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
 		logger.info("About to load web page: " + pURL + "...");
+		logger.info("   using httpAgent: " + httpAgent + "...");
 		logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
 		
 		ArrayList<String> results = new ArrayList <String>();
@@ -28,7 +35,11 @@ public class WebPageReader {
 		try {
 			URL url = new URL(pURL);
 			
-			webReader = new InputStreamReader(url.openStream());
+			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+			httpcon.addRequestProperty("User-Agent", httpAgent);
+			InputStream openStream = httpcon.getInputStream();
+			
+			webReader = new InputStreamReader(openStream);
 			
 			in = new BufferedReader(webReader);
 
@@ -48,6 +59,14 @@ public class WebPageReader {
 		return results;
 	}
 
+	public String getHttpAgent() {
+		return httpAgent;
+	}
+
+	public void setHttpAgent(String httpAgent) {
+		this.httpAgent = httpAgent;
+	}
+
 //	public static void main(String[] args) throws FileNotFoundException, IOException {
 //		WebPageReader reader = new WebPageReader();
 //		reader.setHttpAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36");
@@ -57,13 +76,5 @@ public class WebPageReader {
 //			System.out.println(line);
 //		}
 //	}
-
-	public String getHttpAgent() {
-		return httpAgent;
-	}
-
-	public void setHttpAgent(String httpAgent) {
-		this.httpAgent = httpAgent;
-		System.setProperty("http.agent", httpAgent);
-	}
+	
 }

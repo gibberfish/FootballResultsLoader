@@ -24,7 +24,7 @@ import mindbadger.xml.XMLFileReader;
 import mindbadger.xml.XMLFileWriter;
 
 @Configuration
-@ComponentScan 
+@ComponentScan ("mindbadger")
 @EnableAutoConfiguration
 public class FootballLoaderConfiguration {
 	
@@ -58,7 +58,8 @@ public class FootballLoaderConfiguration {
 		pauser = new Pauser();
 		
 		webPageReader = new WebPageReader ();
-		webPageReader.setHttpAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36");
+		//webPageReader.setHttpAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36");
+		webPageReader.setHttpAgent("Googlebot/2.1 (+http://www.googlebot.com/bot.html)");
 
 		teamPageParser = new SoccerbaseTeamPageParser();
 		teamPageParser.setWebPageReader(webPageReader);

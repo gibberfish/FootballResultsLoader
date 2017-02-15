@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import mindbadger.footballresults.reader.ParsedFixture;
@@ -16,11 +18,15 @@ import mindbadger.footballresultsanalyser.domain.Season;
 import mindbadger.footballresultsanalyser.domain.SeasonDivision;
 import mindbadger.footballresultsanalyser.domain.Team;
 
+@Component
 public class FootballResultsSaver {
 	Logger logger = Logger.getLogger(FootballResultsSaver.class);
 	
 	private String dialect;
+	
+	@Autowired
 	private FootballResultsAnalyserDAO dao;
+	@Autowired
 	private FootballResultsMapping mapping;
 
 	public void saveFixtures(List<ParsedFixture> fixturesRead) {

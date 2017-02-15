@@ -10,16 +10,23 @@ import java.util.Set;
 
 import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import mindbadger.footballresults.reader.FootballResultsReader;
+import mindbadger.footballresults.reader.FootballResultsReaderException;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.util.StringToCalendarConverter;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SoccerbaseWebPageReader implements FootballResultsReader {
 	Logger logger = Logger.getLogger(SoccerbaseWebPageReader.class);
 	
+	//@Autowired
 	private SoccerbaseTeamPageParser teamPageParser;
+	//@Autowired
 	private SoccerbaseDatePageParser datePageParser;
+	//@Autowired
 	private FootballResultsMapping mapping;
 	
 	@Override
@@ -85,15 +92,28 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 
 	@Override
 	public List<ParsedFixture> readFixturesForDate(Calendar date) {
-		String dateString = StringToCalendarConverter.convertCalendarToDateString(date);
-		
-		logger.info("About to read fixtures for date " + dateString);
-		
-		List<ParsedFixture> parsedFixtures = datePageParser.parseFixturesForDate(dateString);
-		
-		return parsedFixtures;
+		return readFixturesForDate(date, 0);
 	}
 
+	private List<ParsedFixture> readFixturesForDate(Calendar date, int retries) {
+		retries++;
+		
+		String dateString = StringToCalendarConverter.convertCalendarToDateString(date);
+		
+		logger.info("About to read fixtures for date " + dateString + ": attempt #" + retries);
+		
+		try {
+			List<ParsedFixture> parsedFixtures = datePageParser.parseFixturesForDate(dateString);
+			return parsedFixtures;
+		} catch (FootballResultsReaderException e) {
+			if (retries < 4) {
+				return readFixturesForDate(date);
+			} else {
+				throw (e);
+			}
+		}
+	}
+	
 	@Override
 	public List<ParsedFixture> readFixturesForTeamInSeason(int season, String teamId) {
 		Map<String, String> teamMappings = mapping.getTeamMappings("soccerbase");

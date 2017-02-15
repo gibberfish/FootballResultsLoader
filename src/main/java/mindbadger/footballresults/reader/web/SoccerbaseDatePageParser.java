@@ -57,8 +57,10 @@ public class SoccerbaseDatePageParser {
 			
 			return parsePage(page);
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			throw new FootballResultsReaderException("No page found for " + dateString);
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new FootballResultsReaderException("Cannot load page for " + dateString);
 		}
 	}

@@ -1,23 +1,18 @@
 package mindbadger.footballresults.loader.apps;
 
-import mindbadger.footballresults.loader.FootballResultsLoader;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class LoadResultsFromInternetApplication {
+import mindbadger.footballresults.loader.FootballResultsLoader;
 
-//	public static void main(String[] args) {
-//		System.out.println("About to configure Spring");
-//		@SuppressWarnings("resource")
-//		ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
-//
-//		System.out.println("About to get the loader");
-//		FootballResultsLoader loader = (FootballResultsLoader) context.getBean("loader");
-//		
-//		System.out.println("About to call the loader");
-//		loader.loadResultsForRecentlyPlayedFixtures();
-//	}
+@Component
+public class LoadResultsFromInternetApplication implements Command {
+
+	@Autowired
+	private FootballResultsLoader loader;
+	
+	@Override
+	public void run(String[] args) throws Exception {
+		loader.loadResultsForRecentlyPlayedFixtures();
+	}
 }
