@@ -42,7 +42,9 @@ public class IntegrationTest implements Command {
 	public void run(String[] args) {
 		log.error("************ STEP 1: Create new division *************");
 		
-		Division division1 = new DivisionImpl("1000", "Premier Fish");
+		Division division1 = new DivisionImpl();
+		division1.setDivisionId("1000");
+		division1.setDivisionName("Premier Fish");
 		log.info("Created new Division : " + division1.toString());
 		
 		Division savedDivision = divisionRepository.save((DivisionImpl) division1);
@@ -72,8 +74,13 @@ public class IntegrationTest implements Command {
 		
 		log.error("************ STEP 3b: Create new teams *************");
 		
-		Team team1 = new TeamImpl ("2000", "Madeup United");
-		Team team2 = new TeamImpl ("2001", "Many Fish City");
+		Team team1 = new TeamImpl ();
+		team1.setTeamId("2000");
+		team1.setTeamName("Madeup United");
+		
+		Team team2 = new TeamImpl ();
+		team2.setTeamId("2001");
+		team2.setTeamName("Many Fish City");
 		
 		teamRepository.save((TeamImpl) team1);
 		teamRepository.save((TeamImpl)team2);
@@ -82,7 +89,8 @@ public class IntegrationTest implements Command {
 		
 		log.error("************ STEP 4: Create new season *************");
 		
-		Season season = new SeasonImpl (1800);
+		Season season = new SeasonImpl ();
+		season.setSeasonNumber(1800);
 		log.info("Created new Season : " + season.toString());
 		
 		Season origSavedSeason = seasonRepository.save((SeasonImpl)season);
@@ -125,7 +133,9 @@ public class IntegrationTest implements Command {
 		//seasonRepository.flush();
 		seasonRepository.save((SeasonImpl)retrievedSeason);
 
-		Division division2 = new DivisionImpl("1001", "League of Fools");
+		Division division2 = new DivisionImpl();
+		division2.setDivisionId("1001");
+		division2.setDivisionName("League of Fools");
 		divisionRepository.save((DivisionImpl)division2);
 
 		
