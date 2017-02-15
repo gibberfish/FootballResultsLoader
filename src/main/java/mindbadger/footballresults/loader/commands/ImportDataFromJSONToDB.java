@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader.apps;
+package mindbadger.footballresults.loader.commands;
 
 import java.io.IOException;
 import java.nio.file.Files;

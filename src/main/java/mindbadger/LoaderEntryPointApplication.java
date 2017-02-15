@@ -9,11 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import mindbadger.footballresults.loader.apps.Command;
-import mindbadger.footballresults.loader.apps.ImportDataFromJSONToDB;
-import mindbadger.footballresults.loader.apps.IntegrationTest;
-import mindbadger.footballresults.loader.apps.LoadResultsFromInternetApplication;
-import mindbadger.footballresults.loader.apps.PrintSeasonShape;
+import mindbadger.footballresults.loader.commands.Command;
+import mindbadger.footballresults.loader.commands.ImportDataFromJSONToDB;
+import mindbadger.footballresults.loader.commands.IntegrationTest;
+import mindbadger.footballresults.loader.commands.LoadRecentResultsFromInternet;
+import mindbadger.footballresults.loader.commands.PrintSeasonShape;
 
 @SpringBootApplication(scanBasePackages="**/mindbadger/**/*")
 public class LoaderEntryPointApplication {
@@ -28,7 +28,7 @@ public class LoaderEntryPointApplication {
 	PrintSeasonShape printSeasonShape;
 	
 	@Autowired
-	LoadResultsFromInternetApplication loadResultsFromInternetApplication;
+	LoadRecentResultsFromInternet loadResultsFromInternetApplication;
 	
 	private static final Logger log = LoggerFactory.getLogger(LoaderEntryPointApplication.class);
 	
