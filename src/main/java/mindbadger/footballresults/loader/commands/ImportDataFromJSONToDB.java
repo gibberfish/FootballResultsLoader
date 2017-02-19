@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.Division;
 import mindbadger.footballresultsanalyser.domain.DivisionImpl;
 import mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
@@ -46,16 +45,11 @@ public class ImportDataFromJSONToDB implements Command {
 	FixtureRepository fixtureRepository;
 	
 	@Autowired
-	FootballResultsAnalyserDAO dao;
-
-	@Autowired
 	DomainObjectFactory domainObjectFactory;
 	
 	public static final String FILE_NAME = "E:\\_temp\\export_from_couchbase_no_zero_ids.json";
 	
 	public void readFile () throws IOException, ParseException {
-		//ApplicationContext context = new ClassPathXmlApplicationContext("spring-web-reader.xml");
-		
 		String content = new String(Files.readAllBytes(Paths.get(FILE_NAME)));
 		
 		JSONObject obj = new JSONObject(content);
@@ -87,9 +81,6 @@ public class ImportDataFromJSONToDB implements Command {
 			
 			teamRepository.save(teamImpl);
 		}
-
-		
-		
 		
 		JSONArray seasons = obj.getJSONArray("seasons");
 		for (int i=0; i<seasons.length(); i++) {
