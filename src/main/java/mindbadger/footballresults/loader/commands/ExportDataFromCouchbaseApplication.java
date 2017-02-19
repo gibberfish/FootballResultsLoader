@@ -1,28 +1,26 @@
 package mindbadger.footballresults.loader.commands;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.Division;
 import mindbadger.footballresultsanalyser.domain.Fixture;
 import mindbadger.footballresultsanalyser.domain.Season;
 import mindbadger.footballresultsanalyser.domain.SeasonDivision;
 import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
 import mindbadger.footballresultsanalyser.domain.Team;
+import mindbadger.footballresultsanalyser.repository.DivisionRepository;
+import mindbadger.footballresultsanalyser.repository.FixtureRepository;
+import mindbadger.footballresultsanalyser.repository.SeasonRepository;
+import mindbadger.footballresultsanalyser.repository.TeamRepository;
 
 @Component
 public class ExportDataFromCouchbaseApplication implements Command {
@@ -30,15 +28,22 @@ public class ExportDataFromCouchbaseApplication implements Command {
 	public static final String FILE_NAME = "E:\\_temp\\export_from_couchbase.json";
 
 	@Autowired
-	FootballResultsAnalyserDAO dao;
+	private DivisionRepository divisionRepository;
+
+	@Autowired
+	private TeamRepository teamRepository;
+
+	@Autowired
+	private SeasonRepository seasonRepository;
+
+	@Autowired
+	private FixtureRepository fixtureRepository;
 
 	/*
 	 * Exports data into a simple JSON format...
 	 */
 	@Override
 	public void run(String[] args) throws Exception {
-		dao.startSession();
-		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Path path = Paths.get(FILE_NAME);
@@ -50,10 +55,11 @@ public class ExportDataFromCouchbaseApplication implements Command {
 			writer.write(" divisions: [");
 			writer.newLine();
 			
-			Map<String, Division> divisions = dao.getAllDivisions();
-			List<Division> divisionList = new ArrayList<Division>(divisions.values());
-			Division lastDivision = divisionList.get(divisionList.size()-1);
-			for (Division division : divisionList) {
+			Iterable<Division> divisions = divisionRepository.findAll();
+			Iterator<Division> divisionIterator = divisions.iterator();
+			while (divisionIterator.hasNext()) {
+				Division division = divisionIterator.next();
+				
 				writer.write("{ type: 'division', ");
 				
 				writer.write("  id: '" + division.getDivisionId() + "', ");
@@ -61,12 +67,12 @@ public class ExportDataFromCouchbaseApplication implements Command {
 				
 				writer.write("}");
 
-				if (division != lastDivision) {
+				if (divisionIterator.hasNext()) {
 					writer.write(",");
 				}
 
 				writer.newLine();
-				writer.flush();
+				writer.flush();			
 			}
 
 			writer.write("],");
@@ -74,10 +80,11 @@ public class ExportDataFromCouchbaseApplication implements Command {
 			writer.write(" teams: [");
 			writer.newLine();
 
-			Map<String, Team> teams = dao.getAllTeams();
-			List<Team> teamList = new ArrayList<Team>(teams.values());
-			Team lastTeam = teamList.get(teamList.size()-1);
-			for (Team team : teamList) {
+			Iterable<Team> teams = teamRepository.findAll();
+			Iterator<Team> teamIterator = teams.iterator();
+			while (teamIterator.hasNext()) {
+				Team team = teamIterator.next();
+				
 				writer.write("{ type: 'team', ");
 				
 				writer.write("  id: '" + team.getTeamId() + "', ");
@@ -85,12 +92,12 @@ public class ExportDataFromCouchbaseApplication implements Command {
 				
 				writer.write("}");
 
-				if (team != lastTeam) {
+				if (teamIterator.hasNext()) {
 					writer.write(",");
 				}
 
 				writer.newLine();
-				writer.flush();
+				writer.flush();			
 			}
 
 			writer.write("],");
@@ -98,10 +105,11 @@ public class ExportDataFromCouchbaseApplication implements Command {
 			writer.write(" seasons: [");
 			writer.newLine();
 
-			List<Season> seasons = dao.getSeasons();
-			Season lastSeason = seasons.get(seasons.size()-1);
-			
-			for (Season season : seasons) {
+			Iterable<Season> seasons = seasonRepository.findAll();
+			Iterator<Season> seasonIterator = seasons.iterator();
+			while (seasonIterator.hasNext()) {
+				Season season = seasonIterator.next();
+				
 				writer.write("{ type: 'season', ");
 				
 				writer.write("  seasonNumber: '" + season.getSeasonNumber() + "',");
@@ -109,36 +117,39 @@ public class ExportDataFromCouchbaseApplication implements Command {
 				writer.write("  divisionsInSeason: [");
 				writer.newLine();
 				
-				List<SeasonDivision> seasonDivisions = dao.getDivisionsForSeason(season);
-				SeasonDivision lastSeasonDivision = seasonDivisions.get(seasonDivisions.size()-1);
-				for (SeasonDivision seasonDivision : seasonDivisions) {
+				Set<SeasonDivision> seasonDivisions = season.getSeasonDivisions();
+				Iterator<SeasonDivision> seasonDivisionIterator = seasonDivisions.iterator();
+				while (seasonDivisionIterator.hasNext()) {
+					SeasonDivision seasonDivision = seasonDivisionIterator.next();
+					
 					writer.write("{ division: '" + seasonDivision.getDivision().getDivisionId() + "', ");
 					writer.write("position: '" + seasonDivision.getDivisionPosition() + "', ");
 					writer.write("teams: [");
 					
-					List<SeasonDivisionTeam> seasonDivisionTeams = dao.getTeamsForDivisionInSeason(seasonDivision);
-					SeasonDivisionTeam lastSeasonDivisionTeam = seasonDivisionTeams.get(seasonDivisionTeams.size()-1);
-					for (SeasonDivisionTeam seasonDivisionTeam : seasonDivisionTeams) {
+					Set<SeasonDivisionTeam> seasonDivisionTeams = seasonDivision.getSeasonDivisionTeams();
+					Iterator<SeasonDivisionTeam> seasonDivisionTeamIterator = seasonDivisionTeams.iterator();
+					while (seasonDivisionTeamIterator.hasNext()) {
+						SeasonDivisionTeam seasonDivisionTeam = seasonDivisionTeamIterator.next();
 						writer.write(seasonDivisionTeam.getTeam().getTeamId());
-						if (seasonDivisionTeam != lastSeasonDivisionTeam) {
+						if (seasonDivisionTeamIterator.hasNext()) {
 							writer.write(", ");
-						}
+						}						
 					}
 					
 					writer.write("]}");
-					if (seasonDivision != lastSeasonDivision) {
+					if (seasonDivisionIterator.hasNext()) {
 						writer.write(",");
 					}
 					
 					writer.newLine();
 				}
-
+				
 				writer.write("  ]");
 				writer.newLine();
 
 				writer.write("}");
 
-				if (season != lastSeason) {
+				if (seasonIterator.hasNext()) {
 					writer.write(",");
 				}
 
@@ -147,15 +158,17 @@ public class ExportDataFromCouchbaseApplication implements Command {
 				
 				writer.flush();
 			}
-
+			
 			writer.write("],");
 			writer.newLine();
 			writer.write(" fixtures: [");
 			writer.newLine();
 
-			List<Fixture> fixtures = dao.getFixtures();
-			Fixture lastFixture = fixtures.get(fixtures.size()-1);
-			for (Fixture fixture : fixtures) {
+			Iterable<Fixture> fixtures = fixtureRepository.findAll();
+			Iterator<Fixture> fixtureIterator = fixtures.iterator();
+			while (fixtureIterator.hasNext()) {
+				Fixture fixture = fixtureIterator.next();
+				
 				writer.write("{ type: 'fixture', ");
 				writer.write("  season: '" + fixture.getSeason().getSeasonNumber() + "', ");
 				
@@ -177,12 +190,12 @@ public class ExportDataFromCouchbaseApplication implements Command {
 				
 				writer.write("}");
 				
-				if (fixture != lastFixture) {
+				if (fixtureIterator.hasNext()) {
 					writer.write(",");
 				}
 				
 				writer.newLine();
-				writer.flush();
+				writer.flush();				
 			}
 			
 			writer.write("]");
@@ -190,9 +203,5 @@ public class ExportDataFromCouchbaseApplication implements Command {
 			writer.write("}");
 			writer.newLine();
 		}
-		
-		dao.closeSession();
 	}
-	
-
 }
