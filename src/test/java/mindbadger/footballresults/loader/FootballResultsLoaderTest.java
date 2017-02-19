@@ -22,6 +22,7 @@ import mindbadger.footballresultsanalyser.domain.Season;
 import mindbadger.footballresultsanalyser.domain.SeasonImpl;
 import mindbadger.footballresultsanalyser.domain.Team;
 import mindbadger.footballresultsanalyser.domain.TeamImpl;
+import mindbadger.footballresultsanalyser.repository.FixtureRepository;
 
 public class FootballResultsLoaderTest {
 	private static final int SEASON = 2000;
@@ -40,16 +41,17 @@ public class FootballResultsLoaderTest {
 	private FootballResultsLoader objectUnderTest;
 
 	@Mock
-	private FootballResultsAnalyserDAO mockDao;
-	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
 	private FootballResultsSaver mockSaver;
+	@Mock
+	private FixtureRepository mockFixtureRepository;
 
 	private Calendar date1;
 	private Calendar date2;
 
 	private List<ParsedFixture> fixturesReadFromReader;
+
 
 	@Before
 	public void setup() {
@@ -94,7 +96,7 @@ public class FootballResultsLoaderTest {
 		unplayedFixtures.add(fixture1);
 		unplayedFixtures.add(fixture2);
 		unplayedFixtures.add(fixture3);
-		when(mockDao.getUnplayedFixturesBeforeToday()).thenReturn(unplayedFixtures);
+		when(mockFixtureRepository.getUnplayedFixturesBeforeToday()).thenReturn(unplayedFixtures);
 
 		Fixture fixture4 = new FixtureImpl();
 		fixture4.setFixtureDate(null);
@@ -107,7 +109,7 @@ public class FootballResultsLoaderTest {
 		
 		List<Fixture> fixturesWithoutDates = new ArrayList<Fixture> ();
 		fixturesWithoutDates.add(fixture4);
-		when(mockDao.getFixturesWithNoFixtureDate()).thenReturn(fixturesWithoutDates);
+		when(mockFixtureRepository.getFixturesWithNoFixtureDate()).thenReturn(fixturesWithoutDates);
 
 		
 		List<ParsedFixture> parsedFixturesForDate1 = new ArrayList<ParsedFixture> ();
@@ -127,7 +129,7 @@ public class FootballResultsLoaderTest {
 		objectUnderTest.loadResultsForRecentlyPlayedFixtures();
 		
 		// Then
-		verify(mockDao).getUnplayedFixturesBeforeToday();
+		verify(mockFixtureRepository).getUnplayedFixturesBeforeToday();
 		verify(mockReader,times(1)).readFixturesForDate(date1);
 		verify(mockReader,times(1)).readFixturesForDate(date2);
 		
@@ -147,7 +149,7 @@ public class FootballResultsLoaderTest {
 
 	private void createObjectToTestAndInjectDependencies() {
 		objectUnderTest = new FootballResultsLoader();
-		objectUnderTest.setDao(mockDao);
+		objectUnderTest.setFixtureRepository(mockFixtureRepository);
 		objectUnderTest.setReader(mockReader);
 		objectUnderTest.setSaver(mockSaver);
 	}

@@ -2,6 +2,7 @@ package mindbadger.footballresults.loader;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,9 +15,16 @@ import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.footballresultsanalyser.dao.ChangeScoreException;
 import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.Division;
+import mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
+import mindbadger.footballresultsanalyser.domain.Fixture;
 import mindbadger.footballresultsanalyser.domain.Season;
 import mindbadger.footballresultsanalyser.domain.SeasonDivision;
+import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
 import mindbadger.footballresultsanalyser.domain.Team;
+import mindbadger.footballresultsanalyser.repository.DivisionRepository;
+import mindbadger.footballresultsanalyser.repository.FixtureRepository;
+import mindbadger.footballresultsanalyser.repository.SeasonRepository;
+import mindbadger.footballresultsanalyser.repository.TeamRepository;
 
 @Component
 public class FootballResultsSaver {
@@ -25,18 +33,31 @@ public class FootballResultsSaver {
 	private String dialect;
 	
 	@Autowired
-	private FootballResultsAnalyserDAO dao;
-	@Autowired
 	private FootballResultsMapping mapping;
+	@Autowired
+	private DivisionRepository divisionRepository;
+	@Autowired
+	private TeamRepository teamRepository;
+	@Autowired
+	private SeasonRepository seasonRepository;
+	@Autowired
+	private FixtureRepository fixtureRepository;
+	@Autowired
+	private DomainObjectFactory domainObjectFactory;
 
 	public void saveFixtures(List<ParsedFixture> fixturesRead) {
 		try {
 			logger.debug("About to saveFixtures: " + fixturesRead.size());
 			
-			dao.startSession();
-
-			Map<String, Division> divisionsInDatabase = dao.getAllDivisions();
-			Map<String, Team> teamsInDatabase = dao.getAllTeams();
+			Map<String, Division> divisionsInDatabase = new HashMap<String, Division> ();
+			for (Division division : divisionRepository.findAll()) {
+				divisionsInDatabase.put(division.getDivisionId(), division);
+			}
+			
+			Map<String, Team> teamsInDatabase = new HashMap<String, Team> ();
+			for (Team team : teamRepository.findAll()) {
+				teamsInDatabase.put(team.getTeamId(), team);
+			}
 			
 			if (fixturesRead.size() > 0) {
 	
@@ -67,9 +88,10 @@ public class FootballResultsSaver {
 						Integer seasonNumberForFixture = parsedFixture.getSeasonId();
 						
 						logger.debug("Get the season from the database");
-						Season season = dao.getSeason(seasonNumberForFixture);
+						Season season = seasonRepository.findOne(seasonNumberForFixture);
 						if (season == null) {
-							season = dao.addSeason(seasonNumberForFixture);
+							season = domainObjectFactory.createSeason(seasonNumberForFixture);
+							season = seasonRepository.save(season);
 						}
 						logger.debug("..got " + season);
 						
@@ -77,7 +99,8 @@ public class FootballResultsSaver {
 						division = divisionsInDatabase.get(fraDivisionId);
 						if (division == null) {
 							logger.debug("We don't have this division, so add it");
-							division = dao.addDivision(parsedFixture.getDivisionName());
+							division = domainObjectFactory.createDivision(parsedFixture.getDivisionName());
+							division = divisionRepository.save(division);
 							divisionsInDatabase.put(division.getDivisionId(), division);
 							divisionMappings.put(readDivisionId, division.getDivisionId());
 						}
@@ -86,7 +109,8 @@ public class FootballResultsSaver {
 						homeTeam = teamsInDatabase.get(fraHomeTeamId);
 						if (homeTeam == null) {
 							logger.debug("We don't have this home team, so add it");
-							homeTeam = dao.addTeam(parsedFixture.getHomeTeamName());
+							homeTeam = domainObjectFactory.createTeam(parsedFixture.getHomeTeamName());
+							homeTeam = teamRepository.save(homeTeam);
 							teamsInDatabase.put(homeTeam.getTeamId(), homeTeam);
 							teamMappings.put(readHomeTeamId, homeTeam.getTeamId());
 						}
@@ -95,7 +119,8 @@ public class FootballResultsSaver {
 						awayTeam = teamsInDatabase.get(fraAwayTeamId);
 						if (awayTeam == null) {
 							logger.debug("We don't have this away team, so add it");
-							awayTeam = dao.addTeam(parsedFixture.getAwayTeamName());
+							awayTeam = domainObjectFactory.createTeam(parsedFixture.getAwayTeamName());
+							awayTeam = teamRepository.save(awayTeam);
 							teamsInDatabase.put(awayTeam.getTeamId(), awayTeam);
 							teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
 						}
@@ -112,10 +137,24 @@ public class FootballResultsSaver {
 						
 						try {
 							int indexOfDivision = orderedListOfDivisions.indexOf(division.getDivisionId());
-							SeasonDivision seasonDivision = dao.addSeasonDivision(season, division, indexOfDivision);
-							dao.addSeasonDivisionTeam(seasonDivision, homeTeam);
-							dao.addSeasonDivisionTeam(seasonDivision, awayTeam);
-							dao.addFixture(season, parsedFixture.getFixtureDate(), division, homeTeam, awayTeam, parsedFixture.getHomeGoals(), parsedFixture.getAwayGoals());
+							
+							SeasonDivision seasonDivision = domainObjectFactory.createSeasonDivision(season, division, indexOfDivision);
+							season.getSeasonDivisions().add(seasonDivision);
+							
+							SeasonDivisionTeam homeSeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, homeTeam);
+							SeasonDivisionTeam awaySeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, awayTeam);
+							seasonDivision.getSeasonDivisionTeams().add(homeSeasonDivisionTeam);
+							seasonDivision.getSeasonDivisionTeams().add(awaySeasonDivisionTeam);
+							
+							seasonRepository.save(season);
+
+							Fixture fixture = domainObjectFactory.createFixture(season, homeTeam, awayTeam);
+							fixture.setDivision(division);
+							fixture.setFixtureDate(parsedFixture.getFixtureDate());
+							fixture.setHomeGoals(parsedFixture.getHomeGoals());
+							fixture.setAwayGoals(parsedFixture.getAwayGoals());
+							
+							fixtureRepository.save(fixture);
 						} catch (ChangeScoreException e) {
 							logger.info("Ignoring play-off result...");
 						}
@@ -125,7 +164,6 @@ public class FootballResultsSaver {
 			logger.debug("Saving mappings");
 			mapping.saveMappings();
 		} finally {
-			dao.closeSession();
 		}
 	}
 		
@@ -135,16 +173,50 @@ public class FootballResultsSaver {
 	public void setDialect(String dialect) {
 		this.dialect = dialect;
 	}
-	public FootballResultsAnalyserDAO getDao() {
-		return dao;
-	}
-	public void setDao(FootballResultsAnalyserDAO dao) {
-		this.dao = dao;
-	}
 	public FootballResultsMapping getMapping() {
 		return mapping;
 	}
 	public void setMapping(FootballResultsMapping mapping) {
 		this.mapping = mapping;
+	}
+
+	public DivisionRepository getDivisionRepository() {
+		return divisionRepository;
+	}
+
+	public void setDivisionRepository(DivisionRepository divisionRepository) {
+		this.divisionRepository = divisionRepository;
+	}
+
+	public TeamRepository getTeamRepository() {
+		return teamRepository;
+	}
+
+	public void setTeamRepository(TeamRepository teamRepository) {
+		this.teamRepository = teamRepository;
+	}
+
+	public SeasonRepository getSeasonRepository() {
+		return seasonRepository;
+	}
+
+	public void setSeasonRepository(SeasonRepository seasonRepository) {
+		this.seasonRepository = seasonRepository;
+	}
+
+	public FixtureRepository getFixtureRepository() {
+		return fixtureRepository;
+	}
+
+	public void setFixtureRepository(FixtureRepository fixtureRepository) {
+		this.fixtureRepository = fixtureRepository;
+	}
+
+	public DomainObjectFactory getDomainObjectFactory() {
+		return domainObjectFactory;
+	}
+
+	public void setDomainObjectFactory(DomainObjectFactory domainObjectFactory) {
+		this.domainObjectFactory = domainObjectFactory;
 	}
 }

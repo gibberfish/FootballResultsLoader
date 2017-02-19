@@ -74,7 +74,6 @@ public class FootballLoaderConfiguration {
 		datePageParser.setWebPageReader(webPageReader);
 		
 		saver = new FootballResultsSaver();
-		saver.setDao(dao);
 		saver.setMapping(mapping);
 		saver.setDialect("soccerbase");
 		
@@ -84,7 +83,6 @@ public class FootballLoaderConfiguration {
 		reader.setMapping(mapping);
 		
 		loader = new FootballResultsLoader ();
-		loader.setDao(dao);
 		loader.setReader(reader);
 		loader.setSaver(saver);
 	}

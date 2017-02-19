@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
-import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.Fixture;
+import mindbadger.footballresultsanalyser.repository.FixtureRepository;
 import mindbadger.util.StringToCalendarConverter;
 
 @Component
@@ -20,12 +20,12 @@ public class FootballResultsLoader {
 	Logger logger = Logger.getLogger(FootballResultsLoader.class);
 	
 	@Autowired
-	private FootballResultsAnalyserDAO dao;
-	@Autowired
 	private FootballResultsReader reader;
 	@Autowired
 	private FootballResultsSaver saver;
-
+	@Autowired
+	private FixtureRepository fixtureRepository;
+	
 	public void loadResultsForSeason(int seasonNum) {
 		List<ParsedFixture> fixturesRead = reader.readFixturesForSeason(seasonNum);
 		
@@ -37,9 +37,8 @@ public class FootballResultsLoader {
 	public void loadResultsForRecentlyPlayedFixtures() {
 		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
 		
-		dao.startSession();
-		List<Fixture> unplayedFixtures = dao.getUnplayedFixturesBeforeToday();
-		List<Fixture> fixturesWithoutDates = dao.getFixturesWithNoFixtureDate();
+		List<Fixture> unplayedFixtures = fixtureRepository.getUnplayedFixturesBeforeToday();
+		List<Fixture> fixturesWithoutDates = fixtureRepository.getFixturesWithNoFixtureDate();
 		
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		
@@ -62,16 +61,8 @@ public class FootballResultsLoader {
 			logger.debug("...got " + parsedFixtures.size() + " fixtures for team " + teamId + " in season " + seasonNumber);
 			saver.saveFixtures(parsedFixtures);
 		}
-		
-		dao.closeSession();
 	}
 	
-	public FootballResultsAnalyserDAO getDao() {
-		return dao;
-	}
-	public void setDao(FootballResultsAnalyserDAO dao) {
-		this.dao = dao;
-	}
 	public FootballResultsReader getReader() {
 		return reader;
 	}
@@ -80,5 +71,13 @@ public class FootballResultsLoader {
 	}
 	public void setSaver(FootballResultsSaver saver) {
 		this.saver = saver;
+	}
+
+	public FixtureRepository getFixtureRepository() {
+		return fixtureRepository;
+	}
+
+	public void setFixtureRepository(FixtureRepository fixtureRepository) {
+		this.fixtureRepository = fixtureRepository;
 	}
 }
