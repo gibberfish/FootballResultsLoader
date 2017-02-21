@@ -46,125 +46,107 @@ public class FootballResultsSaver {
 	private DomainObjectFactory domainObjectFactory;
 
 	public void saveFixtures(List<ParsedFixture> fixturesRead) {
-		try {
-			logger.debug("About to saveFixtures: " + fixturesRead.size());
-			
-			Map<String, Division> divisionsInDatabase = new HashMap<String, Division> ();
-			for (Division division : divisionRepository.findAll()) {
-				divisionsInDatabase.put(division.getDivisionId(), division);
-			}
-			
-			Map<String, Team> teamsInDatabase = new HashMap<String, Team> ();
-			for (Team team : teamRepository.findAll()) {
-				teamsInDatabase.put(team.getTeamId(), team);
-			}
-			
-			if (fixturesRead.size() > 0) {
-	
-				logger.debug("Getting mappings");
-				List<String> includedDivisions = mapping.getIncludedDivisions(dialect);
-				Map<String, String> divisionMappings = mapping.getDivisionMappings(dialect);
-				Map<String, String> teamMappings = mapping.getTeamMappings(dialect);
-				List<String> orderedListOfDivisions = mapping.getOrderedListOfDivisions(dialect);
-				
-				// Ensure that we add the fixtures in chronological order so that we don't try to add playoffs before the main games
-				Collections.sort(fixturesRead);
-				
-				for (ParsedFixture parsedFixture : fixturesRead) {
-					logger.debug("Saving fixture: " + parsedFixture);
-					
-					
-					Division division = null;
-					Team homeTeam = null;
-					Team awayTeam = null;
-	
-					String readDivisionId = parsedFixture.getDivisionId();
-					String readHomeTeamId = parsedFixture.getHomeTeamId();
-					String readAwayTeamId = parsedFixture.getAwayTeamId();
-					
-					if (includedDivisions.contains(readDivisionId)) {
-						logger.debug("This is a division we want to track: " + readDivisionId);
+		logger.debug("About to saveFixtures: " + fixturesRead.size());
+		if (fixturesRead.size() > 0) {
+			logger.debug("Getting mappings");
+			List<String> includedDivisions = mapping.getIncludedDivisions(dialect);
+			Map<String, String> divisionMappings = mapping.getDivisionMappings(dialect);
+			Map<String, String> teamMappings = mapping.getTeamMappings(dialect);
+			List<String> orderedListOfDivisions = mapping.getOrderedListOfDivisions(dialect);
+//			
+//			// Ensure that we add the fixtures in chronological order so that we don't try to add playoffs before the main games
+//			Collections.sort(fixturesRead);
+//			
+			for (ParsedFixture parsedFixture : fixturesRead) {
+				logger.debug("Saving fixture: " + parsedFixture);
+//				
+//				
+//
+//				
+//				if (includedDivisions.contains(readDivisionId)) {
+//					logger.debug("This is a division we want to track: " + readDivisionId);
 
-						Integer seasonNumberForFixture = parsedFixture.getSeasonId();
-						
-						logger.debug("Get the season from the database");
-						Season season = seasonRepository.findOne(seasonNumberForFixture);
-						if (season == null) {
-							season = domainObjectFactory.createSeason(seasonNumberForFixture);
-							season = seasonRepository.save(season);
-						}
-						logger.debug("..got " + season);
-						
-						String fraDivisionId = divisionMappings.get(readDivisionId);
-						division = divisionsInDatabase.get(fraDivisionId);
-						if (division == null) {
-							logger.debug("We don't have this division, so add it");
-							division = domainObjectFactory.createDivision(parsedFixture.getDivisionName());
-							division = divisionRepository.save(division);
-							divisionsInDatabase.put(division.getDivisionId(), division);
-							divisionMappings.put(readDivisionId, division.getDivisionId());
-						}
-	
-						String fraHomeTeamId = teamMappings.get(readHomeTeamId);
-						homeTeam = teamsInDatabase.get(fraHomeTeamId);
-						if (homeTeam == null) {
-							logger.debug("We don't have this home team, so add it");
-							homeTeam = domainObjectFactory.createTeam(parsedFixture.getHomeTeamName());
-							homeTeam = teamRepository.save(homeTeam);
-							teamsInDatabase.put(homeTeam.getTeamId(), homeTeam);
-							teamMappings.put(readHomeTeamId, homeTeam.getTeamId());
-						}
-	
-						String fraAwayTeamId = teamMappings.get(readAwayTeamId);
-						awayTeam = teamsInDatabase.get(fraAwayTeamId);
-						if (awayTeam == null) {
-							logger.debug("We don't have this away team, so add it");
-							awayTeam = domainObjectFactory.createTeam(parsedFixture.getAwayTeamName());
-							awayTeam = teamRepository.save(awayTeam);
-							teamsInDatabase.put(awayTeam.getTeamId(), awayTeam);
-							teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
-						}
-						
-						String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());
-						
-						logger.info("Adding fixture: ssn:"+
-								seasonNumberForFixture+
-								",dt:"+dateString+
-								",div:"+parsedFixture.getDivisionName()+
-								",hm:"+parsedFixture.getHomeTeamName()+
-								",aw:"+parsedFixture.getAwayTeamName()+
-								",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
-						
-						try {
-							int indexOfDivision = orderedListOfDivisions.indexOf(division.getDivisionId());
-							
-							SeasonDivision seasonDivision = domainObjectFactory.createSeasonDivision(season, division, indexOfDivision);
-							season.getSeasonDivisions().add(seasonDivision);
-							
-							SeasonDivisionTeam homeSeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, homeTeam);
-							SeasonDivisionTeam awaySeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, awayTeam);
-							seasonDivision.getSeasonDivisionTeams().add(homeSeasonDivisionTeam);
-							seasonDivision.getSeasonDivisionTeams().add(awaySeasonDivisionTeam);
-							
-							seasonRepository.save(season);
-
-							Fixture fixture = domainObjectFactory.createFixture(season, homeTeam, awayTeam);
-							fixture.setDivision(division);
-							fixture.setFixtureDate(parsedFixture.getFixtureDate());
-							fixture.setHomeGoals(parsedFixture.getHomeGoals());
-							fixture.setAwayGoals(parsedFixture.getAwayGoals());
-							
-							fixtureRepository.save(fixture);
-						} catch (ChangeScoreException e) {
-							logger.info("Ignoring play-off result...");
-						}
+					Integer seasonNumberForFixture = parsedFixture.getSeasonId();
+					
+					logger.debug("Get the season from the database");
+					Season season = seasonRepository.findOne(seasonNumberForFixture);
+					if (season == null) {
+						season = domainObjectFactory.createSeason(seasonNumberForFixture);
+						season = seasonRepository.save(season);
 					}
-				}
+					logger.debug("..got " + season);
+					
+					String readDivisionId = parsedFixture.getDivisionId();
+					Division division = null;
+					String fraDivisionId = divisionMappings.get(readDivisionId);
+					division = divisionRepository.findOne(fraDivisionId);
+					if (division == null) {
+						logger.debug("We don't have this division, so add it");
+						division = domainObjectFactory.createDivision(parsedFixture.getDivisionName());
+						division = divisionRepository.save(division);
+						divisionMappings.put(readDivisionId, division.getDivisionId());
+					}
+
+					String readHomeTeamId = parsedFixture.getHomeTeamId();
+					Team homeTeam = null;
+					String fraHomeTeamId = teamMappings.get(readHomeTeamId);
+					homeTeam = teamRepository.findOne(fraHomeTeamId);
+					if (homeTeam == null) {
+						logger.debug("We don't have this home team, so add it");
+						homeTeam = domainObjectFactory.createTeam(parsedFixture.getHomeTeamName());
+						homeTeam = teamRepository.save(homeTeam);
+						teamMappings.put(readHomeTeamId, homeTeam.getTeamId());
+					}
+
+					String readAwayTeamId = parsedFixture.getAwayTeamId();
+					Team awayTeam = null;
+					String fraAwayTeamId = teamMappings.get(readAwayTeamId);
+					awayTeam = teamRepository.findOne(fraAwayTeamId);
+					if (awayTeam == null) {
+						logger.debug("We don't have this away team, so add it");
+						awayTeam = domainObjectFactory.createTeam(parsedFixture.getAwayTeamName());
+						awayTeam = teamRepository.save(awayTeam);
+						teamMappings.put(readAwayTeamId, awayTeam.getTeamId());
+					}
+					
+//					String dateString = (new SimpleDateFormat("yyyy-MM-dd")).format(parsedFixture.getFixtureDate().getTime());
+//					
+//					logger.info("Adding fixture: ssn:"+
+//							seasonNumberForFixture+
+//							",dt:"+dateString+
+//							",div:"+parsedFixture.getDivisionName()+
+//							",hm:"+parsedFixture.getHomeTeamName()+
+//							",aw:"+parsedFixture.getAwayTeamName()+
+//							",scr:"+parsedFixture.getHomeGoals()+"-"+parsedFixture.getAwayGoals());
+//					
+//					try {
+//						int indexOfDivision = orderedListOfDivisions.indexOf(division.getDivisionId());
+//						
+//						SeasonDivision seasonDivision = domainObjectFactory.createSeasonDivision(season, division, indexOfDivision);
+//						season.getSeasonDivisions().add(seasonDivision);
+//						
+//						SeasonDivisionTeam homeSeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, homeTeam);
+//						SeasonDivisionTeam awaySeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, awayTeam);
+//						seasonDivision.getSeasonDivisionTeams().add(homeSeasonDivisionTeam);
+//						seasonDivision.getSeasonDivisionTeams().add(awaySeasonDivisionTeam);
+//						
+//						seasonRepository.save(season);
+//
+//						Fixture fixture = domainObjectFactory.createFixture(season, homeTeam, awayTeam);
+//						fixture.setDivision(division);
+//						fixture.setFixtureDate(parsedFixture.getFixtureDate());
+//						fixture.setHomeGoals(parsedFixture.getHomeGoals());
+//						fixture.setAwayGoals(parsedFixture.getAwayGoals());
+//						
+//						fixtureRepository.save(fixture);
+//					} catch (ChangeScoreException e) {
+//						logger.info("Ignoring play-off result...");
+//					}
+//				}
 			}
-			logger.debug("Saving mappings");
-			mapping.saveMappings();
-		} finally {
 		}
+		logger.debug("Saving mappings");
+//		mapping.saveMappings();
 	}
 		
 	public String getDialect() {
