@@ -10,7 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 import mindbadger.footballresults.loader.FootballResultsLoader;
-import mindbadger.footballresults.loader.FootballResultsSaver;
+import mindbadger.footballresults.loader.ParsedResultsSaver;
 import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import mindbadger.footballresults.reader.web.SoccerbaseDatePageParser;
 import mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser;
@@ -32,7 +32,7 @@ public class FootballLoaderConfiguration {
 	private XMLFileWriter xmlFileWriter;
 	private FootballResultsMapping mapping;
 	private DomainObjectFactory domainObjectFactory;
-	private FootballResultsSaver saver;
+	private ParsedResultsSaver saver;
 	private FootballResultsLoader loader;
 	private WebPageReader webPageReader;
 	private Pauser pauser;
@@ -73,7 +73,7 @@ public class FootballLoaderConfiguration {
 		datePageParser.setPauser(pauser);
 		datePageParser.setWebPageReader(webPageReader);
 		
-		saver = new FootballResultsSaver();
+		saver = new ParsedResultsSaver();
 		saver.setMapping(mapping);
 		saver.setDialect("soccerbase");
 		
@@ -119,7 +119,7 @@ public class FootballLoaderConfiguration {
 	}
 	
 	@Bean
-	public FootballResultsSaver saver () {
+	public ParsedResultsSaver saver () {
 		return saver;
 	}
 	

@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import mindbadger.footballresults.loader.FootballResultsLoader;
-import mindbadger.footballresults.loader.FootballResultsSaver;
+import mindbadger.footballresults.loader.ParsedResultsSaver;
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
@@ -43,7 +43,7 @@ public class FootballResultsLoaderTest {
 	@Mock
 	private FootballResultsReader mockReader;
 	@Mock
-	private FootballResultsSaver mockSaver;
+	private ParsedResultsSaver mockSaver;
 	@Mock
 	private FixtureRepository mockFixtureRepository;
 

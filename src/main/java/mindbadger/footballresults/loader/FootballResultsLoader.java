@@ -22,7 +22,7 @@ public class FootballResultsLoader {
 	@Autowired
 	private FootballResultsReader reader;
 	@Autowired
-	private FootballResultsSaver saver;
+	private ParsedResultsSaver saver;
 	@Autowired
 	private FixtureRepository fixtureRepository;
 	
@@ -69,7 +69,7 @@ public class FootballResultsLoader {
 	public void setReader(FootballResultsReader reader) {
 		this.reader = reader;
 	}
-	public void setSaver(FootballResultsSaver saver) {
+	public void setSaver(ParsedResultsSaver saver) {
 		this.saver = saver;
 	}
 
