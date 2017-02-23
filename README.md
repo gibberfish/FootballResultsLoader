@@ -26,3 +26,18 @@ To run the JPA integration test, run the following:
 ```
 mvn clean spring-boot:run -Drun.arguments="INT_TEST"
 ```
+
+## Import data from JSON file
+```
+mvn clean spring-boot:run -Drun.arguments="IMPORT_FROM_JSON"
+```
+
+## Load Recent Results
+```
+mvn clean spring-boot:run -Drun.arguments="LOAD_RESULTS"
+```
+
+## Load Season
+```
+mvn clean spring-boot:run -Drun.arguments="LOAD_SEASON"
+```

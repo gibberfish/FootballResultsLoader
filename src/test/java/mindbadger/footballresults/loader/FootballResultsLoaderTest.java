@@ -15,7 +15,6 @@ import mindbadger.footballresults.loader.FootballResultsLoader;
 import mindbadger.footballresults.loader.ParsedResultsSaver;
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
-import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.Fixture;
 import mindbadger.footballresultsanalyser.domain.FixtureImpl;
 import mindbadger.footballresultsanalyser.domain.Season;
