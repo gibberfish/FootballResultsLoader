@@ -96,6 +96,26 @@ public class FootballResultSaver {
 		
 		fixtureRepository.createOrUpdate(fixture);
 	}
+
+	public void setDivisionRepository(DivisionRepository divisionRepository) {
+		this.divisionRepository = divisionRepository;
+	}
+
+	public void setTeamRepository(TeamRepository teamRepository) {
+		this.teamRepository = teamRepository;
+	}
+
+	public void setSeasonRepository(SeasonRepository seasonRepository) {
+		this.seasonRepository = seasonRepository;
+	}
+
+	public void setFixtureRepository(FixtureRepository fixtureRepository) {
+		this.fixtureRepository = fixtureRepository;
+	}
+
+	public void setDomainObjectFactory(DomainObjectFactory domainObjectFactory) {
+		this.domainObjectFactory = domainObjectFactory;
+	}
 	
 	
 }
