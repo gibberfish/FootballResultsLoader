@@ -67,7 +67,7 @@ public class ParsedResultsSaver {
 					
 					int indexOfDivision = orderedListOfDivisions.indexOf(division.getDivisionId());
 					
-					footballResultSaver.createSeasonDivisionTeamsIfNotExisting(season, division, indexOfDivision, homeTeam, awayTeam);
+					footballResultSaver.createSeasonDivisionTeamsIfNotExisting(season, division, indexOfDivision+1, homeTeam, awayTeam);
 					
 					footballResultSaver.createFixture(season, division, homeTeam, awayTeam, fixtureDate, homeGoals, awayGoals);
 				}
