@@ -60,23 +60,31 @@ public class FootballResultSaver {
 
 	public void createSeasonDivisionTeamsIfNotExisting(Season season, Division division, int indexOfDivision, Team homeTeam,
 			Team awayTeam) {
+		boolean changed = false;
+		
 		SeasonDivision seasonDivision = seasonRepository.getSeasonDivision(season, division);
+
 		if (seasonDivision == null) {
 			seasonDivision = domainObjectFactory.createSeasonDivision(season, division, indexOfDivision);
 			season.getSeasonDivisions().add(seasonDivision);
-			
-			SeasonDivisionTeam homeSeasonDivisionTeam = seasonRepository.getSeasonDivisionTeam(seasonDivision, homeTeam);
-			if (homeSeasonDivisionTeam == null) {
-				homeSeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, homeTeam);
-				seasonDivision.getSeasonDivisionTeams().add(homeSeasonDivisionTeam);
-			}
+			changed = true;
+		}
+		
+		SeasonDivisionTeam homeSeasonDivisionTeam = seasonRepository.getSeasonDivisionTeam(seasonDivision, homeTeam);
+		if (homeSeasonDivisionTeam == null) {
+			homeSeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, homeTeam);
+			seasonDivision.getSeasonDivisionTeams().add(homeSeasonDivisionTeam);
+			changed = true;
+		}
 
-			SeasonDivisionTeam awaySeasonDivisionTeam = seasonRepository.getSeasonDivisionTeam(seasonDivision, awayTeam);
-			if (awaySeasonDivisionTeam == null) {
-				awaySeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, awayTeam);
-				seasonDivision.getSeasonDivisionTeams().add(awaySeasonDivisionTeam);
-			}
+		SeasonDivisionTeam awaySeasonDivisionTeam = seasonRepository.getSeasonDivisionTeam(seasonDivision, awayTeam);
+		if (awaySeasonDivisionTeam == null) {
+			awaySeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, awayTeam);
+			seasonDivision.getSeasonDivisionTeams().add(awaySeasonDivisionTeam);
+			changed = true;
+		}
 
+		if (changed) {
 			seasonRepository.save(season);
 		}
 	}
