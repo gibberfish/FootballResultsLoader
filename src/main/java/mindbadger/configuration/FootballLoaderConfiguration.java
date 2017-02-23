@@ -1,13 +1,9 @@
 package mindbadger.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 import mindbadger.footballresults.loader.FootballResultsLoader;
 import mindbadger.footballresults.loader.ParsedResultsSaver;
@@ -15,7 +11,6 @@ import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import mindbadger.footballresults.reader.web.SoccerbaseDatePageParser;
 import mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser;
 import mindbadger.footballresults.reader.web.SoccerbaseWebPageReader;
-import mindbadger.footballresultsanalyser.dao.FootballResultsAnalyserDAO;
 import mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
 import mindbadger.footballresultsanalyser.domain.DomainObjectFactoryImpl;
 import mindbadger.util.Pauser;
@@ -40,9 +35,6 @@ public class FootballLoaderConfiguration {
 	private SoccerbaseDatePageParser datePageParser;
 	private SoccerbaseWebPageReader reader;
 	
-	@Autowired
-	private FootballResultsAnalyserDAO dao;
-
 	public FootballLoaderConfiguration () {
 
 		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
