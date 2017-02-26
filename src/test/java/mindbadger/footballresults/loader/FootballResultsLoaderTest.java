@@ -45,7 +45,21 @@ public class FootballResultsLoaderTest {
 	private ParsedResultsSaver mockSaver;
 	@Mock
 	private FixtureRepository mockFixtureRepository;
-
+	@Mock
+	private Season mockSeason;
+	@Mock
+	private Team mockHomeTeam;
+	@Mock
+	private Fixture mockFixture1;
+	@Mock
+	private Fixture mockFixture2;
+	@Mock
+	private Fixture mockFixture3_not_on_date_1_page;
+	@Mock
+	private Fixture mockFixture4;
+	@Mock
+	private Fixture mockFixture5_nodate;
+	
 	private Calendar date1;
 	private Calendar date2;
 
@@ -82,47 +96,53 @@ public class FootballResultsLoaderTest {
 	@Test
 	public void shouldLoadMissingFixtureDates () {
 		// Given
-		Fixture fixture1 = new FixtureImpl();
-		fixture1.setFixtureDate(date1);
+		when (mockSeason.getSeasonNumber()).thenReturn(2000);
+		when (mockHomeTeam.getTeamId()).thenReturn("100");
 		
-		Fixture fixture2 = new FixtureImpl();
-		fixture2.setFixtureDate(date2);
+		// 3 fixtures on date 1
+		when(mockFixture1.getFixtureDate()).thenReturn(date1);
+		when(mockFixture3_not_on_date_1_page.getFixtureDate()).thenReturn(date1);
+		when(mockFixture4.getFixtureDate()).thenReturn(date1);
+		
+		// 1 fixture on date 2
+		when(mockFixture2.getFixtureDate()).thenReturn(date2);
 
-		Fixture fixture3 = new FixtureImpl();
-		fixture3.setFixtureDate(date1);
-
+		// Fixture 5 does not have a fixture date
+		when(mockFixture5_nodate.getFixtureDate()).thenReturn(null);
+		when(mockFixture5_nodate.getSeason()).thenReturn(mockSeason);
+		when(mockFixture5_nodate.getHomeTeam()).thenReturn(mockHomeTeam);
+		
+		// Setup the unplayed Fixtures with dates
 		List<Fixture> unplayedFixtures = new ArrayList<Fixture> ();
-		unplayedFixtures.add(fixture1);
-		unplayedFixtures.add(fixture2);
-		unplayedFixtures.add(fixture3);
+		unplayedFixtures.add(mockFixture1);
+		unplayedFixtures.add(mockFixture2);
+		unplayedFixtures.add(mockFixture3_not_on_date_1_page);
+		unplayedFixtures.add(mockFixture4);
 		when(mockFixtureRepository.getUnplayedFixturesBeforeToday()).thenReturn(unplayedFixtures);
 
-		Fixture fixture4 = new FixtureImpl();
-		fixture4.setFixtureDate(null);
-		Season season = new SeasonImpl ();
-		season.setSeasonNumber(2000);
-		fixture4.setSeason(season );
-		Team homeTeam = new TeamImpl();
-		homeTeam.setTeamId("100");
-		fixture4.setHomeTeam(homeTeam);
-		
+		// Setup the unplayed Fixtures without dates
 		List<Fixture> fixturesWithoutDates = new ArrayList<Fixture> ();
-		fixturesWithoutDates.add(fixture4);
+		fixturesWithoutDates.add(mockFixture5_nodate);
 		when(mockFixtureRepository.getFixturesWithNoFixtureDate()).thenReturn(fixturesWithoutDates);
 
 		
 		List<ParsedFixture> parsedFixturesForDate1 = new ArrayList<ParsedFixture> ();
 		parsedFixturesForDate1.add(createParsedFixture1());
+		when (mockReader.readFixturesForDate(date1)).thenReturn(parsedFixturesForDate1);
 		
 		List<ParsedFixture> parsedFixturesForDate2 = new ArrayList<ParsedFixture> ();
-		
-		List<ParsedFixture> parsedFixturesForTeam = new  ArrayList<ParsedFixture> ();
-		parsedFixturesForTeam.add(createParsedFixture2());
-		
-		when (mockReader.readFixturesForDate(date1)).thenReturn(parsedFixturesForDate1);
 		when (mockReader.readFixturesForDate(date2)).thenReturn(parsedFixturesForDate2);
 		
+		List<ParsedFixture> parsedFixturesForTeam = new  ArrayList<ParsedFixture> ();
+		parsedFixturesForTeam.add(createParsedFixture2());		
 		when (mockReader.readFixturesForTeamInSeason(2000, "100")).thenReturn(parsedFixturesForTeam);
+		
+		List<Fixture> unplayedFixturesOnDate1 = new ArrayList<Fixture> ();
+		unplayedFixturesOnDate1.add(mockFixture3_not_on_date_1_page);
+		when (mockFixtureRepository.getUnplayedFixturesOnDate(date1)).thenReturn(unplayedFixturesOnDate1);
+		
+		List<Fixture> unplayedFixturesOnDate2 = new ArrayList<Fixture> ();
+		when (mockFixtureRepository.getUnplayedFixturesOnDate(date2)).thenReturn(unplayedFixturesOnDate2);
 		
 		// When
 		objectUnderTest.loadResultsForRecentlyPlayedFixtures();
@@ -134,6 +154,18 @@ public class FootballResultsLoaderTest {
 		
 		verify(mockSaver).saveFixtures(parsedFixturesForDate1);
 		verify(mockSaver).saveFixtures(parsedFixturesForDate2);
+		
+		verify(mockFixtureRepository).getUnplayedFixturesOnDate(date1);
+		verify(mockFixtureRepository).getUnplayedFixturesOnDate(date2);
+		
+		verify(mockFixture3_not_on_date_1_page, times(1)).setFixtureDate(null);
+		verify(mockFixture3_not_on_date_1_page, times(1)).setHomeGoals(null);
+		verify(mockFixture3_not_on_date_1_page, times(1)).setAwayGoals(null);
+		verify(mockFixtureRepository, times(1)).save(mockFixture3_not_on_date_1_page);
+		verify(mockFixtureRepository, never()).save(mockFixture1);
+		verify(mockFixtureRepository, never()).save(mockFixture2);
+		verify(mockFixtureRepository, never()).save(mockFixture4);
+		verify(mockFixtureRepository, never()).save(mockFixture5_nodate);
 		
 		verify(mockReader).readFixturesForTeamInSeason(2000, "100");
 		

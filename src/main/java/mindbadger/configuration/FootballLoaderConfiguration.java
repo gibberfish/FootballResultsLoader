@@ -55,7 +55,7 @@ public class FootballLoaderConfiguration {
 
 		teamPageParser = new SoccerbaseTeamPageParser();
 		teamPageParser.setWebPageReader(webPageReader);
-		teamPageParser.setUrl("http://www.soccerbase.com/teams/team.sd?season_id={seasonNum}&amp;team_id={teamId}&amp;teamTabs=results");
+		teamPageParser.setUrl("http://www.soccerbase.com/teams/team.sd?season_id={seasonNum}&team_id={teamId}&teamTabs=results");
 		teamPageParser.setPauser(pauser);
 		
 		datePageParser = new SoccerbaseDatePageParser ();

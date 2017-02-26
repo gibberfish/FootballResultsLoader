@@ -39,10 +39,6 @@ public class FootballResultsLoader {
 		logger.debug("Starting loadResultsForRecentlyPlayedFixtures");
 		
 		List<Fixture> unplayedFixtures = fixtureRepository.getUnplayedFixturesBeforeToday();
-		List<Fixture> fixturesWithoutDates = fixtureRepository.getFixturesWithNoFixtureDate();
-		
-		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
-		
 		Map<Calendar, Calendar> uniqueDates = new HashMap<Calendar, Calendar> ();
 		for (Fixture fixture : unplayedFixtures) {
 			uniqueDates.put(fixture.getFixtureDate(), fixture.getFixtureDate());
@@ -53,8 +49,19 @@ public class FootballResultsLoader {
 			List<ParsedFixture> parsedFixtures = reader.readFixturesForDate(fixtureDate);
 			logger.debug("...got " + parsedFixtures.size() + " fixtures for date " + StringToCalendarConverter.convertCalendarToDateString(fixtureDate));
 			saver.saveFixtures(parsedFixtures);
+			
+			List<Fixture> unplayedFixturesOnThisDate = fixtureRepository.getUnplayedFixturesOnDate(fixtureDate);
+			for (Fixture fixtureNotOnThisDate : unplayedFixturesOnThisDate) {
+				logger.debug("getUnplayedFixturesOnDate has found fixture " + fixtureNotOnThisDate + " that needs to be removed from this fixture date");
+				fixtureNotOnThisDate.setFixtureDate(null);
+				fixtureNotOnThisDate.setHomeGoals(null);
+				fixtureNotOnThisDate.setAwayGoals(null);
+				fixtureRepository.save(fixtureNotOnThisDate);
+			}
 		}
 		
+		List<Fixture> fixturesWithoutDates = fixtureRepository.getFixturesWithNoFixtureDate();
+		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		for (Fixture fixture : fixturesWithoutDates) {
 			Integer seasonNumber = fixture.getSeason().getSeasonNumber();
 			String teamId = fixture.getHomeTeam().getTeamId();

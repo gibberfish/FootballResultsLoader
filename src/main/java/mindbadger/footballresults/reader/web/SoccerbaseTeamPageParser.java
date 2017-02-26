@@ -212,6 +212,8 @@ public class SoccerbaseTeamPageParser {
 		parsedFixture.setHomeGoals(homeGoals);
 		parsedFixture.setAwayGoals(awayGoals);
 		
+		logger.info("Parsed Fixture: " + parsedFixture);
+		
 		return parsedFixture;
 	}
 

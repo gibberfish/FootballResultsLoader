@@ -20,24 +20,31 @@ When Couchbase has been integrated, use the couchbase build profile:
 mvn clean spring-boot:run -Drun.arguments="<command to run>" -P couchbase
 ```
 
+## Load Recent Results
+This is the main action that the loader was designed to perform: To check for updates to results on a daily basis
+
+```
+mvn clean spring-boot:run -Drun.arguments="LOAD_RESULTS" -P jpa
+```
+
 ## Integration Tests
 To run the JPA integration test, run the following:
 
 ```
-mvn clean spring-boot:run -Drun.arguments="INT_TEST"
+mvn clean spring-boot:run -Drun.arguments="INT_TEST" -P jpa
 ```
 
 ## Import data from JSON file
 ```
-mvn clean spring-boot:run -Drun.arguments="IMPORT_FROM_JSON"
-```
-
-## Load Recent Results
-```
-mvn clean spring-boot:run -Drun.arguments="LOAD_RESULTS"
+mvn clean spring-boot:run -Drun.arguments="IMPORT_FROM_JSON" -P jpa
 ```
 
 ## Load Season
 ```
-mvn clean spring-boot:run -Drun.arguments="LOAD_SEASON"
+mvn clean spring-boot:run -Drun.arguments="LOAD_SEASON" -P jpa
+```
+
+## Print Season Shapes
+```
+mvn clean spring-boot:run -Drun.arguments="PRINT_SEASON" -P jpa
 ```
