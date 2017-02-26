@@ -64,3 +64,11 @@ mvn clean spring-boot:run -Drun.arguments="LOAD_SEASON" -P jpa
 ```
 mvn clean spring-boot:run -Drun.arguments="PRINT_SEASON" -P jpa
 ```
+
+## Division & Team Mapping
+The default is to store the mapping data in the database alongside the main data.
+This is achieved by the FootballResultsLoaderMappingDatabase component.
+To use XML instead, remove the @Component annotation from this class and add it instead
+onto the FootballResultsLoaderMappingXml class.
+(Note there is some work to do on this to ensure that the dependencies are auto-wired, as they
+are currently supplied as constructor parameters).
