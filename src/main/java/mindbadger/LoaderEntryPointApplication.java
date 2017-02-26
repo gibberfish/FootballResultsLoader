@@ -8,7 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import mindbadger.footballresults.commands.AddMissingFixturesForSeason;
 import mindbadger.footballresults.commands.Command;
+import mindbadger.footballresults.commands.CreateSeasonShape;
 import mindbadger.footballresults.commands.ImportDataFromJSONToDB;
 import mindbadger.footballresults.commands.IntegrationTest;
 import mindbadger.footballresults.commands.LoadRecentResultsFromInternet;
@@ -32,7 +34,13 @@ public class LoaderEntryPointApplication {
 	
 	@Autowired
 	LoadRecentResultsFromInternet loadResultsFromInternetApplication;
-	
+
+	@Autowired
+	AddMissingFixturesForSeason addMissingFixturesForSeason;
+
+	@Autowired
+	CreateSeasonShape createSeasonShape;
+
 	private static final Logger log = LoggerFactory.getLogger(LoaderEntryPointApplication.class);
 	
 	public static void main(String[] args) {
@@ -58,6 +66,10 @@ public class LoaderEntryPointApplication {
 					command = loadResultsFromInternetApplication;
 				} else if ("LOAD_SEASON".equals(commandString)) {
 					command = loadSeasonFromInternet;
+				} else if ("ADD_MISSING_FIXTURES".equals(commandString)) {
+					command = addMissingFixturesForSeason;
+				} else if ("CREATE_SEASON_SHAPE".equals(commandString)) {
+					command = createSeasonShape;
 				} else {
 					throw new IllegalArgumentException("*** SORRY, I DON'T RECOGNISE COMMAND " + commandString + " ***");
 				}

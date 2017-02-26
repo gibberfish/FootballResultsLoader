@@ -13,7 +13,10 @@ public class LoadSeasonFromInternet implements Command {
 	
 	@Override
 	public void run(String[] args) throws Exception {
-		Integer season = Integer.parseInt(args[0]);
+		if (args.length < 2)
+			throw new IllegalArgumentException("Please supply a season");
+		
+		Integer season = Integer.parseInt(args[1]);
 		loader.loadResultsForSeason(season);
 	}
 }

@@ -34,6 +34,11 @@ To run the JPA integration test, run the following:
 mvn clean spring-boot:run -Drun.arguments="INT_TEST" -P jpa
 ```
 
+## Add missing fixtures for a season, based upon the season division team shape
+```
+mvn clean spring-boot:run -Drun.arguments="ADD_MISSING_FIXTURES,2016" -P jpa
+```
+
 ## Import data from JSON file
 ```
 mvn clean spring-boot:run -Drun.arguments="IMPORT_FROM_JSON" -P jpa
