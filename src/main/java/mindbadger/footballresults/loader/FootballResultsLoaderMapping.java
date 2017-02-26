@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader.mapping;
+package mindbadger.footballresults.loader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import mindbadger.footballresults.loader.FootballResultsLoaderException;
 import mindbadger.xml.XMLFileReader;
 import mindbadger.xml.XMLFileWriter;
 
@@ -22,13 +21,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class FootballResultsMapping {
+public class FootballResultsLoaderMapping {
 	private XMLFileWriter xmlFileWriter;
 	private String mappingFile;
 	
 	private Map<String, Dialect> dialects = new HashMap<String, Dialect>();
 
-	public FootballResultsMapping(String mappingFile, XMLFileReader xmlFileReader, XMLFileWriter xmlFileWriter) throws FootballResultsLoaderException {
+	public FootballResultsLoaderMapping(String mappingFile, XMLFileReader xmlFileReader, XMLFileWriter xmlFileWriter) throws FootballResultsLoaderException {
 		this.xmlFileWriter = xmlFileWriter;
 		this.mappingFile = mappingFile;
 		

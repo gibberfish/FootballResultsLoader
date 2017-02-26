@@ -6,11 +6,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import mindbadger.footballresults.loader.FootballResultsLoader;
-import mindbadger.footballresults.loader.ParsedResultsSaver;
-import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
+import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
 import mindbadger.footballresults.reader.web.SoccerbaseDatePageParser;
 import mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser;
 import mindbadger.footballresults.reader.web.SoccerbaseWebPageReader;
+import mindbadger.footballresults.saver.ParsedResultsSaver;
 import mindbadger.football.domain.DomainObjectFactory;
 import mindbadger.football.domain.DomainObjectFactoryImpl;
 import mindbadger.util.Pauser;
@@ -25,7 +25,7 @@ public class FootballLoaderConfiguration {
 	
 	private XMLFileReader xmlFileReader;
 	private XMLFileWriter xmlFileWriter;
-	private FootballResultsMapping mapping;
+	private FootballResultsLoaderMapping mapping;
 	private DomainObjectFactory domainObjectFactory;
 	private ParsedResultsSaver saver;
 	private FootballResultsLoader loader;
@@ -42,7 +42,7 @@ public class FootballLoaderConfiguration {
 		xmlFileReader = new XMLFileReader();
 		xmlFileWriter = new XMLFileWriter();
 		
-		mapping = new FootballResultsMapping(
+		mapping = new FootballResultsLoaderMapping(
 				"E:\\Mark\\appConfig\\fra_mapping_cb.xml", xmlFileReader, xmlFileWriter);
 		
 		domainObjectFactory = new DomainObjectFactoryImpl ();
@@ -101,7 +101,7 @@ public class FootballLoaderConfiguration {
 	}
 	
 	@Bean
-	public FootballResultsMapping mapping() {
+	public FootballResultsLoaderMapping mapping() {
 		return mapping;
 	}
 	

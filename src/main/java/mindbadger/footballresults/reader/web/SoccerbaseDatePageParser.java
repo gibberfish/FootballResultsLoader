@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
+import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
 import mindbadger.footballresults.reader.FootballResultsReaderException;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.util.Pauser;
@@ -36,7 +36,7 @@ public class SoccerbaseDatePageParser {
 	private WebPageReader webPageReader;
 	private String url;
 	private Pauser pauser;
-	private FootballResultsMapping mapping;
+	private FootballResultsLoaderMapping mapping;
 	private String dialect;
 	
 	public void setWebPageReader(WebPageReader webPageReader) {
@@ -216,11 +216,11 @@ public class SoccerbaseDatePageParser {
 		this.pauser = pauser;
 	}
 
-	public FootballResultsMapping getMapping() {
+	public FootballResultsLoaderMapping getMapping() {
 		return mapping;
 	}
 
-	public void setMapping(FootballResultsMapping mapping) {
+	public void setMapping(FootballResultsLoaderMapping mapping) {
 		this.mapping = mapping;
 	}
 	

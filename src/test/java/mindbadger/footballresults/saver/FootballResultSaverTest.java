@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader;
+package mindbadger.footballresults.saver;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
@@ -24,6 +24,7 @@ import mindbadger.football.repository.DivisionRepository;
 import mindbadger.football.repository.FixtureRepository;
 import mindbadger.football.repository.SeasonRepository;
 import mindbadger.football.repository.TeamRepository;
+import mindbadger.footballresults.saver.FootballResultSaver;
 
 public class FootballResultSaverTest {
 	private static final int SEASON = 2000;

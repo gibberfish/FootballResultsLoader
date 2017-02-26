@@ -8,12 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import mindbadger.footballresults.loader.commands.Command;
-import mindbadger.footballresults.loader.commands.ImportDataFromJSONToDB;
-import mindbadger.footballresults.loader.commands.IntegrationTest;
-import mindbadger.footballresults.loader.commands.LoadRecentResultsFromInternet;
-import mindbadger.footballresults.loader.commands.LoadSeasonFromInternet;
-import mindbadger.footballresults.loader.commands.PrintSeasonShape;
+import mindbadger.footballresults.commands.Command;
+import mindbadger.footballresults.commands.ImportDataFromJSONToDB;
+import mindbadger.footballresults.commands.IntegrationTest;
+import mindbadger.footballresults.commands.LoadRecentResultsFromInternet;
+import mindbadger.footballresults.commands.LoadSeasonFromInternet;
+import mindbadger.footballresults.commands.PrintSeasonShape;
 
 @SpringBootApplication(scanBasePackages="**/mindbadger/**/*")
 public class LoaderEntryPointApplication {

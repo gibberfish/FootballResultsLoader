@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader;
+package mindbadger.footballresults.saver;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -16,8 +16,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
+import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
 import mindbadger.footballresults.reader.ParsedFixture;
+import mindbadger.footballresults.saver.FootballResultSaver;
+import mindbadger.footballresults.saver.ParsedResultsSaver;
 import mindbadger.football.domain.Division;
 import mindbadger.football.domain.Season;
 import mindbadger.football.domain.Team;
@@ -46,7 +48,7 @@ public class ParsedResultsSaverTest {
 	@Mock
 	private FootballResultSaver footballResultSaver;	
 	@Mock
-	private FootballResultsMapping mockMapping;
+	private FootballResultsLoaderMapping mockMapping;
 
 	@Mock
 	private Season mockSeason;

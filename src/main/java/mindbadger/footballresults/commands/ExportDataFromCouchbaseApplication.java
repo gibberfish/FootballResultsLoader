@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader.commands;
+package mindbadger.footballresults.commands;
 
 import java.io.BufferedWriter;
 import java.nio.file.Files;

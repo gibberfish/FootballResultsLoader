@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader.commands;
+package mindbadger.footballresults.commands;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,14 +6,13 @@ import org.springframework.stereotype.Component;
 import mindbadger.footballresults.loader.FootballResultsLoader;
 
 @Component
-public class LoadSeasonFromInternet implements Command {
+public class LoadRecentResultsFromInternet implements Command {
 
 	@Autowired
-	FootballResultsLoader loader;
+	private FootballResultsLoader loader;
 	
 	@Override
 	public void run(String[] args) throws Exception {
-		Integer season = Integer.parseInt(args[0]);
-		loader.loadResultsForSeason(season);
+		loader.loadResultsForRecentlyPlayedFixtures();
 	}
 }

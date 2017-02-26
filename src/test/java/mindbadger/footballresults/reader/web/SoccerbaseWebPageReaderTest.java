@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
+import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.footballresults.reader.web.SoccerbaseDatePageParser;
 import mindbadger.footballresults.reader.web.SoccerbaseTeamPageParser;
@@ -31,7 +31,7 @@ public class SoccerbaseWebPageReaderTest {
 	
 	@Mock	private SoccerbaseTeamPageParser mockTeamPageParser;
 	@Mock private SoccerbaseDatePageParser mockDatePageParser;
-	@Mock private FootballResultsMapping mockFootballResultsMapping;
+	@Mock private FootballResultsLoaderMapping mockFootballResultsMapping;
 	
 	@Before
 	public void setup() {

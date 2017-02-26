@@ -12,9 +12,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import mindbadger.footballresults.loader.FootballResultsLoader;
-import mindbadger.footballresults.loader.ParsedResultsSaver;
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
+import mindbadger.footballresults.saver.ParsedResultsSaver;
 import mindbadger.football.domain.Fixture;
 import mindbadger.football.domain.FixtureImpl;
 import mindbadger.football.domain.Season;

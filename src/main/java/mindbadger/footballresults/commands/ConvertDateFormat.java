@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader.commands;
+package mindbadger.footballresults.commands;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

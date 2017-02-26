@@ -1,4 +1,4 @@
-package mindbadger.footballresults.loader;
+package mindbadger.footballresults.saver;
 
 import java.util.Calendar;
 
