@@ -11,12 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WebPageReader {
 	Logger logger = Logger.getLogger(WebPageReader.class);
 	
+	@Autowired
+	@Value("${http.agent}")
 	private String httpAgent;
 	
 	public List<String> readWebPage(String pURL) throws FileNotFoundException, IOException {

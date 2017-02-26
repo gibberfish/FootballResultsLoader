@@ -13,7 +13,11 @@ import mindbadger.util.StringToCalendarConverter;
 import mindbadger.web.WebPageReader;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SoccerbaseTeamPageParser {
 	Logger logger = Logger.getLogger(SoccerbaseTeamPageParser.class);
 	
@@ -35,9 +39,14 @@ public class SoccerbaseTeamPageParser {
 	private static final String END_OF_HOME_GOALS_LOCATION = "</em>&nbsp;-&nbsp;<em>";
 	private static final String END_OF_AWAY_GOALS_LOCATION = "</em></a>";
 
-	private String url;
+	@Autowired
 	private WebPageReader webPageReader;
+	@Autowired
 	private Pauser pauser;
+
+	@Autowired
+	@Value("${team.page.url}")
+	private String url;
 	
 	public List<ParsedFixture> parseFixturesForTeam(Integer seasonNumber, String teamId, boolean retry) {
 		Integer soccerbaseSeasonNumber = null;

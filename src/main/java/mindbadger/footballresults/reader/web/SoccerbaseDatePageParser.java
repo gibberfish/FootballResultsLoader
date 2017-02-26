@@ -14,7 +14,11 @@ import mindbadger.util.StringToCalendarConverter;
 import mindbadger.web.WebPageReader;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SoccerbaseDatePageParser {
 	Logger logger = Logger.getLogger(SoccerbaseDatePageParser.class);
 	
@@ -33,10 +37,18 @@ public class SoccerbaseDatePageParser {
 	private static final String START_OF_DIVISION_NAME_LOCATION = "page\">";
 	private static final String END_OF_DIVISION_ID_LOCATION = "\" title";
 	private static final String START_OF_DIVISION_ID_LOCATION = " <a href=\"/tournaments/tournament.sd?comp_id=";
+	@Autowired
 	private WebPageReader webPageReader;
-	private String url;
+	@Autowired
 	private Pauser pauser;
+	@Autowired
 	private AbstractFootballResultsLoaderMapping mapping;
+
+	@Autowired
+	@Value("${date.page.url}")
+	private String url;
+	@Autowired
+	@Value("${dialect}")
 	private String dialect;
 	
 	public void setWebPageReader(WebPageReader webPageReader) {

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import mindbadger.footballresults.loader.AbstractFootballResultsLoaderMapping;
@@ -21,11 +22,11 @@ import mindbadger.util.StringToCalendarConverter;
 public class SoccerbaseWebPageReader implements FootballResultsReader {
 	Logger logger = Logger.getLogger(SoccerbaseWebPageReader.class);
 	
-	//@Autowired
+	@Autowired
 	private SoccerbaseTeamPageParser teamPageParser;
-	//@Autowired
+	@Autowired
 	private SoccerbaseDatePageParser datePageParser;
-	//@Autowired
+	@Autowired
 	private AbstractFootballResultsLoaderMapping mapping;
 	
 	@Override

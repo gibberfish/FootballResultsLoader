@@ -13,8 +13,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 
+@Component
 public class XMLFileWriter {
 	Logger logger = Logger.getLogger(XMLFileWriter.class);
 	

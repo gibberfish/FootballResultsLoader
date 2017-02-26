@@ -10,9 +10,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+@Component
 public class XMLFileReader {
 	Logger logger = Logger.getLogger(XMLFileReader.class);
 	

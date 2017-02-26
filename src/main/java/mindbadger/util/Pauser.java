@@ -3,7 +3,9 @@ package mindbadger.util;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Pauser {
 	Logger logger = Logger.getLogger(Pauser.class);
 	

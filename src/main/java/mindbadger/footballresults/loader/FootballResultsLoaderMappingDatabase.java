@@ -1,8 +1,13 @@
 package mindbadger.footballresults.loader;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import mindbadger.football.domain.DivisionMapping;
 import mindbadger.football.domain.DomainObjectFactory;
@@ -12,7 +17,9 @@ import mindbadger.football.repository.DivisionMappingRepository;
 import mindbadger.football.repository.TeamMappingRepository;
 import mindbadger.football.repository.TrackedDivisionRepository;
 
+@Component
 public class FootballResultsLoaderMappingDatabase extends AbstractFootballResultsLoaderMapping {
+	Logger logger = Logger.getLogger(FootballResultsLoaderMappingDatabase.class);
 	
 	@Autowired
 	private TrackedDivisionRepository trackedDivisionRepository;
@@ -33,66 +40,57 @@ public class FootballResultsLoaderMappingDatabase extends AbstractFootballResult
 	//TODO This is shitty code that needs to be refactorred
 	@PostConstruct
 	public void initialise() throws FootballResultsLoaderException {
-		trackDivisions = trackedDivisionRepository.findAll();
-		divisionMappings = divisionMappingRepository.findAll();
-		teamMappings = teamMappingRepository.findAll();
+		logger.info("Initialising the FootballResultsLoaderMappingDatabase");
 		
-		String lastDialectName = "";
+		trackDivisions = trackedDivisionRepository.findAll();
+		logger.info("Got " + trackDivisions.spliterator().getExactSizeIfKnown() + " divisions to track");
+
+		divisionMappings = divisionMappingRepository.findAll();
+		logger.info("Got " + divisionMappings.spliterator().getExactSizeIfKnown() + " divisions to track");
+
+		teamMappings = teamMappingRepository.findAll();
+		logger.info("Got " + teamMappings.spliterator().getExactSizeIfKnown() + " teams to track");
+		
 		Dialect dialect = null;
+
+		// Store the tracked divisions for this dialect
+		for (TrackedDivision trackedDivision : trackDivisions) {
+			String dialectName = trackedDivision.getDialect();
+			
+			if (dialects.containsKey(dialectName)) {
+				dialect = dialects.get(dialectName);
+				logger.info("Getting dialect " + dialectName + " from the map");
+			} else {
+				dialect = new Dialect(dialectName);
+				dialects.put(dialectName, dialect);
+				logger.info("Adding dialect " + dialectName + " to the map");
+			}
+			
+			dialect.getIncludedDivisions().add(trackedDivision.getSourceId().toString());
+			logger.info("Adding " + trackedDivision.getSourceId() + "to dialect " + dialectName);
+		}
+		
+		if (dialects.size() == 0) {
+			throw new FootballResultsLoaderException("There are no IncludedDivisions in your mapping file");
+		}
 		
 		for (DivisionMapping divisionMapping : divisionMappings) {
 			String dialectName = divisionMapping.getDialect();
-			
-			// Get the dialect if we don't already have it
-			if (!dialectName.equals(lastDialectName)) {
-				lastDialectName = dialectName;
-				if (dialects.containsKey(dialectName)) {
-					dialect = dialects.get(dialectName);
-				} else {
-					dialect = new Dialect(dialectName);
-					dialects.put(dialectName, dialect);
-				}
-				
-				// Store the tracked divisions for this dialect
-				for (TrackedDivision trackedDivision : trackDivisions) {
-					if (dialectName.equals(trackedDivision.getDialect())) {
-						dialect.getIncludedDivisions().add(trackedDivision.getSourceId().toString());
-					}
-				}
-				
-				if (dialect.getIncludedDivisions().size() == 0) {
-					throw new FootballResultsLoaderException("There are no IncludedDivisions in your mapping file for dialect " + dialectName);
-				}
-			}
-			
+			dialect = dialects.get(dialectName);
+			logger.info("Getting dialect " + dialectName + " from the map");
+						
 			dialect.getDivisionMappings().put(divisionMapping.getSourceId().toString(), divisionMapping.getFraId().toString());
 			dialect.getOrderedListOfDivisions().add(divisionMapping.getFraId().toString());
+			logger.info("Adding " + divisionMapping.getSourceId() + "to dialect " + dialectName);
+		}
+		
+		for (TeamMapping teamMapping : teamMappings) {
+			String dialectName = teamMapping.getDialect();
+			dialect = dialects.get(dialectName);
+			logger.info("Getting dialect " + dialectName + " from the map");
 			
-			if (dialect.getDivisionMappings().size() == 0) {
-				throw new FootballResultsLoaderException("There are no DivisionMappings in your mapping file for dialect " + dialectName);
-			}
-
-			// Now find the team mappings
-			lastDialectName = "";
-			dialect = null;
-			for (TeamMapping teamMapping : teamMappings) {
-				// Get the dialect if we don't already have it
-				if (!dialectName.equals(lastDialectName)) {
-					lastDialectName = dialectName;
-					if (dialects.containsKey(dialectName)) {
-						dialect = dialects.get(dialectName);
-					} else {
-						dialect = new Dialect(dialectName);
-						dialects.put(dialectName, dialect);
-					}
-				}
-
-				dialect.getTeamMappings().put(teamMapping.getSourceId().toString(), teamMapping.getFraId().toString());
-			}
-			
-			if (dialect.getTeamMappings().size() == 0) {
-				throw new FootballResultsLoaderException("There are no TeamMappings in your mapping file for dialect " + dialectName);
-			}
+			dialect.getTeamMappings().put(teamMapping.getSourceId().toString(), teamMapping.getFraId().toString());
+			logger.info("Adding " + teamMapping.getSourceId() + "to dialect " + dialectName);
 		}
 	}
 

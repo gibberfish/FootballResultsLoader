@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import mindbadger.footballresults.loader.AbstractFootballResultsLoaderMapping;
@@ -18,6 +19,8 @@ import mindbadger.football.domain.Team;
 public class ParsedResultsSaver {
 	Logger logger = Logger.getLogger(ParsedResultsSaver.class);
 	
+	@Autowired
+	@Value("${dialect}")
 	private String dialect;
 
 	@Autowired
