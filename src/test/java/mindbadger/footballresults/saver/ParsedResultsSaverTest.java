@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
+import mindbadger.footballresults.loader.FootballResultsLoaderMappingXml;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.footballresults.saver.FootballResultSaver;
 import mindbadger.footballresults.saver.ParsedResultsSaver;
@@ -48,7 +48,7 @@ public class ParsedResultsSaverTest {
 	@Mock
 	private FootballResultSaver footballResultSaver;	
 	@Mock
-	private FootballResultsLoaderMapping mockMapping;
+	private FootballResultsLoaderMappingXml mockMapping;
 
 	@Mock
 	private Season mockSeason;

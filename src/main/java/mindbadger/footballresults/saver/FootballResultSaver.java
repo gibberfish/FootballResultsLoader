@@ -2,6 +2,7 @@ package mindbadger.footballresults.saver;
 
 import java.util.Calendar;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,8 @@ import mindbadger.football.repository.TeamRepository;
 
 @Component
 public class FootballResultSaver {
+	Logger logger = Logger.getLogger(FootballResultSaver.class);
+	
 	@Autowired
 	private DivisionRepository divisionRepository;
 	@Autowired
@@ -32,9 +35,11 @@ public class FootballResultSaver {
 	
 	public Season createSeasonIfNotExisting(Integer seasonNumber) {
 		Season season = seasonRepository.findOne(seasonNumber);
+		logger.debug("seasonRepository.findOne("+ seasonNumber + ") returned: " + season);
 		if (season == null) {
 			season = domainObjectFactory.createSeason(seasonNumber);
 			season = seasonRepository.save(season);
+			logger.debug("seasonRepository.s("+ seasonNumber + ") returned: " + season);
 		}
 		
 		return season;
@@ -63,35 +68,43 @@ public class FootballResultSaver {
 		boolean changed = false;
 		
 		SeasonDivision seasonDivision = seasonRepository.getSeasonDivision(season, division);
-
+		logger.debug("seasonRepository.getSeasonDivision("+ season + ", " + division +") returned: " + season);
+		
 		if (seasonDivision == null) {
 			seasonDivision = domainObjectFactory.createSeasonDivision(season, division, indexOfDivision);
 			season.getSeasonDivisions().add(seasonDivision);
+			logger.debug("added SeasonDivision("+ seasonDivision +") to list of season divisions");
 			changed = true;
 		}
 		
 		SeasonDivisionTeam homeSeasonDivisionTeam = seasonRepository.getSeasonDivisionTeam(seasonDivision, homeTeam);
+		logger.debug("seasonRepository.getSeasonDivisionTeam("+ seasonDivision +", "+ homeTeam + ") returned: " + homeSeasonDivisionTeam);
 		if (homeSeasonDivisionTeam == null) {
 			homeSeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, homeTeam);
 			seasonDivision.getSeasonDivisionTeams().add(homeSeasonDivisionTeam);
+			logger.debug("added SeasonDivisionTeam("+ homeSeasonDivisionTeam +") to list of season division teams");
 			changed = true;
 		}
 
 		SeasonDivisionTeam awaySeasonDivisionTeam = seasonRepository.getSeasonDivisionTeam(seasonDivision, awayTeam);
+		logger.debug("seasonRepository.getSeasonDivisionTeam("+ seasonDivision +", "+ awayTeam + ") returned: " + awaySeasonDivisionTeam);
 		if (awaySeasonDivisionTeam == null) {
 			awaySeasonDivisionTeam = domainObjectFactory.createSeasonDivisionTeam(seasonDivision, awayTeam);
 			seasonDivision.getSeasonDivisionTeams().add(awaySeasonDivisionTeam);
+			logger.debug("added SeasonDivisionTeam("+ awaySeasonDivisionTeam +") to list of season division teams");
 			changed = true;
 		}
 
 		if (changed) {
+			logger.debug("saving season with changes to season division or season division teams");
 			seasonRepository.save(season);
-		}
+		}	
 	}
 
 	public void createFixture(Season season, Division division, Team homeTeam, Team awayTeam, Calendar fixtureDate,
 			Integer homeGoals, Integer awayGoals) {
 		Fixture fixture = fixtureRepository.getExistingFixture(season, homeTeam, awayTeam);
+		logger.debug("fixtureRepository.getExistingFixture(" + season + ", " + homeTeam + ", " + awayTeam + ") returned " + fixture);
 		
 		if (fixture == null) {
 			fixture = domainObjectFactory.createFixture(season, homeTeam, awayTeam);
@@ -102,6 +115,7 @@ public class FootballResultSaver {
 		fixture.setHomeGoals(homeGoals);
 		fixture.setAwayGoals(awayGoals);
 		
+		logger.debug("fixtureRepository.createOrUpdate" + fixture);
 		fixtureRepository.createOrUpdate(fixture);
 	}
 

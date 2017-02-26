@@ -11,7 +11,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
+import mindbadger.footballresults.loader.AbstractFootballResultsLoaderMapping;
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.FootballResultsReaderException;
 import mindbadger.footballresults.reader.ParsedFixture;
@@ -26,7 +26,7 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 	//@Autowired
 	private SoccerbaseDatePageParser datePageParser;
 	//@Autowired
-	private FootballResultsLoaderMapping mapping;
+	private AbstractFootballResultsLoaderMapping mapping;
 	
 	@Override
 	public List<ParsedFixture> readFixturesForSeason(int season) {
@@ -85,7 +85,7 @@ public class SoccerbaseWebPageReader implements FootballResultsReader {
 		this.datePageParser = datePageParser;
 	}
 
-	public void setMapping(FootballResultsLoaderMapping mapping) {
+	public void setMapping(AbstractFootballResultsLoaderMapping mapping) {
 		this.mapping = mapping;
 	}
 

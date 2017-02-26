@@ -2,18 +2,11 @@ package mindbadger.footballresults.loader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-
-import mindbadger.xml.XMLFileReader;
-import mindbadger.xml.XMLFileWriter;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -21,13 +14,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class FootballResultsLoaderMapping {
+import mindbadger.xml.XMLFileReader;
+import mindbadger.xml.XMLFileWriter;
+
+public class FootballResultsLoaderMappingXml extends AbstractFootballResultsLoaderMapping {
 	private XMLFileWriter xmlFileWriter;
 	private String mappingFile;
 	
-	private Map<String, Dialect> dialects = new HashMap<String, Dialect>();
-
-	public FootballResultsLoaderMapping(String mappingFile, XMLFileReader xmlFileReader, XMLFileWriter xmlFileWriter) throws FootballResultsLoaderException {
+	public FootballResultsLoaderMappingXml(String mappingFile, XMLFileReader xmlFileReader, XMLFileWriter xmlFileWriter) throws FootballResultsLoaderException {
 		this.xmlFileWriter = xmlFileWriter;
 		this.mappingFile = mappingFile;
 		
@@ -94,47 +88,7 @@ public class FootballResultsLoaderMapping {
 		}
 	}
 
-	public List<String> getIncludedDivisions(String dialectName) {
-		Dialect dialect = dialects.get(dialectName);
-		if (dialect == null) {
-			throw new FootballResultsLoaderException("There is no configuration for " + dialectName + " in your mapping file");
-		}
-		
-		return dialects.get(dialectName).getIncludedDivisions();
-	}
-	
-	public void addDivisionMapping(String dialectName, String sourceDivId, String fraDivId) {
-		dialects.get(dialectName).getDivisionMappings().put(sourceDivId, fraDivId);
-		dialects.get(dialectName).getOrderedListOfDivisions().add(fraDivId);
-		for (String s : dialects.get(dialectName).getOrderedListOfDivisions()) {
-			System.out.println("ADD " + fraDivId + " : " + s);
-		}
-	}
-
-	public int getIndexForDivision(String dialectName, String fraDivId) {
-		for (String s : dialects.get(dialectName).getOrderedListOfDivisions()) {
-			System.out.println("GET " + fraDivId + " : " + s);
-		}
-		
-		return dialects.get(dialectName).getOrderedListOfDivisions().indexOf(fraDivId);
-	}
-	
-	public List<String> getOrderedListOfDivisions(String dialectName) {
-		return dialects.get(dialectName).getOrderedListOfDivisions();
-	}
-	
-	public Map<String, String> getDivisionMappings(String dialectName) {
-		return dialects.get(dialectName).getDivisionMappings();
-	}
-	
-	public Map<String, String> getTeamMappings(String dialectName) {
-		return dialects.get(dialectName).getTeamMappings();
-	}
-	
-	public void addTeamMapping(String dialectName, String sourceTeamId, String fraTeamId) {
-		dialects.get(dialectName).getTeamMappings().put(sourceTeamId, fraTeamId);
-	}
-	
+	@Override
 	public void saveMappings() throws FootballResultsLoaderException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
@@ -194,38 +148,6 @@ public class FootballResultsLoaderMapping {
 			xmlFileWriter.writeXMLFile(mappingFile, doc);
 		} catch (ParserConfigurationException | FileNotFoundException | TransformerException e) {
 			throw new FootballResultsLoaderException(e);
-		}
-	}
-	
-	private class Dialect {
-		private String name;
-		private List<String> includedDivisions = new ArrayList<String>();
-		private Map<String, String> divisionMappings = new HashMap<String, String>();
-		private Map<String, String> teamMappings = new HashMap<String, String>();
-		private List<String> orderedListOfDivisions = new ArrayList<String> ();
-
-		public Dialect(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public List<String> getIncludedDivisions() {
-			return includedDivisions;
-		}
-
-		public Map<String, String> getDivisionMappings() {
-			return divisionMappings;
-		}
-
-		public Map<String, String> getTeamMappings() {
-			return teamMappings;
-		}
-
-		public List<String> getOrderedListOfDivisions() {
-			return orderedListOfDivisions;
 		}
 	}
 }

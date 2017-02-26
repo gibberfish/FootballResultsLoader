@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
+import mindbadger.footballresults.loader.AbstractFootballResultsLoaderMapping;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.football.domain.Division;
 import mindbadger.football.domain.Season;
@@ -23,7 +23,7 @@ public class ParsedResultsSaver {
 	@Autowired
 	private FootballResultSaver footballResultSaver;
 	@Autowired
-	private FootballResultsLoaderMapping mapping;
+	private AbstractFootballResultsLoaderMapping mapping;
 
 	public void saveFixtures(List<ParsedFixture> fixturesRead) {
 		logger.debug("About to saveFixtures: " + fixturesRead.size());
@@ -84,10 +84,10 @@ public class ParsedResultsSaver {
 	public void setDialect(String dialect) {
 		this.dialect = dialect;
 	}
-	public FootballResultsLoaderMapping getMapping() {
+	public AbstractFootballResultsLoaderMapping getMapping() {
 		return mapping;
 	}
-	public void setMapping(FootballResultsLoaderMapping mapping) {
+	public void setMapping(AbstractFootballResultsLoaderMapping mapping) {
 		this.mapping = mapping;
 	}
 	public FootballResultSaver getFootballResultSaver() {

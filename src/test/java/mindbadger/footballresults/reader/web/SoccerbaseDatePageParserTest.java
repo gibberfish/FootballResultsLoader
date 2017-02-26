@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import mindbadger.footballresults.loader.FootballResultsLoaderMapping;
+import mindbadger.footballresults.loader.FootballResultsLoaderMappingXml;
 import mindbadger.footballresults.reader.FootballResultsReaderException;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.footballresults.reader.web.SoccerbaseDatePageParser;
@@ -56,7 +56,7 @@ public class SoccerbaseDatePageParserTest {
 
 	@Mock private WebPageReader mockWebPageReader;
 	@Mock private Pauser mockPauser;
-	@Mock private FootballResultsLoaderMapping mockMapping;
+	@Mock private FootballResultsLoaderMappingXml mockMapping;
 
 	@Before
 	public void setup() {
