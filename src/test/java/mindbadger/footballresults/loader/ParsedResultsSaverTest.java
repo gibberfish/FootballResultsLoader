@@ -18,9 +18,9 @@ import org.mockito.MockitoAnnotations;
 
 import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import mindbadger.footballresults.reader.ParsedFixture;
-import mindbadger.footballresultsanalyser.domain.Division;
-import mindbadger.footballresultsanalyser.domain.Season;
-import mindbadger.footballresultsanalyser.domain.Team;
+import mindbadger.football.domain.Division;
+import mindbadger.football.domain.Season;
+import mindbadger.football.domain.Team;
 
 public class ParsedResultsSaverTest {
 	private static final int SEASON = 2000;

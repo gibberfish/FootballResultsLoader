@@ -3,13 +3,13 @@ package mindbadger.footballresults.loader.commands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresultsanalyser.domain.DomainObjectFactory;
-import mindbadger.footballresultsanalyser.domain.Fixture;
-import mindbadger.footballresultsanalyser.domain.Season;
-import mindbadger.footballresultsanalyser.domain.SeasonDivision;
-import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
-import mindbadger.footballresultsanalyser.repository.FixtureRepository;
-import mindbadger.footballresultsanalyser.repository.SeasonRepository;
+import mindbadger.football.domain.DomainObjectFactory;
+import mindbadger.football.domain.Fixture;
+import mindbadger.football.domain.Season;
+import mindbadger.football.domain.SeasonDivision;
+import mindbadger.football.domain.SeasonDivisionTeam;
+import mindbadger.football.repository.FixtureRepository;
+import mindbadger.football.repository.SeasonRepository;
 
 @Component
 public class CreateSeasonDivisionTeamsForExistingFixtures implements Command {

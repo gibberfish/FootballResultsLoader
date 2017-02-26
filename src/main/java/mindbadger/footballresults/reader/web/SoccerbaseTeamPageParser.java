@@ -215,14 +215,6 @@ public class SoccerbaseTeamPageParser {
 		return parsedFixture;
 	}
 
-	private Integer getSeasonFromFixturedate(Calendar fixtureDate) {
-		if (fixtureDate.get(Calendar.MONTH) < 7) {
-			return (fixtureDate.get(Calendar.YEAR) -1);
-		} else {
-			return fixtureDate.get(Calendar.YEAR);
-		}
-	}
-	
 	public void setWebPageReader(WebPageReader webPageReader) {
 		this.webPageReader = webPageReader;
 	}

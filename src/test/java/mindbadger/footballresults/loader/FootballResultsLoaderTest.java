@@ -15,13 +15,13 @@ import mindbadger.footballresults.loader.FootballResultsLoader;
 import mindbadger.footballresults.loader.ParsedResultsSaver;
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
-import mindbadger.footballresultsanalyser.domain.Fixture;
-import mindbadger.footballresultsanalyser.domain.FixtureImpl;
-import mindbadger.footballresultsanalyser.domain.Season;
-import mindbadger.footballresultsanalyser.domain.SeasonImpl;
-import mindbadger.footballresultsanalyser.domain.Team;
-import mindbadger.footballresultsanalyser.domain.TeamImpl;
-import mindbadger.footballresultsanalyser.repository.FixtureRepository;
+import mindbadger.football.domain.Fixture;
+import mindbadger.football.domain.FixtureImpl;
+import mindbadger.football.domain.Season;
+import mindbadger.football.domain.SeasonImpl;
+import mindbadger.football.domain.Team;
+import mindbadger.football.domain.TeamImpl;
+import mindbadger.football.repository.FixtureRepository;
 
 public class FootballResultsLoaderTest {
 	private static final int SEASON = 2000;

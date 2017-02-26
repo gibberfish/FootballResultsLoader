@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 import mindbadger.footballresults.loader.mapping.FootballResultsMapping;
 import mindbadger.footballresults.reader.ParsedFixture;
-import mindbadger.footballresultsanalyser.domain.Division;
-import mindbadger.footballresultsanalyser.domain.Season;
-import mindbadger.footballresultsanalyser.domain.Team;
+import mindbadger.football.domain.Division;
+import mindbadger.football.domain.Season;
+import mindbadger.football.domain.Team;
 
 @Component
 public class ParsedResultsSaver {

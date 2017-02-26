@@ -11,16 +11,16 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresultsanalyser.domain.Division;
-import mindbadger.footballresultsanalyser.domain.Fixture;
-import mindbadger.footballresultsanalyser.domain.Season;
-import mindbadger.footballresultsanalyser.domain.SeasonDivision;
-import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
-import mindbadger.footballresultsanalyser.domain.Team;
-import mindbadger.footballresultsanalyser.repository.DivisionRepository;
-import mindbadger.footballresultsanalyser.repository.FixtureRepository;
-import mindbadger.footballresultsanalyser.repository.SeasonRepository;
-import mindbadger.footballresultsanalyser.repository.TeamRepository;
+import mindbadger.football.domain.Division;
+import mindbadger.football.domain.Fixture;
+import mindbadger.football.domain.Season;
+import mindbadger.football.domain.SeasonDivision;
+import mindbadger.football.domain.SeasonDivisionTeam;
+import mindbadger.football.domain.Team;
+import mindbadger.football.repository.DivisionRepository;
+import mindbadger.football.repository.FixtureRepository;
+import mindbadger.football.repository.SeasonRepository;
+import mindbadger.football.repository.TeamRepository;
 
 @Component
 public class ExportDataFromCouchbaseApplication implements Command {

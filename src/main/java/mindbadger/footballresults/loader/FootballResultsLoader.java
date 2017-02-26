@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
-import mindbadger.footballresultsanalyser.domain.Fixture;
-import mindbadger.footballresultsanalyser.repository.FixtureRepository;
+import mindbadger.football.domain.Fixture;
+import mindbadger.football.repository.FixtureRepository;
 import mindbadger.util.StringToCalendarConverter;
 
 @Component

@@ -10,19 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import mindbadger.LoaderEntryPointApplication;
-import mindbadger.footballresultsanalyser.domain.Division;
-import mindbadger.footballresultsanalyser.domain.DivisionImpl;
-import mindbadger.footballresultsanalyser.domain.Season;
-import mindbadger.footballresultsanalyser.domain.SeasonDivision;
-import mindbadger.footballresultsanalyser.domain.SeasonDivisionImpl;
-import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeam;
-import mindbadger.footballresultsanalyser.domain.SeasonDivisionTeamImpl;
-import mindbadger.footballresultsanalyser.domain.SeasonImpl;
-import mindbadger.footballresultsanalyser.domain.Team;
-import mindbadger.footballresultsanalyser.domain.TeamImpl;
-import mindbadger.footballresultsanalyser.repository.DivisionRepository;
-import mindbadger.footballresultsanalyser.repository.SeasonRepository;
-import mindbadger.footballresultsanalyser.repository.TeamRepository;
+import mindbadger.football.domain.Division;
+import mindbadger.football.domain.DivisionImpl;
+import mindbadger.football.domain.Season;
+import mindbadger.football.domain.SeasonDivision;
+import mindbadger.football.domain.SeasonDivisionImpl;
+import mindbadger.football.domain.SeasonDivisionTeam;
+import mindbadger.football.domain.SeasonDivisionTeamImpl;
+import mindbadger.football.domain.SeasonImpl;
+import mindbadger.football.domain.Team;
+import mindbadger.football.domain.TeamImpl;
+import mindbadger.football.repository.DivisionRepository;
+import mindbadger.football.repository.SeasonRepository;
+import mindbadger.football.repository.TeamRepository;
 
 @Component
 public class IntegrationTest implements Command {
@@ -171,7 +171,7 @@ public class IntegrationTest implements Command {
 			Iterator<SeasonDivisionTeam> iter2 = seasonDivisionTeams.iterator();
 			
 			while (iter2.hasNext()) {
-				SeasonDivisionTeam seasonDivisionTeamToDelete = iter2.next();
+				iter2.next();
 				iter2.remove();
 			}
 			

@@ -3,8 +3,8 @@ package mindbadger.footballresults.loader.commands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mindbadger.footballresultsanalyser.domain.Fixture;
-import mindbadger.footballresultsanalyser.repository.FixtureRepository;
+import mindbadger.football.domain.Fixture;
+import mindbadger.football.repository.FixtureRepository;
 
 @Component
 public class ConvertDateFormat implements Command {
