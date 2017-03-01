@@ -20,6 +20,17 @@ When Couchbase has been integrated, use the couchbase build profile:
 mvn clean spring-boot:run -Drun.arguments="<command to run>" -P couchbase
 ```
 
+## Run any of the commands below on the test database
+By default, running the commands below will be actioned on the 'live' database (football).
+However, if you want to run any of the commands below against the 'test' database (football_test), then include a
+command-line argument to use the 'test' spring profile:
+
+e.g.
+
+```
+mvn clean spring-boot:run -Drun.arguments="PRINT_SEASON,--spring.profiles.active=test" -P jpa
+```
+
 ## Load Recent Results
 This is the main action that the loader was designed to perform: To check for updates to results on a daily basis
 
