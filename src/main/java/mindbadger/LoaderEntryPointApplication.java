@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 import mindbadger.footballresults.commands.AddMissingFixturesForSeason;
 import mindbadger.footballresults.commands.Command;
@@ -17,6 +18,9 @@ import mindbadger.footballresults.commands.LoadRecentResultsFromInternet;
 import mindbadger.footballresults.commands.LoadSeasonFromInternet;
 import mindbadger.footballresults.commands.PrintSeasonShape;
 
+@PropertySource(
+	    name = "props",
+	    value = { "classpath:loader.properties" })
 @SpringBootApplication(scanBasePackages="**/mindbadger/**/*")
 public class LoaderEntryPointApplication {
 
