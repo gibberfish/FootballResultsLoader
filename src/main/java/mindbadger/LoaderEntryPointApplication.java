@@ -79,7 +79,8 @@ public class LoaderEntryPointApplication {
 				}
 				
 				command.run(args);
-				
+
+				log.info("Command Complete");
 			} else {
 				throw new IllegalArgumentException("*** PLEASE SPECIFY A COMMAND TO RUN ***");
 			}
