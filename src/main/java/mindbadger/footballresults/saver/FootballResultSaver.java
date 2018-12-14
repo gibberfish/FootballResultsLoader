@@ -103,14 +103,16 @@ public class FootballResultSaver {
 
 	public void createFixture(Season season, Division division, Team homeTeam, Team awayTeam, Calendar fixtureDate,
 			Integer homeGoals, Integer awayGoals) {
-		Fixture fixture = fixtureRepository.getExistingFixture(season, homeTeam, awayTeam);
+		SeasonDivision sd = seasonRepository.getSeasonDivision(season,division);
+
+		Fixture fixture = fixtureRepository.getExistingFixture(sd, homeTeam, awayTeam);
 		logger.debug("fixtureRepository.getExistingFixture(" + season + ", " + homeTeam + ", " + awayTeam + ") returned " + fixture);
 		
 		if (fixture == null) {
-			fixture = domainObjectFactory.createFixture(season, homeTeam, awayTeam);
+			fixture = domainObjectFactory.createFixture(sd, homeTeam, awayTeam);
 		}
-		
-		fixture.setDivision(division);
+
+		fixture.setSeasonDivision(sd);
 		fixture.setFixtureDate(fixtureDate);
 		fixture.setHomeGoals(homeGoals);
 		fixture.setAwayGoals(awayGoals);

@@ -1,6 +1,7 @@
 package mindbadger.footballresults.saver;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -267,15 +268,19 @@ public class FootballResultSaverTest {
 	@Test
 	public void shouldUpdateAnExistingFixture () {
 		// Given
-		when (mockFixtureRepository.getExistingFixture(mockSeason, mockTeam1, mockTeam2)).thenReturn(mockFixture);
+		//when (mockDomainObjectFactory.createSeasonDivision(mockSeason,mockDivision,1)).thenReturn(mockSeasonDivision);
+		when (mockSeasonRepository.getSeasonDivision(mockSeason, mockDivision)).thenReturn(mockSeasonDivision);
+		when (mockSeasonDivision.getSeason()).thenReturn(mockSeason);
+		when (mockSeasonDivision.getDivision()).thenReturn(mockDivision);
+		when (mockFixtureRepository.getExistingFixture(mockSeasonDivision, mockTeam1, mockTeam2)).thenReturn(mockFixture);
 		
 		// When
 		objectUnderTest.createFixture(mockSeason, mockDivision, mockTeam1, mockTeam2, date1, 5, 3);
 		
 		// Then
-		verify (mockDomainObjectFactory, never()).createFixture(mockSeason, mockTeam1, mockTeam2);
+		verify (mockDomainObjectFactory, never()).createFixture(mockSeasonDivision, mockTeam1, mockTeam2);
 		
-		verify (mockFixture, times(1)).setDivision(mockDivision);
+		verify (mockFixture, times(1)).setSeasonDivision(mockSeasonDivision);
 		verify (mockFixture, times(1)).setFixtureDate(date1);
 		verify (mockFixture, times(1)).setHomeGoals(5);
 		verify (mockFixture, times(1)).setAwayGoals(3);
@@ -286,16 +291,18 @@ public class FootballResultSaverTest {
 	@Test
 	public void shouldCreateANewFixture () {
 		// Given
-		when (mockFixtureRepository.getExistingFixture(mockSeason, mockTeam1, mockTeam2)).thenReturn(null);
-		when (mockDomainObjectFactory.createFixture(mockSeason, mockTeam1, mockTeam2)).thenReturn(mockFixture);
+		when (mockSeasonRepository.getSeasonDivision(mockSeason, mockDivision)).thenReturn(mockSeasonDivision);
+		when (mockSeasonDivision.getSeason()).thenReturn(mockSeason);
+		when (mockSeasonDivision.getDivision()).thenReturn(mockDivision);
+		when (mockFixtureRepository.getExistingFixture(mockSeasonDivision, mockTeam1, mockTeam2)).thenReturn(null);
+		when (mockDomainObjectFactory.createFixture(mockSeasonDivision, mockTeam1, mockTeam2)).thenReturn(mockFixture);
 		
 		// When
 		objectUnderTest.createFixture(mockSeason, mockDivision, mockTeam1, mockTeam2, date1, 5, 3);
 		
 		// Then
-		verify (mockDomainObjectFactory, times(1)).createFixture(mockSeason, mockTeam1, mockTeam2);
+		verify (mockDomainObjectFactory, times(1)).createFixture(mockSeasonDivision, mockTeam1, mockTeam2);
 		
-		verify (mockFixture, times(1)).setDivision(mockDivision);
 		verify (mockFixture, times(1)).setFixtureDate(date1);
 		verify (mockFixture, times(1)).setHomeGoals(5);
 		verify (mockFixture, times(1)).setAwayGoals(3);

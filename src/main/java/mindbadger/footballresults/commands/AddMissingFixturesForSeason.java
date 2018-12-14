@@ -40,10 +40,9 @@ public class AddMissingFixturesForSeason implements Command {
 			for (SeasonDivisionTeam seasonDivisionHomeTeam : seasonDivision.getSeasonDivisionTeams()) {
 				for (SeasonDivisionTeam seasonDivisionAwayTeam : seasonDivision.getSeasonDivisionTeams()) {
 					if (seasonDivisionHomeTeam != seasonDivisionAwayTeam) {
-						Fixture fixture = domainObjectFactory.createFixture(season, seasonDivisionHomeTeam.getTeam(), seasonDivisionAwayTeam.getTeam());
+						Fixture fixture = domainObjectFactory.createFixture(seasonDivision, seasonDivisionHomeTeam.getTeam(), seasonDivisionAwayTeam.getTeam());
 						Fixture fixtureFound = fixtureRepository.findMatching(fixture);
 						if (fixtureFound == null) {
-							fixture.setDivision(seasonDivision.getDivision());
 							fixtureRepository.save(fixture);
 							log.info("Adding missing fixture: " + fixture);
 						}

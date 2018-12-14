@@ -146,9 +146,11 @@ public class ImportDataFromJSONToDB implements Command {
 			Team homeTeam = teamRepository.findOne(homeTeamId);
 			Team awayTeam = teamRepository.findOne(awayTeamId);
 			Season season = seasonRepository.findOne(Integer.parseInt(seasonNumber));
-			
-			Fixture fixture = domainObjectFactory.createFixture(season, homeTeam, awayTeam);
-			fixture.setDivision(division);
+			SeasonDivision sd = domainObjectFactory.createSeasonDivision();
+			sd.setSeason(season);
+			sd.setDivision(division);
+
+			Fixture fixture = domainObjectFactory.createFixture(sd, homeTeam, awayTeam);
 			fixture.setFixtureDate(fixtureDateCalendar);
 			if (homeGoals != null) {
 				fixture.setHomeGoals(Integer.parseInt(homeGoals));

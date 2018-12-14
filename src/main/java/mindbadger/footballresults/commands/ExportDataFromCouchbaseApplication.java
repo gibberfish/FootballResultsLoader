@@ -170,7 +170,7 @@ public class ExportDataFromCouchbaseApplication implements Command {
 				Fixture fixture = fixtureIterator.next();
 				
 				writer.write("{ type: 'fixture', ");
-				writer.write("  season: '" + fixture.getSeason().getSeasonNumber() + "', ");
+				writer.write("  season: '" + fixture.getSeasonDivision().getSeason().getSeasonNumber() + "', ");
 				
 				if (fixture.getFixtureDate() != null) {
 					writer.write("  fixtureDate: '" + dateFormat.format(fixture.getFixtureDate().getTime()) + "', ");
@@ -184,7 +184,7 @@ public class ExportDataFromCouchbaseApplication implements Command {
 					writer.write("  awayGoals: '" + fixture.getAwayGoals() + "', ");
 				}
 
-				writer.write("  division: '" + fixture.getDivision().getDivisionId() + "', ");
+				writer.write("  division: '" + fixture.getSeasonDivision().getDivision().getDivisionId() + "', ");
 				writer.write("  homeTeam: '" + fixture.getHomeTeam().getTeamId() + "', ");
 				writer.write("  awayTeam: '" + fixture.getAwayTeam().getTeamId() + "'");
 				

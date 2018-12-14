@@ -26,11 +26,11 @@ public class CreateSeasonDivisionTeamsForExistingFixtures implements Command {
 	@Override
 	public void run(String[] args) throws Exception {
 		for (Fixture fixture : fixtureRepository.findAll()) {
-			Season season = seasonRepository.findMatching(fixture.getSeason());
+			Season season = seasonRepository.findMatching(fixture.getSeasonDivision().getSeason());
 
-			SeasonDivision seasonDivision = seasonRepository.getSeasonDivision(fixture.getSeason(), fixture.getDivision());
+			SeasonDivision seasonDivision = seasonRepository.getSeasonDivision(fixture.getSeasonDivision().getSeason(), fixture.getSeasonDivision().getDivision());
 			if (seasonDivision == null) {
-				seasonDivision = domainObjectFactory.createSeasonDivision(season, fixture.getDivision(), 0);
+				seasonDivision = domainObjectFactory.createSeasonDivision(season, fixture.getSeasonDivision().getDivision(), 0);
 				season.getSeasonDivisions().add(seasonDivision);
 			}
 			

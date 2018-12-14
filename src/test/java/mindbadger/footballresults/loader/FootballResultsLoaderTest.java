@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import mindbadger.football.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,12 +16,6 @@ import mindbadger.footballresults.loader.FootballResultsLoader;
 import mindbadger.footballresults.reader.FootballResultsReader;
 import mindbadger.footballresults.reader.ParsedFixture;
 import mindbadger.footballresults.saver.ParsedResultsSaver;
-import mindbadger.football.domain.Fixture;
-import mindbadger.football.domain.FixtureImpl;
-import mindbadger.football.domain.Season;
-import mindbadger.football.domain.SeasonImpl;
-import mindbadger.football.domain.Team;
-import mindbadger.football.domain.TeamImpl;
 import mindbadger.football.repository.FixtureRepository;
 
 public class FootballResultsLoaderTest {
@@ -47,6 +42,10 @@ public class FootballResultsLoaderTest {
 	private FixtureRepository mockFixtureRepository;
 	@Mock
 	private Season mockSeason;
+	@Mock
+	private Division mockDivision;
+	@Mock
+	private SeasonDivision mockSeasonDivision;
 	@Mock
 	private Team mockHomeTeam;
 	@Mock
@@ -77,6 +76,8 @@ public class FootballResultsLoaderTest {
 		initialiseAllListsAsEmpty();
 
 		when(mockReader.readFixturesForSeason(SEASON)).thenReturn(fixturesReadFromReader);
+		when(mockSeasonDivision.getSeason()).thenReturn(mockSeason);
+		when(mockSeasonDivision.getDivision()).thenReturn(mockDivision);
 	}
 
 	// ----------------------------------------------------------------------------------------------
@@ -109,7 +110,7 @@ public class FootballResultsLoaderTest {
 
 		// Fixture 5 does not have a fixture date
 		when(mockFixture5_nodate.getFixtureDate()).thenReturn(null);
-		when(mockFixture5_nodate.getSeason()).thenReturn(mockSeason);
+		when(mockFixture5_nodate.getSeasonDivision()).thenReturn(mockSeasonDivision);
 		when(mockFixture5_nodate.getHomeTeam()).thenReturn(mockHomeTeam);
 		
 		// Setup the unplayed Fixtures with dates

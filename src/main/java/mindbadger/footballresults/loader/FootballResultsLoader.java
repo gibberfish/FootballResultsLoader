@@ -63,7 +63,7 @@ public class FootballResultsLoader {
 		List<Fixture> fixturesWithoutDates = fixtureRepository.getFixturesWithNoFixtureDate();
 		logger.debug("loadResultsForRecentlyPlayedFixtures has found " + fixturesWithoutDates.size() + " fixtures without dates");
 		for (Fixture fixture : fixturesWithoutDates) {
-			Integer seasonNumber = fixture.getSeason().getSeasonNumber();
+			Integer seasonNumber = fixture.getSeasonDivision().getSeason().getSeasonNumber();
 			String teamId = fixture.getHomeTeam().getTeamId();
 			List<ParsedFixture> parsedFixtures = reader.readFixturesForTeamInSeason(seasonNumber, teamId);
 			logger.debug("...got " + parsedFixtures.size() + " fixtures for team " + teamId + " in season " + seasonNumber);

@@ -37,7 +37,7 @@ public class CreateSeasonShape implements Command {
 		Iterable<Fixture> allFixtures = fixtureRepository.findAll();
 		
 		for (Fixture fixture : allFixtures) {
-			if (fixture.getSeason().getSeasonNumber() == seasonNumber) {
+			if (fixture.getSeasonDivision().getSeason().getSeasonNumber() == seasonNumber) {
 				
 			}
 		}		

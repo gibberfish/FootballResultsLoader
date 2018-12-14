@@ -5,14 +5,11 @@ import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
 
+import mindbadger.football.domain.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mindbadger.football.domain.DivisionMapping;
-import mindbadger.football.domain.DomainObjectFactory;
-import mindbadger.football.domain.TeamMapping;
-import mindbadger.football.domain.TrackedDivision;
 import mindbadger.football.repository.DivisionMappingRepository;
 import mindbadger.football.repository.TeamMappingRepository;
 import mindbadger.football.repository.TrackedDivisionRepository;
@@ -111,9 +108,16 @@ public class FootballResultsLoaderMappingDatabase extends AbstractFootballResult
 	private void saveMappedTeams(Dialect dialect) {
 		for (String sourceId : dialect.getTeamMappings().keySet()) {
 			String fraId = dialect.getTeamMappings().get(sourceId);
-			TeamMapping teamMapping = domainObjectFactory.createTeamMapping(dialect.getName(), Integer.parseInt(sourceId), Integer.parseInt(fraId));
-			TeamMapping teamMappingInDb = teamMappingRepository.findOne(teamMapping);
+
+			MappingId teamMappingId = new MappingId();
+			teamMappingId.setDialect(dialect.getName());
+			teamMappingId.setSourceId(Integer.parseInt(sourceId));
+			teamMappingId.setFraId(Integer.parseInt(fraId));
+
+			TeamMapping teamMappingInDb = teamMappingRepository.findOne(teamMappingId);
+
 			if (teamMappingInDb == null) {
+				TeamMapping teamMapping = domainObjectFactory.createTeamMapping(dialect.getName(), Integer.parseInt(sourceId), Integer.parseInt(fraId));
 				teamMappingRepository.save(teamMapping);
 			}
 		}
@@ -122,9 +126,16 @@ public class FootballResultsLoaderMappingDatabase extends AbstractFootballResult
 	private void saveMappedDivisions(Dialect dialect) {
 		for (String sourceId : dialect.getDivisionMappings().keySet()) {
 			String fraId = dialect.getDivisionMappings().get(sourceId);
-			DivisionMapping divisionMapping = domainObjectFactory.createDivisionMapping(dialect.getName(), Integer.parseInt(sourceId), Integer.parseInt(fraId));
-			DivisionMapping divisionMappingInDb = divisionMappingRepository.findOne(divisionMapping);
+
+			MappingId divisionMappingId = new MappingId();
+			divisionMappingId.setDialect(dialect.getName());
+			divisionMappingId.setSourceId(Integer.parseInt(sourceId));
+			divisionMappingId.setFraId(Integer.parseInt(fraId));
+
+			DivisionMapping divisionMappingInDb = divisionMappingRepository.findOne(divisionMappingId);
+
 			if (divisionMappingInDb == null) {
+				DivisionMapping divisionMapping = domainObjectFactory.createDivisionMapping(dialect.getName(), Integer.parseInt(sourceId), Integer.parseInt(fraId));
 				divisionMappingRepository.save(divisionMapping);
 			}			
 		}
@@ -132,9 +143,14 @@ public class FootballResultsLoaderMappingDatabase extends AbstractFootballResult
 
 	private void saveTrackedDivisions(Dialect dialect) {
 		for (String includedDivisionId : dialect.getIncludedDivisions()) {
-			TrackedDivision trackedDivision = domainObjectFactory.createTrackedDivision(dialect.getName(), Integer.parseInt(includedDivisionId));
-			TrackedDivision trackedDivisionInDb = trackedDivisionRepository.findOne(trackedDivision);
+			TrackedDivisionId trackedDivisionId = new TrackedDivisionId();
+			trackedDivisionId.setDialect(dialect.getName());
+			trackedDivisionId.setSourceId(Integer.parseInt(includedDivisionId));
+
+			TrackedDivision trackedDivisionInDb = trackedDivisionRepository.findOne(trackedDivisionId);
+
 			if (trackedDivisionInDb == null) {
+				TrackedDivision trackedDivision = domainObjectFactory.createTrackedDivision(dialect.getName(), Integer.parseInt(includedDivisionId));
 				trackedDivisionRepository.save(trackedDivision);
 			}
 		}
